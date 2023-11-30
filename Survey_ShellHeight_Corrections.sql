@@ -71,6 +71,25 @@ where ShellHeightID like 'CRSRVY_20230613_1_0232_1_04_01%' and ShellHeightID not
 delete from [dbo].[SurveySH]
 where ShellHeightID like 'CRSRVY_20230613_1_0232_1_05_01%' and ShellHeightID not like 'CRSRVY_20230613_1_0232_1_05_010' or ShellHeightID like 'CRSRVY_20230613_1_0232_1_05_02%' or ShellHeightID like 'CRSRVY_20230613_1_0232_1_05_03%' or ShellHeightID like 'CRSRVY_20230613_1_0232_1_05_04%' or ShellHeightID like 'CRSRVY_20230613_1_0232_1_05_05%'
 
+---Update data to "Entered" for re-entry in ODIN for most quads 1-5 & 11-15
+--Station 2, 3, 4 2023/03/14 
+update [dbo].[SurveySH]
+set DataStatus = 'Entered', DateProofed = NULL, ProofedBy = NULL
+where ShellHeightID  like 'CRSRVY_20230314_1_0231_1_01%' or ShellHeightID  like 'CRSRVY_20230314_1_0231_1_02%' or ShellHeightID  like 'CRSRVY_20230314_1_0231_1_03%' or ShellHeightID  like 'CRSRVY_20230314_1_0231_1_04%' or ShellHeightID  like 'CRSRVY_20230314_1_0231_1_05%' or ShellHeightID  like 'CRSRVY_20230314_1_0231_1_1%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_10%'
+update [dbo].[SurveySH]
+set DataStatus = 'Entered', DateProofed = NULL, ProofedBy = NULL
+where ShellHeightID  like 'CRSRVY_20230314_1_0232_1_01%' or ShellHeightID  like 'CRSRVY_20230314_1_0232_1_02%' or ShellHeightID  like 'CRSRVY_20230314_1_0232_1_03%' or ShellHeightID  like 'CRSRVY_20230314_1_0232_1_04%' or ShellHeightID  like 'CRSRVY_20230314_1_0232_1_05%' or ShellHeightID  like 'CRSRVY_20230314_1_0232_1_1%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_10%'
+update [dbo].[SurveySH]
+set DataStatus = 'Entered', DateProofed = NULL, ProofedBy = NULL
+where ShellHeightID  like 'CRSRVY_20230314_1_0233_1_01%' or ShellHeightID  like 'CRSRVY_20230314_1_0233_1_02%' or ShellHeightID  like 'CRSRVY_20230314_1_0233_1_03%' or ShellHeightID  like 'CRSRVY_20230314_1_0233_1_04%' or ShellHeightID  like 'CRSRVY_20230314_1_0233_1_05%' or ShellHeightID  like 'CRSRVY_20230314_1_0233_1_12%'
+--Station 2, 3 2023/06/13
+update [dbo].[SurveySH]
+set DataStatus = 'Entered', DateProofed = NULL, ProofedBy = NULL
+where ShellHeightID  like 'CRSRVY_20230613_1_0231_1_11%' or ShellHeightID  like 'CRSRVY_20230613_1_0231_1_12%' or ShellHeightID  like 'CRSRVY_20230613_1_0231_1_13%' or ShellHeightID  like 'CRSRVY_20230613_1_0231_1_15%'
+update [dbo].[SurveySH]
+set DataStatus = 'Entered', DateProofed = NULL, ProofedBy = NULL
+where ShellHeightID  like 'CRSRVY_20230613_1_0232_1_11%' or ShellHeightID  like 'CRSRVY_20230613_1_0232_1_12%' or ShellHeightID  like 'CRSRVY_20230613_1_0232_1_14%' or ShellHeightID  like 'CRSRVY_20230613_1_0232_1_15%'
+
 --Check data
 select * from SurveySH where ShellHeightID  like 'CRSRVY_20230613_1_0232_1_13%' order by ShellHeightID
 
