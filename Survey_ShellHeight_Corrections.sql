@@ -6,7 +6,7 @@ GO
 
 --Check Fixed location IDs for reference - change estuary as needed
 select * from FixedLocations where Estuary = 'CR'
---Check for and note incorrect data by changing the searcg ShellHeightID
+--Check for and note incorrect data by changing the search ShellHeightID
 select * from SurveySH where ShellHeightID like 'CRSRVY_20230613_1_0233%' order by ShellHeightID
 
 ----update specific missing values by ShellHeightID
