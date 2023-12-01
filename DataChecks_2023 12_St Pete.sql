@@ -30,11 +30,20 @@ WHERE [TripID] like 'CRRCRT_20230110%'
 UPDATE [dbo].[Recruitment] 
 SET [Comments] = 'Retrieval after hurricane Ian'
 where [SampleEventID] like 'CRRCRT_20230110%'
-
 ---End of CR RCRT Jan 2023 - Oct 2023 data checks. With corrections above, data is complete.
+  
+---SL RCRT updates
+--Update 2023/03/08 WQ comment
+UPDATE [dbo].[SampleEventWQ] 
+SET [Comments] = 'Same as dermo WQ'
+WHERE [SampleEventWQID] like 'SLRCRT_20230308_1_0269%' or [SampleEventWQID] like 'SLRCRT_20230308_1_0256%' or [SampleEventWQID] like 'SLRCRT_20230308_1_0257%' or [SampleEventWQID] like 'SLRCRT_20230308_1_0271%'
+---End of SL RCRT Jan 2023 - Oct 2023 data checks. With corrections above, data is complete.
+
+
 IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL BEGIN DROP TABLE #ValidTrips; END
 CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-10-31' AND DataStatus = 'Proofed' AND TripID like 'CRRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-10-31' AND DataStatus = 'Proofed' AND TripID like 'SLRCRT%';
 UPDATE TripInfo SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '01-December-2023' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEvent SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '01.December.2023' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEventWQ SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '01-December-2023' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
