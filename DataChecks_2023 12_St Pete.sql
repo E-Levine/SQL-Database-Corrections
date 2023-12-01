@@ -3,6 +3,10 @@ Use OystersEL_231201
 go
 
 ---CR RCRT updates
+  --Remove incorrect TripIDs
+DELETE FROM [dbo].[TripInfo]
+WHERE [TripID] like 'CRRCRT_20230913%' or [TripID] like 'CRRCRT_20230621%'
+
 --Update 2023/02/14 Trip IDs in SampleEvent
 UPDATE [dbo].[SampleEvent] 
 SET [TripID] = REPLACE ([TripID], 'CRRCRT_20230413_1','CRRCRT_20230214_1') 
