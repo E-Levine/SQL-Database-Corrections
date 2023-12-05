@@ -8,6 +8,12 @@ GO
 select * from FixedLocations where Estuary = 'CR'
 --Check for and note incorrect data by changing the search ShellHeightID
 select * from SurveySH where ShellHeightID like 'CRSRVY_20230613_1_0233%' order by ShellHeightID
+select * from TripInfo where TripID like 'CRSRVY_2023%' 
+
+--Reset trips needing re-entry/proofing
+update [dbo].[TripInfo]
+set [DataStatus] = 'Not Entered',  DateProofed = NULL, ProofedBy = NULL
+where [TripID] = 'CRSRVY_20230314_1' or [TripID] = 'CRSRVY_20230613_1'
 
 ----update specific missing values by ShellHeightID
 --Station 1 2023/03/14 survey
