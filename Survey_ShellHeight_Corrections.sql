@@ -99,3 +99,36 @@ where ShellHeightID  like 'CRSRVY_20230613_1_0232_1_11%' or ShellHeightID  like 
 --Check data
 select * from SurveySH where ShellHeightID  like 'CRSRVY_20230613_1_0232_1_13%' order by ShellHeightID
 
+
+---Code above run for re-entry and corrections. Data re-entered as approriate and secondary checks performed 12/7/2023.
+--Remove NULL rows CR 3/14/23 St2 & St 3, Q1-5
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0231_1_01_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_01_010' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_01_02%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_01_03%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_01_04%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_01_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0231_1_02_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_02_010' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_02_02%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_02_03%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_02_04%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_02_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0231_1_03_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_03_010' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_03_02%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_03_03%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_03_04%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_03_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0231_1_04_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_04_010' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_04_02%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_04_03%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_04_04%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_04_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0231_1_05_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0231_1_05_010' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_05_02%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_05_03%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_05_04%' or ShellHeightID like 'CRSRVY_20230314_1_0231_1_05_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0232_1_01_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_01_010' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_01_02%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_01_03%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_01_04%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_01_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0232_1_02_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_02_010' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_02_02%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_02_03%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_02_04%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_02_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0232_1_03_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_03_010' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_03_02%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_03_03%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_03_04%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_03_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0232_1_04_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_04_010' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_04_02%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_04_03%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_04_04%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_04_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0232_1_05_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0232_1_05_010' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_05_02%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_05_03%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_05_04%' or ShellHeightID like 'CRSRVY_20230314_1_0232_1_05_05%'
+--Remove rows CR 3/14/23 St4, Q1 (9-22), 2 (11-31), 4  (11-43)
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_01%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_009' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_02%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_03%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_04%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_01_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0233_1_02_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0233_1_02_010' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_02_02%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_02_03%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_02_04%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_02_05%'
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230314_1_0233_1_04_01%' and ShellHeightID not like 'CRSRVY_20230314_1_0233_1_04_010' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_04_02%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_04_03%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_04_04%' or ShellHeightID like 'CRSRVY_20230314_1_0233_1_04_05%'
+--Remove SH#10 Q4 Cr 6/13/23
+delete from [dbo].[SurveySH]
+where ShellHeightID like 'CRSRVY_20230613_1_0232_1_04_010'
