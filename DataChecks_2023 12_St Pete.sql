@@ -1,5 +1,5 @@
----Database corrections St Pete 2023/12/01 - E Levine
-Use OystersEL_231201
+---Database corrections St Pete 2023/12/27 - E Levine
+Use OystersEL_231227
 go
 
 ---CR RCRT updates
@@ -65,16 +65,66 @@ DELETE FROM [dbo].[SampleEventWQ]
 WHERE [SampleEventID] like 'LWRCRT_20230608%'
 DELETE FROM [dbo].[Recruitment]
 WHERE [SampleEventID] like 'LWRCRT_20230608%'
-
+---End of LW RCRT Jan 2023 - Nov 2023 data checks. With corrections above, data is complete.
 
 --TB RCRT Updates
+--WQ data missing from trips. Add additional data as local database for join. Name database SPDecMissing for use in following code.
+UPDATE [dbo].[SampleEventWQ]
+SET [SampleEventWQ].Temperature = (SELECT[2023_12_MissingTBRCRTData].Temperature FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+ [SampleEventWQ].Salinity = (SELECT[2023_12_MissingTBRCRTData].Salinity FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].DissolvedOxygen = (SELECT [2023_12_MissingTBRCRTData].DissolvedOxygen FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].pH = (SELECT [2023_12_MissingTBRCRTData].pH FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].Depth = (SELECT [2023_12_MissingTBRCRTData].Depth FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].SampleDepth = (SELECT [2023_12_MissingTBRCRTData].SampleDepth FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].Secchi = (SELECT [2023_12_MissingTBRCRTData].Secchi FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].TurbidityYSI = (SELECT [2023_12_MissingTBRCRTData].TurbidityYSI FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].TurbidityHach = (SELECT [2023_12_MissingTBRCRTData].TurbidityHach FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].CollectionTime = (SELECT [2023_12_MissingTBRCRTData].CollectionTime FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+),
+[SampleEventWQ].PercentDissolvedOxygen = (SELECT [2023_12_MissingTBRCRTData].PercentDissolvedOxygen FROM [SPDecMissing].[dbo].[2023_12_MissingTBRCRTData] WHERE [2023_12_MissingTBRCRTData].SampleEventWQID = [SampleEventWQ].SampleEventWQID
+)
+WHERE [SampleEventWQ].SampleEventID like 'TBRCRT_202305%' or [SampleEventWQ].SampleEventID like 'TBRCRT_202306%' or [SampleEventWQ].SampleEventID like 'TBRCRT_202307%' or [SampleEventWQ].SampleEventID like 'TBRCRT_202308%';
+--Update Comments for corrected data.
+UPDATE [dbo].[SampleEventWQ]
+SET Comments = NULL
+WHERE SampleEventID like 'TBRCRT_202305%' or SampleEventID like 'TBRCRT_202306%' or SampleEventID like 'TBRCRT_202307%' or SampleEventID like 'TBRCRT_202308%'
+--Confirm dates and days deployed
+UPDATE [dbo].[Recruitment]
+SET Comments = 'Dates and days deployed correct'
+WHERE SampleEventID like 'TBRCRT_20230227%' or SampleEventID like 'TBRCRT_20230626%' 
+--Update missing comment for shell order
+UPDATE [dbo].[Recruitment]
+SET Comments = 'Shell broke in field, mixed up shell order'
+WHERE SampleEventID like 'TBRCRT_20230227_1_0527%' and ShellReplicate = 2 and ShellPosition < 7
+--Confirm WQ data
+UPDATE [dbo].[SampleEventWQ]
+SET Comments = 'pH value okay'
+WHERE SampleEventID like 'TBRCRT_20231017_1_0291%' or SampleEventID like 'TBRCRT_20231117_1_0529%'
+UPDATE [dbo].[SampleEventWQ]
+SET Comments = 'YSI turbidity okay'
+WHERE SampleEventID like 'TBRCRT_20230118_1_027%' or SampleEventID like 'TBRCRT_20231118_1_0528%'
+UPDATE [dbo].[SampleEventWQ]
+SET Comments = 'DO value okay'
+WHERE SampleEventID like 'TBRCRT_20230815_1_0291%' or SampleEventID like 'TBRCRT_20230718_1_0291%'
+---End of TB RCRT Jan 2023 - Nov 2023 data checks. With corrections above, data is complete.
+
 
 IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL BEGIN DROP TABLE #ValidTrips; END
 CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
-INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-10-31' AND DataStatus = 'Proofed' AND TripID like 'CRRCRT%';
-INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-10-31' AND DataStatus = 'Proofed' AND TripID like 'SLRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'CRRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'SLRCRT%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'LXRCRT%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'LWRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'TBRCRT%';
 UPDATE TripInfo SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '27-December-2023' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEvent SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '27.December.2023' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEventWQ SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '27-December-2023' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
