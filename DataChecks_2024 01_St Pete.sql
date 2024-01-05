@@ -3,7 +3,7 @@ Use OystersEL_240104
 go
 
 ---TB SDTP Updates
---Correct PK for 11/2023 and add SampleEvent for 01/2023
+--Correct PK and add data as needed for 11/2023 and 01/2023
 update [dbo].[SampleEvent] 
 set [SampleEventID] = CONCAT(TripID,'_',(right(replicate('0',4) + cast(FixedLocationID as varchar(4)),4)),'_1')
 where [TripID] like 'TBSDTP_20231117%'
@@ -17,6 +17,16 @@ set [TripID] = 'TBSDTP_20230118_1',
 insert into SampleEvent
 select *
 from temp_table
+
+select * into temp_tableb
+from SampleEventWQ
+where SampleEventID like 'TBSDTP_202301%'
+update temp_tableb
+set [SampleEventWQID] = REPLACE(SampleEventWQID, '0118','1117'),
+	[SampleEventID] = REPLACE(SampleEventID, '0118', '1117')
+insert into SampleEventWQ
+select *
+from temp_tableb
 
 --Update incorrect dates and SampleEventIDs for mixed 01/2023 and 11/2023 samples
 update [dbo].[SedimentTrap]
