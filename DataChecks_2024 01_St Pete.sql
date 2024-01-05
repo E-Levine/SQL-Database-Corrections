@@ -44,3 +44,8 @@ where CupSampleID like 'TB%2311-04%' or CupSampleID like 'TB%2311-05%' or CupSam
 update [dbo].[SedimentTrap]
 set [DeployedDate] = '2023-06-26'
 where [SampleEventID] like 'TBSDTP_202307%' and DeployedDate like '2023-05%'
+
+--Update comments to indicate correct data. 
+update [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, '2 filters used')
+where CupSampleID like 'TBR2305-07-1%'
