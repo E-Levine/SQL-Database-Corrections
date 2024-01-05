@@ -47,5 +47,27 @@ where [SampleEventID] like 'TBSDTP_202307%' and DeployedDate like '2023-05%'
 
 --Update comments to indicate correct data. 
 update [dbo].[SedimentTrap]
-set [Comments] = CONCAT(Comments, '2 filters used')
-where CupSampleID like 'TBR2305-07-1%'
+set [Comments] = CONCAT(Comments, ' 2 filters used')
+where [CupSampleID] like 'TBR2305-07-1%'
+
+update [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, ' Data is correct')
+where [CupSampleID] like 'TB%2302-07-3%' or CupSampleID like 'TB%2303-01-1%' or CupSampleID like 'TB%2303-01-2%' or CupSampleID like 'TB%2305-01-1%' or CupSampleID like 'TB%2305-01-2%' or CupSampleID like 'TB%2309-01-1%' or CupSampleID like 'TB%2309-04-2%' or CupSampleID like 'TB%2309-05-1%'
+--End of TBSDTP corrections for 01/2023 - 11/2023.
+
+
+IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL BEGIN DROP TABLE #ValidTrips; END
+CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'TBSDTP%';
+UPDATE TripInfo SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-05' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+UPDATE SampleEvent SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-05' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+UPDATE SampleEventWQ SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-05' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+UPDATE SedimentTrap SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '%Y-01-05' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+INSERT INTO hsdb.TripInfo SELECT * FROM TripInfo WHERE DataStatus = 'Completed';
+DELETE FROM dbo.TripInfo WHERE DataStatus = 'Completed';
+INSERT INTO hsdb.SampleEvent SELECT * FROM SampleEvent WHERE DataStatus = 'Completed';
+DELETE FROM dbo.SampleEvent WHERE DataStatus = 'Completed';
+INSERT INTO hsdb.SampleEventWQ SELECT * FROM SampleEventWQ WHERE DataStatus = 'Completed';
+DELETE FROM dbo.SampleEventWQ WHERE DataStatus = 'Completed';
+INSERT INTO hsdb.SedimentTrap SELECT * FROM SedimentTrap WHERE DataStatus = 'Completed';
+DELETE FROM dbo.SedimentTrap WHERE DataStatus = 'Completed';
