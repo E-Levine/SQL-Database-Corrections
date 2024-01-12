@@ -76,6 +76,20 @@ set [Comments] = CONCAT(Comments, case when Comments is null then 'Data is corre
 where [CupSampleID] like 'CRE2303-01-1%' or CupSampleID like 'CRW2309-03-2%' or CupSampleID like 'CRW2303-04-1%' or CupSampleID like 'CRW2303-04-2%' or CupSampleID like 'CRW2304-04-1%' or CupSampleID like 'CRW2305-04-1%' or CupSampleID like 'CRW2306-04-3%' 
 --End of CRSDTP corrections 01/2023 - 11/2023.
 
+--TB WAVE Updates
+--Correct/comment DWs
+update [dbo].[Wave]
+set [Comments] = 'Data as recorded on datasheet'
+where [WaveID] like 'TBWAVE_20230321_1_0528_1_3' or WaveID like 'TBWAVE_20230418_1_0528_1_3' or WaveID like 'TBWAVE_20230626_1_0528_1_2'
+--End of TBWAVE corrections 01/2023-11/2023
+
+--CR WAVE Updates
+--Correct/comment DWs
+update [dbo].[Wave]
+set [Comments] = 'Data as recorded on datasheet'
+where [WaveID] like 'CRWAVE_20231010_1_0232_1_2'
+--End of CRWAVE corrections 03/2023-11/2023
+
 
 IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL BEGIN DROP TABLE #ValidTrips; END
 CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
@@ -83,6 +97,8 @@ CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'TBSDTP%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'LWSDTP%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'CRSDTP%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'TBWAVE%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'CRWAVE%';
 
 UPDATE TripInfo SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-05' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEvent SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-05' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
