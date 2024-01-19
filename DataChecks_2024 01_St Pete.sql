@@ -105,6 +105,10 @@ set [DryWeight] = 23.52
 where [WaveID] like 'CRWAVE_20231219_1_0230_1_2'
 --End of CRWAVE corrections 03/2023-12/2023
 
+--December RCRT checks---
+--SL,LX,LW,CR - none
+
+
 
 IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL BEGIN DROP TABLE #ValidTrips; END
 CREATE TABLE #ValidTrips ( TripID VARCHAR(50) );
@@ -114,12 +118,17 @@ INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-11-30' AND DataStatus = 'Proofed' AND TripID like 'CRSDTP%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'TBWAVE%';
 INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-01-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'CRWAVE%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-11-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'SLRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-11-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'LXRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-11-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'LWRCRT%';
+INSERT INTO #ValidTrips (TripID) SELECT TripID FROM TripInfo WHERE TripDate > '2023-11-01' AND TripDate < '2023-12-31' AND DataStatus = 'Proofed' AND TripID like 'CRRCRT%';
 
 UPDATE TripInfo SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEvent SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE TripID IN (SELECT TripID FROM #ValidTrips);
 UPDATE SampleEventWQ SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
 UPDATE SedimentTrap SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
 UPDATE Wave SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+UPDATE Recruitment SET DataStatus = 'Completed', CompletedBy = 'Erica Levine', DateCompleted = '2024-01-31' WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
 
 INSERT INTO hsdb.TripInfo SELECT * FROM TripInfo WHERE DataStatus = 'Completed';
 DELETE FROM dbo.TripInfo WHERE DataStatus = 'Completed';
