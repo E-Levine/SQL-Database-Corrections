@@ -1,0 +1,15 @@
+select * from SampleEvent where TripID != substring(SampleEventID, 1, 17)
+select * from SampleEventWQ where SampleEventID != substring(SampleEventWQID, 1, 24)
+select * from Recruitment where SampleEventID != substring(ShellID, 1, 24)
+select * from SedimentTrap where substring(SampleEventID, 1, 2) != substring(CupSampleID, 1, 2) or
+	substring(SampleEventID, 10, 4) != substring(CupSampleID, 4, 4)
+select * from SurveyQuadrat where SampleEventID != substring(QuadratID, 1, 24)
+select * from SurveySH where QuadratID != substring(ShellHeightID, 1, 27)
+select * from ShellBudgetQuadrat where SampleEventID != substring(QuadratID, 1, 24)
+select * from ShellBudgetSH where QuadratID != substring(ShellHeightID, 1, 27)
+select * from ConditionIndex where substring(SampleEventID, 1, 2) != substring(OysterID, 1, 2) or
+	substring(SampleEventID, 10, 4) != substring(OysterID, 5, 4)
+select * from Dermo where substring(SampleEventID, 1, 2) != substring(OysterID, 1, 2) or
+	substring(SampleEventID, 10, 4) != substring(OysterID, 5, 4)
+select * from Repro where substring(SampleEventID, 1, 2) != substring(OysterID, 1, 2) or
+	substring(SampleEventID, 10, 4) != substring(OysterID, 5, 4)
