@@ -157,6 +157,72 @@ INSERT INTO [dbo].[SurveySH](ShellHeightID, QuadratID, ShellHeight, DataStatus, 
 VALUES  ('CRSRVY_20240312_1_0230_1_11_014', 'CRSRVY_20240312_1_0230_1_11', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine'),
 	('CRSRVY_20240312_1_0230_1_12_014', 'CRSRVY_20240312_1_0230_1_12', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine')
 
+--SL 2023 Survey data
+--Remove duplicate rows of data
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY ShellHeightID ORDER BY (SELECT NULL))
+	FROM SurveySH) AS T
+WHERE DupRank > 1 and ShellHeightID like 'SL%'
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY QuadratID ORDER BY (SELECT NULL))
+	FROM SurveyQuadrat) AS T
+WHERE DupRank > 1 and QuadratID like 'SL%'
+
+--Add comment for no oysters
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'No oysters found' else ', No oysters found' end)
+where [SampleEventID] like 'SLSRVY_20230523_1_L020_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L022_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L024_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L025_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L026_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L027_1_01%' or [SampleEventID] like 'SLSRVY_20230523_1_L029_1_01' or [SampleEventID] like 'SLSRVY_20230523_1_L030_1_01' or [SampleEventID] like 'SLSRVY_20230523_1_L033_1_01'
+--Add comment for SL Random SRVY with only 1 quad
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'SL random SRVY-only 1 quad' else ', SL random SRVY-only 1 quad' end)
+where [SampleEventID] like 'SLSRVY_20230523_1_L0%'
+UPDATE [dbo].[SampleEventWQ]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'No WQ collected' else ', No WQ collected' end)
+where [SampleEventWQID] like 'SLSRVY_20230523_1_L035_1_01%'
+
+UPDATE [dbo].[SurveySH] set ShellHeight = 32 where [ShellHeightID] like 'SLSRVY_20230906_1_0257_1_14_003'
+UPDATE [dbo].[SurveySH] set ShellHeight = 44 where [ShellHeightID] like 'SLSRVY_20230906_1_0257_1_14_004'
+UPDATE [dbo].[SurveySH] set ShellHeight = 43 where [ShellHeightID] like 'SLSRVY_20230906_1_0257_1_14_005'
+UPDATE [dbo].[SurveySH] set ShellHeight = 56 where [ShellHeightID] like 'SLSRVY_20230906_1_0257_1_14_010'
+UPDATE [dbo].[SurveySH] set ShellHeight = 63 where [ShellHeightID] like 'SLSRVY_20240306_1_0255_1_09_006'
+UPDATE [dbo].[SurveySH] set ShellHeight = 24 where [ShellHeightID] like 'SLSRVY_20240306_1_0257_1_01_002'
+
+
+UPDATE [dbo].[SurveySH]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data correct' else ', Data correct' end)
+where [ShellHeightID] like 'SLSRVY_20230523_1_L012_1_01_006' or [ShellHeightID] like 'SLSRVY_20240306_1_0271_1_11_010'
+
+DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_002%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_003%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_004%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_005%' 
+DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L008_1_01_006%' or [ShellHeightID] like 'SLSRVY_20230523_1_L008_1_01_007%' or [ShellHeightID] like 'SLSRVY_20230523_1_L008_1_01_008%' or [ShellHeightID] like 'SLSRVY_20230523_1_L008_1_01_009%'
+DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_002%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_003%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_004%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_005' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_006%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_007%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_008%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_009%' or [ShellHeightID] like 'SLSRVY_20230523_1_L010_1_01_010%'
+DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L014_1_01_002%'
+DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L016_1_01_001%'
+
+
+--LW 2023 Survey data
+--Remove duplicate rows of data
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY ShellHeightID ORDER BY (SELECT NULL))
+	FROM SurveySH) AS T
+WHERE DupRank > 1 and ShellHeightID like 'LW%'
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY QuadratID ORDER BY (SELECT NULL))
+	FROM SurveyQuadrat) AS T
+WHERE DupRank > 1 and QuadratID like 'LW%'
+
+UPDATE [dbo].[SurveySH] set ShellHeight = 44 where [ShellHeightID] like 'LWSRVY_20230905_1_0312_1_15_010'
+UPDATE [dbo].[SurveySH] set ShellHeight = 21 where [ShellHeightID] like 'LWSRVY_20240305_1_0240_1_10_002'
+
+DELETE FROM [dbo].[TripInfo] WHERE [TripID] like 'LWSRVY_20230207_1%'
+
+
+--LX 2023 Survey data
+UPDATE [dbo].[SampleEventWQ]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'WQ same as dermo' else ', WQ same as dermo' end)
+where [SampleEventWQID] like 'LXSRVY_20230906_1_0244_1_01%'
+
+UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 8 where [QuadratID] like 'LXSRVY_20230308_1_0247_1_02' 
+
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
@@ -164,3 +230,6 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
