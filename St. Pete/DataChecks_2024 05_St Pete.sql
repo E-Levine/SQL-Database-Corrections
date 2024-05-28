@@ -102,6 +102,60 @@ UPDATE [dbo].[SurveyQuadrat]
 set NumLive = 7 
 where [QuadratID] like 'TBSRVY_20230822_1_T018_1_03'
 
+--CR SRVY data
+UPDATE [dbo].[SurveyQuadrat]
+set [QuadratID] = 'CRSRVY_20230914_1_C009_1_01',
+	[QuadratNumber] = 1,
+	[DateEntered] = '2024-05-28 00:00:00',
+	[EnteredBy] = 'Erica Levine'
+where [SampleEventID] like 'CRSRVY_20230914_1_C009_1'
+UPDATE [dbo].[SurveySH]
+set [DataStatus] = 'Proofed',
+	[DateProofed] = '2024-05-28 00:00:00',
+	[ProofedBy] = 'Erica Levine'
+where [QuadratID] like 'CRSRVY_20230914_1_C009_1_01'
+
+--Remove duplicate rows of data
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY ShellHeightID ORDER BY (SELECT NULL))
+	FROM SurveySH) AS T
+WHERE DupRank > 1 and ShellHeightID like 'CR%'
+DELETE T FROM (
+	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY QuadratID ORDER BY (SELECT NULL))
+	FROM SurveyQuadrat) AS T
+WHERE DupRank > 1 and QuadratID like 'CRSRVY_20230613_1_0232_1_02%'
+
+--Update SRVY DOPct data
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 101.8 where [SampleEventWQID] like 'CRSRVY_20230110_1_0232_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 112.2 where [SampleEventWQID] like 'CRSRVY_20230613_1_C001_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.5 where [SampleEventWQID] like 'CRSRVY_20230620_1_C005_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 104.7 where [SampleEventWQID] like 'CRSRVY_20230620_1_C007_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 140.9 where [SampleEventWQID] like 'CRSRVY_20230620_1_C008_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 105.3 where [SampleEventWQID] like 'CRSRVY_20240221_1_C032_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 106.6 where [SampleEventWQID] like 'CRSRVY_20240221_1_C033_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 103.8 where [SampleEventWQID] like 'CRSRVY_20240221_1_C034_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 106.4 where [SampleEventWQID] like 'CRSRVY_20240221_1_C035_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 107.1 where [SampleEventWQID] like 'CRSRVY_20240221_1_C036_1_01'
+
+--Update comments to confirm data
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'No TIG SRVY' else ', No TIG SRVY' end)
+where [QuadratID] like 'CRSRVY_20230110_1%' 
+
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data correct' else ', Data correct' end)
+where [QuadratID] like 'CRSRVY_20230912_1_0230_1_12' or [QuadratID] like 'CRSRVY_20231030_1_C022_1_01' or [QuadratID] like 'CRSRVY_20240312_1_0232_1_13'
+
+UPDATE [dbo].[SurveySH] set [ShellHeight] = 19 where [ShellHeightID] like 'CRSRVY_20231030_1_C022_1_02_011'
+
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'SHs 42-50 not measured' else ', SHs 42-50 not measured' end)
+where [QuadratID] like 'CRSRVY_20230613_1_0231_1_11' 
+UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 24 where [QuadratID] like 'CRSRVY_20231219_1_0231_1_15' 
+UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 25 where [QuadratID] like 'CRSRVY_20240312_1_0233_1_14' 
+INSERT INTO [dbo].[SurveySH](ShellHeightID, QuadratID, ShellHeight, DataStatus, DateEntered, EnteredBy, DateProofed, ProofedBy)
+VALUES  ('CRSRVY_20240312_1_0230_1_11_014', 'CRSRVY_20240312_1_0230_1_11', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine'),
+	('CRSRVY_20240312_1_0230_1_12_014', 'CRSRVY_20240312_1_0230_1_12', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine')
 
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
@@ -109,3 +163,4 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
