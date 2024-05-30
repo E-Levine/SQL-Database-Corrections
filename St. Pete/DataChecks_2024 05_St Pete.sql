@@ -1,8 +1,8 @@
----Database corrections St Pete 2024/01/04 - E Levine
+---Database corrections St Pete 2024/05/04 - E Levine
 Use [Oysters_24-05-15]
 go
 
---Jan-Apr RCRT 
+--Jan-May RCRT 
 -- SL,LW, CR Checks
 --No issues
 
@@ -44,6 +44,24 @@ UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 112 where [SampleEvent
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 104.9 where [SampleEventWQID] like 'TBRCRT_20240423_1_0527_1_01'
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 104.6 where [SampleEventWQID] like 'TBRCRT_20240423_1_0529_1_01'
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 104.1 where [SampleEventWQID] like 'TBRCRT_20240423_1_0529_1_02'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 105.0 where [SampleEventWQID] like 'TBRCRT_20240521_1_0277_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 109.3 where [SampleEventWQID] like 'TBRCRT_20240521_1_0528_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 112.8 where [SampleEventWQID] like 'TBRCRT_20240521_1_0529_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 113.4 where [SampleEventWQID] like 'TBRCRT_20240521_1_0529_1_02'
+
+UPDATE [dbo].[Recruitment] set NumBottom = 82 where [ShellID] like 'TBRCRT_20240521_1_0528_1_25'
+UPDATE [dbo].[Recruitment] set NumBottom = 32 where [ShellID] like 'TBRCRT_20240521_1_0528_1_26'
+UPDATE [dbo].[Recruitment] set NumBottom = 29 where [ShellID] like 'TBRCRT_20240521_1_0528_1_27'
+UPDATE [dbo].[Recruitment] set NumBottom = 90 where [ShellID] like 'TBRCRT_20240521_1_0528_1_28'
+UPDATE [dbo].[Recruitment] set NumBottom = 45 where [ShellID] like 'TBRCRT_20240521_1_0528_1_29'
+UPDATE [dbo].[Recruitment] set NumBottom = 20 where [ShellID] like 'TBRCRT_20240521_1_0528_1_30'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_31'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_32'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_33'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_34'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_35'
+UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_36'
+
 
 --2023 Survey data
 --TB
@@ -223,13 +241,32 @@ where [SampleEventWQID] like 'LXSRVY_20230906_1_0244_1_01%'
 
 UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 8 where [QuadratID] like 'LXSRVY_20230308_1_0247_1_02' 
 
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+
+--CR Sediment traps 04-05/2024
+UPDATE [dbo].[SampleEvent]
+set [DataStatus] = 'Proofed',
+	[DateProofed] = '2024-05-28 00:00:00',
+	[ProofedBy] = 'Erica Levine'
+where [TripID] like 'CRSDTP_20240408_1%'
+UPDATE [dbo].[SampleEventWQ]
+set [DataStatus] = 'Proofed',
+	[DateProofed] = '2024-05-28 00:00:00',
+	[ProofedBy] = 'Erica Levine'
+where [SampleEventID] like 'CRSDTP_20240408_1%'
+UPDATE [dbo].[SedimentTrap]
+set [DataStatus] = 'Proofed',
+	[DateProofed] = '2024-05-29 00:00:00',
+	[ProofedBy] = 'Mallory Gassen-Kurtz'
+where [SampleEventID] like 'CRSDTP_20240408%'
+
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2023-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
