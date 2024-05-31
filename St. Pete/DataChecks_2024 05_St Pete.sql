@@ -243,7 +243,32 @@ UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 8 where [QuadratID] like 'LXSRVY_20
 
 
 --CR Sediment traps 04-05/2024 - no issues
---LW SDTP - no issues
+--LW SDTP 
+--Add in missing CrucibleDWs for May 2024
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 46.4 where [CupSampleID] like 'LWL2405-01-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = NULL where [CupSampleID] like 'LWL2405-01-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 45.5 where [CupSampleID] like 'LWL2405-01-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = NULL where [CupSampleID] like 'LWL2405-01-4'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 25.7 where [CupSampleID] like 'LWL2405-02-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 30.5 where [CupSampleID] like 'LWL2405-02-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 34.9 where [CupSampleID] like 'LWL2405-02-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 38.9 where [CupSampleID] like 'LWL2405-02-4'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 21.4 where [CupSampleID] like 'LWL2405-03-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 25.4 where [CupSampleID] like 'LWL2405-03-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 31.8 where [CupSampleID] like 'LWL2405-03-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 22.1 where [CupSampleID] like 'LWL2405-03-4'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 39.9 where [CupSampleID] like 'LWR2405-02-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 41.4 where [CupSampleID] like 'LWR2405-02-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 47.9 where [CupSampleID] like 'LWR2405-02-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 45.2 where [CupSampleID] like 'LWR2405-02-4'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 32.8 where [CupSampleID] like 'LWR2405-03-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 37.5 where [CupSampleID] like 'LWR2405-03-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 29.9 where [CupSampleID] like 'LWR2405-03-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 33.4 where [CupSampleID] like 'LWR2405-03-4'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 35.4 where [CupSampleID] like 'LWR2405-04-1'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 32.2 where [CupSampleID] like 'LWR2405-04-2'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 29.6 where [CupSampleID] like 'LWR2405-04-3'
+UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 41.9 where [CupSampleID] like 'LWR2405-04-4'
 --TB SDTP - no issues
 
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
