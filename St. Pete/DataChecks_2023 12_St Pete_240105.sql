@@ -1,4 +1,4 @@
----Database corrections St Pete 2023/12/27 - E Levine
+---Database corrections St Pete 2023/12/27 - E Levine - COMPLETED 2023/01/05
 Use OystersEL_231227
 go
 
