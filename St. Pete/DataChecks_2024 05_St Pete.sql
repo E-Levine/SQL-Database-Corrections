@@ -291,6 +291,9 @@ UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 29.6 where [CupSampleID] like 'LW
 UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 41.9 where [CupSampleID] like 'LWR2405-04-4'
 --TB SDTP - no issues
 
+--Kick back Trip for COLL CI data entry
+UPDATE [dbo].[TripInfo] set [DataStatus] = 'Not Entered', [DateProofed] = NULL, [ProofedBy] = NULL where [TripID] like 'SLCOLL_20240410_1'
+
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
