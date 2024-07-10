@@ -1,8 +1,27 @@
 ---Database corrections St Pete 2024/05/04 - E Levine
-Use [Oysters_24-05-30]
+Use [Oysters_24-07-01]
 go
 
---Jan-May RCRT 
+--June DERMO
+--SL,LX, LW
+--Confirm TWs
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'TW correct' else ', TW correct' end)
+where [OysterID] like 'SLND2406-11' or OysterID like 'SLND2406-13'
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'TW correct' else ', TW correct' end)
+where [OysterID] like 'LXND2406-02' or OysterID like 'LXSD2406-13'
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'TW correct' else ', TW correct' end)
+where [OysterID] like 'LWLD2406-06' or OysterID like 'LWRD2406-05' or OysterID like 'LWLD2406-14' or OysterID like 'LWRD2406-07' or OysterID like 'LWRD2406-14'
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'TW correct' else ', TW correct' end)
+where [OysterID] like 'CRED2406-02' 
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'SWW correct' else ', SWW correct' end)
+where [OysterID] like 'CRWD2406-09' 
+
+--Jan-June RCRT 
 -- SL,LW, CR Checks
 --No issues
 
@@ -11,7 +30,7 @@ go
 DELETE FROM [dbo].[TripInfo]
 WHERE [TripID] like 'LXRCRT_20240213%' 
 
---TB
+--TB (Jan-May)
 --Remove sta 7 & 8 from 1/18/24 - collected 1/23/24; update missing count
 DELETE FROM [dbo].[SampleEvent]
 WHERE [SampleEventID] like 'TBRCRT_20240118_1_0528%' or [SampleEventID] like 'TBRCRT_20240118_1_0529%' 
@@ -63,7 +82,7 @@ UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_202
 UPDATE [dbo].[Recruitment] set NumBottom = NULL where [ShellID] like 'TBRCRT_20240521_1_0528_1_36'
 
 
---2023 Survey data
+--2023 Survey data, March 2024
 --TB
 --Remove duplicate rows of data
 DELETE T FROM (
@@ -120,7 +139,8 @@ UPDATE [dbo].[SurveyQuadrat]
 set NumLive = 7 
 where [QuadratID] like 'TBSRVY_20230822_1_T018_1_03'
 
---CR SRVY data
+
+--CR SRVY data 2023-June 2024
 UPDATE [dbo].[SurveyQuadrat]
 set [QuadratID] = 'CRSRVY_20230914_1_C009_1_01',
 	[QuadratNumber] = 1,
@@ -175,7 +195,7 @@ INSERT INTO [dbo].[SurveySH](ShellHeightID, QuadratID, ShellHeight, DataStatus, 
 VALUES  ('CRSRVY_20240312_1_0230_1_11_014', 'CRSRVY_20240312_1_0230_1_11', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine'),
 	('CRSRVY_20240312_1_0230_1_12_014', 'CRSRVY_20240312_1_0230_1_12', 14, 'Proofed', '2024-05-28 00:00:00', 'Erica Levine', '2024-05-28 00:00:00', 'Erica Levine')
 
---SL 2023 Survey data
+--SL 2023 Survey data, March 2024, June 2024
 --Remove duplicate rows of data
 DELETE T FROM (
 	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY ShellHeightID ORDER BY (SELECT NULL))
@@ -207,7 +227,7 @@ UPDATE [dbo].[SurveySH] set ShellHeight = 24 where [ShellHeightID] like 'SLSRVY_
 
 
 UPDATE [dbo].[SurveySH]
-set [Comments] = CONCAT(Comments, case when Comments is null then 'Data correct' else ', Data correct' end)
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data correct' else 'Data correct' end)
 where [ShellHeightID] like 'SLSRVY_20230523_1_L012_1_01_006' or [ShellHeightID] like 'SLSRVY_20240306_1_0271_1_11_010'
 
 DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_002%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_003%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_004%' or [ShellHeightID] like 'SLSRVY_20230523_1_L007_1_01_005%' 
@@ -217,7 +237,7 @@ DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L014_
 DELETE FROM [dbo].[SurveySH] WHERE [ShellHeightID] like 'SLSRVY_20230523_1_L016_1_01_001%'
 
 
---LW 2023 Survey data
+--LW 2023 Survey data, March 2024
 --Remove duplicate rows of data
 DELETE T FROM (
 	SELECT * , DupRank = ROW_NUMBER() OVER (PARTITION BY ShellHeightID ORDER BY (SELECT NULL))
@@ -234,7 +254,7 @@ UPDATE [dbo].[SurveySH] set ShellHeight = 21 where [ShellHeightID] like 'LWSRVY_
 DELETE FROM [dbo].[TripInfo] WHERE [TripID] like 'LWSRVY_20230207_1%'
 
 
---LX 2023 Survey data
+--LX 2023 Survey data, March 2024
 UPDATE [dbo].[SampleEventWQ]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'WQ same as dermo' else ', WQ same as dermo' end)
 where [SampleEventWQID] like 'LXSRVY_20230906_1_0244_1_01%'
@@ -244,7 +264,7 @@ UPDATE [dbo].[SurveyQuadrat] set [NumLive] = 8 where [QuadratID] like 'LXSRVY_20
 
 --CR Sediment traps 04-05/2024 - no issues
 --LW SDTP 
---Add in missing CrucibleDWs for May 2024
+--Add in missing CrucibleDWs for May 2024, no issues June
 UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 46.4 where [CupSampleID] like 'LWL2405-01-1'
 UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = NULL where [CupSampleID] like 'LWL2405-01-2'
 UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 45.5 where [CupSampleID] like 'LWL2405-01-3'
@@ -271,16 +291,22 @@ UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 29.6 where [CupSampleID] like 'LW
 UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 41.9 where [CupSampleID] like 'LWR2405-04-4'
 --TB SDTP - no issues
 
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+--Kick back Trip for COLL CI data entry
+UPDATE [dbo].[TripInfo] set [DataStatus] = 'Not Entered', [DateProofed] = NULL, [ProofedBy] = NULL where [TripID] like 'SLCOLL_20240410_1'
+
+--Remove incorrect dermo data in Condition table
+DELETE FROM [dbo].[ConditionIndex] where [OysterID] like 'SL%D%' or [OysterID] like 'CR%D%' or [OysterID] like 'LW%D%' or [OysterID] like 'LX%D%' or [OysterID] like 'TB%D%'
+
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2023-01-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-04-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
