@@ -1,5 +1,5 @@
 ---Database corrections St Pete 2024/05/04 - E Levine
-Use [Oysters_24-06-28_test]
+Use [Oysters_24-07-01]
 go
 
 --June DERMO
@@ -293,6 +293,9 @@ UPDATE [dbo].[SedimentTrap] set [CrucibleDW] = 41.9 where [CupSampleID] like 'LW
 
 --Kick back Trip for COLL CI data entry
 UPDATE [dbo].[TripInfo] set [DataStatus] = 'Not Entered', [DateProofed] = NULL, [ProofedBy] = NULL where [TripID] like 'SLCOLL_20240410_1'
+
+--Remove incorrect dermo data in Condition table
+DELETE FROM [dbo].[ConditionIndex] where [OysterID] like 'SL%D%' or [OysterID] like 'CR%D%' or [OysterID] like 'LW%D%' or [OysterID] like 'LX%D%' or [OysterID] like 'TB%D%'
 
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-01-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
