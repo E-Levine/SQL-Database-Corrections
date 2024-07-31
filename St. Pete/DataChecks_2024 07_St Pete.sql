@@ -63,6 +63,13 @@ UPDATE [dbo].[Dermo]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data as recorded on datasheet' else ', Data as recorded on datasheet' end)
 where [OysterID] like 'LWLD2407-15' or [OysterID] like 'LWRD2407-13%' or [OysterID] like 'LWRD2407-14%' or [OysterID] like 'LWRD2407-15%' or [OysterID] like 'LWLD2407-01%' or [OysterID] like 'LWRD2407-04%'
 
+--TB SRVY 06/2024
+UPDATE [dbo].[SampleEventWQ]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
+where [SampleEventWQID] like 'TBSRVY_20240624_1_T039_1_01' or [SampleEventWQID] like 'TBSRVY_20240624_1_T045_1_01%'
+UPDATE [dbo].[SurveyQuadrat]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
+where [QuadratID] like 'TBSRVY_20240624_1_0291_1_02'
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
