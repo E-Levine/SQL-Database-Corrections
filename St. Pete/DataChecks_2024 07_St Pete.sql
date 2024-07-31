@@ -1,8 +1,8 @@
-use [Oysters_24-07-19]
+use [Oysters_24-07-31]
 go
 
 --CAGE checks
---CR  04-06/2024
+--CR  04-07/2024
 DELETE FROM [dbo].[SampleEventWQ] where [SampleEventWQID] like 'CRCAGE_20240516_1_0231_1_01' and DateEntered = '2024-06-11 00:00:00'
 DELETE FROM [dbo].[SampleEventWQ] where [SampleEventWQID] like 'CRCAGE_20240516_1_0232_1_01' and DateEntered = '2024-06-11 00:00:00'
 UPDATE [dbo].[SampleEventWQ] 
@@ -16,7 +16,7 @@ where [SampleEventID] like 'CRCAGE_20240408_1_0232_1'
 UPDATE [dbo].[CageCount]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Yellow flipped' else ', Yellow flipped' end)
 where [SampleEventID] like 'CRCAGE_20240408_1_0232_1'
---SL 04-06/2024
+--SL 04-07/2024
 UPDATE [dbo].[SampleEventWQ]
 set [DataStatus] = 'Proofed',
 	[DateProofed] = '2024-07-10 00:00:00',
@@ -24,7 +24,7 @@ set [DataStatus] = 'Proofed',
 where [SampleEventWQID] like 'SLCAGE_20240604_1_0255_1_01'
 DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCAGE_20240603_1' 
 DELETE FROM [dbo].[SampleEventWQ] where [SampleEventWQID] like 'SLCAGE_20240604_1_0255_1_01' and DateEntered = '2024-06-11 00:00:00'
---LX 04-06/2024
+--LX 04-07/2024
 DELETE FROM [dbo].[SampleEventWQ] where [SampleEventWQID] like 'LXCAGE_20240506_1_0243_1_01' and DateEntered = '2024-06-11 00:00:00'
 UPDATE [dbo].[SampleEventWQ]
 set [DataStatus] = 'Proofed',
@@ -54,7 +54,21 @@ UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 107.3 where [SampleEve
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 124.0 where [SampleEventWQID] like 'LXCOLL_20240409_1_0247_1_01'
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 108.2 where [SampleEventWQID] like 'LXCOLL_20240409_1_0249_1_01'
 
+--RCRT 07/2024: LW, LX, SL, CR
+--SDTP 07/2024: LW
+--Dermo 07/2024:
+--SL
+UPDATE [dbo].[SampleEventWQ] set Secchi = 0.50 where [SampleEventID] like 'SLCOLL_20240710_1_0255_1'
+UPDATE [dbo].[Dermo]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data as recorded on datasheet' else ', Data as recorded on datasheet' end)
+where [OysterID] like 'LWLD2407-15' or [OysterID] like 'LWRD2407-13%' or [OysterID] like 'LWRD2407-14%' or [OysterID] like 'LWRD2407-15%' or [OysterID] like 'LWLD2407-01%' or [OysterID] like 'LWRD2407-04%'
 
-EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
