@@ -1,4 +1,4 @@
-use [Oysters_24-07-31]
+use [Oysters_24-08-01]
 go
 
 --CAGE checks
@@ -70,6 +70,28 @@ where [SampleEventWQID] like 'TBSRVY_20240624_1_T039_1_01' or [SampleEventWQID] 
 UPDATE [dbo].[SurveyQuadrat]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
 where [QuadratID] like 'TBSRVY_20240624_1_0291_1_02'
+DELETE FROM [dbo].[TripInfo] where [TripID] like 'TBSRVY_20240626_2'
+UPDATE [dbo].[SampleEvent] set TripID = 'TBSRVY_20240626_1' where TripID like 'TBSRVY_202406%' and FixedLocationID like 'T%'
+UPDATE [dbo].[SampleEvent] set SampleEventID = REPLACE(SampleEventID, '_2_', '_1_') where TripID like 'TBSRVY_202406%' and FixedLocationID like 'T%'
+UPDATE [dbo].[SampleEvent] set SampleEventID = REPLACE(SampleEventID, '20240624', '20240626') where SampleEventID like 'TBSRVY_20240624%' and FixedLocationID like 'T%'
+UPDATE [dbo].[SampleEventWQ] set SampleEventWQID = REPLACE(SampleEventWQID, '20240624', '20240626') where SampleEventID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SampleEventWQ] set SampleEventID = REPLACE(SampleEventID, '20240624', '20240626') where SampleEventID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SampleEventWQ] set SampleEventWQID = REPLACE(SampleEventWQID, '_2_', '_1_') where SampleEventID like 'TBSRVY_20240626_2_T%' 
+UPDATE [dbo].[SampleEventWQ] set SampleEventID = REPLACE(SampleEventID, '_2_', '_1_') where SampleEventID like 'TBSRVY_20240626_2_T%' 
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = REPLACE(QuadratID, '20240624', '20240626') where SampleEventID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SurveyQuadrat] set SampleEventID = REPLACE(SampleEventID, '20240624', '20240626') where SampleEventID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = REPLACE(QuadratID, '_2_', '_1_') where SampleEventID like 'TBSRVY_20240626_2_T%' 
+UPDATE [dbo].[SurveyQuadrat] set SampleEventID = REPLACE(SampleEventID, '_2_', '_1_') where SampleEventID like 'TBSRVY_20240626_2_T%' 
+UPDATE [dbo].[SurveySH] set ShellHeightID = REPLACE(ShellHeightID, '20240624', '20240626') where QuadratID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SurveySH] set QuadratID = REPLACE(QuadratID, '20240624', '20240626') where QuadratID like 'TBSRVY_20240624_1_T%' 
+UPDATE [dbo].[SurveySH] set ShellHeightID = REPLACE(ShellHeightID, '_2_', '_1_') where QuadratID like 'TBSRVY_20240626_2_T%' 
+UPDATE [dbo].[SurveySH] set QuadratID = REPLACE(QuadratID, '_2_', '_1_') where QuadratID like 'TBSRVY_20240626_2_T%' 
+
+--CR SRVY 06/2024
+--CR/TB SDTP 05-07/2024
+UPDATE [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
+where [CupSampleID] like 'CRE2406-02-1' or [CupSampleID] like 'CRE2406-02-2%' or [CupSampleID] like 'CRW2406-03-2%'
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
@@ -79,3 +101,5 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-06-01', @CheckEnd = '2024-07-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-06-01', @CheckEnd = '2024-07-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
