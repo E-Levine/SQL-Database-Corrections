@@ -60,12 +60,12 @@ UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 108.2 where [SampleEve
 --SL
 UPDATE [dbo].[SampleEventWQ] set Secchi = 0.50 where [SampleEventID] like 'SLCOLL_20240710_1_0255_1'
 UPDATE [dbo].[Dermo]
-set [Comments] = CONCAT(Comments, case when Comments is null then 'Data as recorded on datasheet' else ', Data as recorded on datasheet' end)
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data as recorded on datasheet' else ' Data as recorded on datasheet' end)
 where [OysterID] like 'LWLD2407-15' or [OysterID] like 'LWRD2407-13%' or [OysterID] like 'LWRD2407-14%' or [OysterID] like 'LWRD2407-15%' or [OysterID] like 'LWLD2407-01%' or [OysterID] like 'LWRD2407-04%'
 
 --TB SRVY 06/2024
 UPDATE [dbo].[SampleEventWQ]
-set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
 where [SampleEventWQID] like 'TBSRVY_20240624_1_T039_1_01' or [SampleEventWQID] like 'TBSRVY_20240624_1_T045_1_01%'
 UPDATE [dbo].[SurveyQuadrat]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
@@ -90,8 +90,28 @@ UPDATE [dbo].[SurveySH] set QuadratID = REPLACE(QuadratID, '_2_', '_1_') where Q
 --CR SRVY 06/2024
 --CR/TB SDTP 05-07/2024
 UPDATE [dbo].[SedimentTrap]
-set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ', Data confirmed' end)
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
 where [CupSampleID] like 'CRE2406-02-1' or [CupSampleID] like 'CRE2406-02-2%' or [CupSampleID] like 'CRW2406-03-2%'
+
+--LW,CR SDTP 2-3/2024
+UPDATE [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
+where [CupSampleID] like 'LWL2402-01-1' or [CupSampleID] like 'LWL2402-01-2' or [CupSampleID] like 'LWL2402-01-3' or [CupSampleID] like 'LWL2402-01-4' or [CupSampleID] like 'LWR2402-02-2' or [CupSampleID] like 'LWR2403-02-2'
+UPDATE [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
+where [CupSampleID] like 'CRE2402-02-2' or [CupSampleID] like 'CRW2402-03-2' or [CupSampleID] like 'CRW2402-04-2' or [CupSampleID] like 'CRE2403-01-1' or [CupSampleID] like 'CRE2403-01-2' or [CupSampleID] like 'CRE2403-02-1' or [CupSampleID] like 'CRE2403-02-2' or [CupSampleID] like 'CRW2403-03-1' or [CupSampleID] like 'CRW2403-03-2'
+DELETE FROM [dbo].[TripInfo] where [TripID] like 'TBSDTP_20240212_1' 
+UPDATE [dbo].[SedimentTrap]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
+where [CupSampleID] like 'TBL2402-01-1' or [CupSampleID] like 'TBL2402-06-1' or [CupSampleID] like 'TBL2403-01-1' or [CupSampleID] like 'TBL2403-01-2' or [CupSampleID] like 'TBM2403-05-4'
+
+--TB CI/dermo 6-7 & 6/2024
+UPDATE [dbo].[ConditionIndex]
+set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
+where [OysterID] like 'TBRC2406-04' or [OysterID] like 'TBRC2407-09' or [OysterID] like 'TBRC2407-10' or [OysterID] like 'TBLD2406-03'
+
+--Repro 06/2024 - Dermo already completed: LX, SL, LW, CR
+
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
@@ -103,3 +123,11 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-07-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-06-01', @CheckEnd = '2024-07-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-06-01', @CheckEnd = '2024-07-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-06-01', @CheckEnd = '2024-07-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-02-01', @CheckEnd = '2024-04-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-02-01', @CheckEnd = '2024-03-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-01-01', @CheckEnd = '2024-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-06-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-06-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-06-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-06-01', @CheckEnd = '2024-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
