@@ -111,6 +111,8 @@ set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirme
 where [OysterID] like 'TBRC2406-04' or [OysterID] like 'TBRC2407-09' or [OysterID] like 'TBRC2407-10' or [OysterID] like 'TBLD2406-03'
 
 --Repro 06/2024 - Dermo already completed: LX, SL, LW, CR
+ DELETE FROM [dbo].[TripInfo] where [TripID] like 'LWCOLL_20240520%'
+ DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCAGE_20240603%'
 
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-04-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
