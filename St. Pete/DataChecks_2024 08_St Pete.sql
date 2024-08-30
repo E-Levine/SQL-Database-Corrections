@@ -1,4 +1,4 @@
-use [Oysters_24-08-28]
+use [Oysters_24-08-30]
 go
 
 --FixedLocation info: Cages
@@ -7,7 +7,7 @@ UPDATE [dbo].[FixedLocations] set Cage = 'N' where Estuary like 'TB' or StationN
 --Cage data: CR
 --Update missing SH
 UPDATE [dbo].[CageCount] set TotalCount = 16 where [CageCountID] like 'CRCAGE_20240813_1_0231_1_R_B'
-insert into CageSH(ShellHeightID, CageCountID, ShellHeight, DataStatus, DateEntered, EnteredBy, DateProofed, ProofedBy, DateCompleted, CompletedBy, Comments, AdminNotes)
+INSERT into CageSH(ShellHeightID, CageCountID, ShellHeight, DataStatus, DateEntered, EnteredBy, DateProofed, ProofedBy, DateCompleted, CompletedBy, Comments, AdminNotes)
 values ('CRCAGE_20240813_1_0231_1_R_B_16', 'CRCAGE_20240813_1_0231_1_R_B', '56', 'Entered', '2024-08-27 00:00:00', 'Erica Levine', '2024-08-27 00:00:00', 'Erica Levine', NULL, NULL, NULL, NULL);
 
 --Sediment Trap: TB
@@ -17,7 +17,7 @@ UPDATE [dbo].[SedimentTrap]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
 where [CupSampleID] like 'LWL2408-02-1' or [CupSampleID] like 'CRE2408-01-1' or [CupSampleID] like 'CRE2408-01-2' or [CupSampleID] like 'CRE2408-02-1' or [CupSampleID] like 'CRE2408-02-2' 
 
---Dermo data: SL, LW, LX
+--Dermo data: SL, LW, LX, CR
 --SL, LX
 UPDATE [dbo].[Dermo]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
@@ -161,6 +161,34 @@ UPDATE [dbo].[CageSH] set ShellHeight = 65 where [ShellHeightID] like 'LXCAGE_20
 UPDATE [dbo].[CageSH] set ShellHeight = 53 where [ShellHeightID] like 'LXCAGE_20231003_1_0243_1_R_Y_19'
 UPDATE [dbo].[CageSH] set ShellHeight = 49 where [ShellHeightID] like 'LXCAGE_20231003_1_0243_1_R_Y_20'
 
+--2023-01, 02, 12 Dermo, Repro checks: SL, LX, LW, CR
+DELETE from [dbo].[TripInfo] where [TripID] like 'CRCOLL_20230127_1%'
+UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed',  DateProofed = '2024-07-02 00:00:00', ProofedBy = 'Mallory Gassen-Kurtz' where SampleEventWQID like 'SLCOLL_20230208_1_0269_1_01' or SampleEventWQID like 'SLCOLL_20230208_1_0270_1_01' or SampleEventWQID like 'SLCOLL_20230208_1_0271_1_01' or SampleEventWQID like 'LWCOLL_20231205_1_0312_1_01'
+UPDATE [dbo].[SampleEvent] set DataStatus = 'Proofed',  DateProofed = '2024-07-02 00:00:00', ProofedBy = 'Mallory Gassen-Kurtz' where SampleEventID like 'SLCOLL_20230208_1_0269_1' or SampleEventID like 'SLCOLL_20230208_1_0270_1' or SampleEventID like 'SLCOLL_20230208_1_0271_1' or SampleEventID like 'LWCOLL_20231205_1_0312_1'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 109.3 where SampleEventWQID like 'SLCOLL_20230105_1_0261_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.2 where SampleEventWQID like 'CRCOLL_20230110_1_0230_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 101.8 where SampleEventWQID like 'CRCOLL_20230110_1_0232_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 121.9 where SampleEventWQID like 'CRCOLL_20230110_1_0233_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 101.1 where SampleEventWQID like 'LXCOLL_20230207_1_0243_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 108.4 where SampleEventWQID like 'LXCOLL_20230207_1_0247_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.55 where SampleEventWQID like 'SLCOLL_20230208_1_0255_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.40 where SampleEventWQID like 'SLCOLL_20230208_1_0256_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 101.7 where SampleEventWQID like 'SLCOLL_20230208_1_0262_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.40 where SampleEventWQID like 'SLCOLL_20230208_1_0257_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.60 where SampleEventWQID like 'CRCOLL_20230214_1_0230_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.50 where SampleEventWQID like 'CRCOLL_20230214_1_0231_1_01'
+UPDATE [dbo].[SampleEventWQ] set SampleDepth = 0.50, PercentDissolvedOxygen = 119.0 where SampleEventWQID like 'CRCOLL_20230214_1_0232_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 106.5 where SampleEventWQID like 'CRCOLL_20230214_1_0233_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 111.8 where SampleEventWQID like 'LWCOLL_20230104_1_0235_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 114.8 where SampleEventWQID like 'LWCOLL_20230104_1_0236_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 111.7 where SampleEventWQID like 'LWCOLL_20230104_1_0240_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.4 where SampleEventWQID like 'LWCOLL_20230104_1_0237_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 110.3 where SampleEventWQID like 'LWCOLL_20230104_1_0241_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 120.4 where SampleEventWQID like 'LWCOLL_20230104_1_0312_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 114.2 where SampleEventWQID like 'LWCOLL_20230207_1_0237_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.1 where SampleEventWQID like 'LWCOLL_20230207_1_0241_1_01'
+UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.3 where SampleEventWQID like 'LWCOLL_20230207_1_0312_1_01'
+UPDATE [dbo].[Dermo] set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end) where [OysterID] like 'LXSD2301-13'
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
@@ -173,3 +201,11 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksWave] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2023-03-01', @CheckEnd = '2023-10-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-01-01', @CheckEnd = '2023-02-27', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-01-01', @CheckEnd = '2023-02-27', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-01-01', @CheckEnd = '2023-02-27', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-01-01', @CheckEnd = '2023-02-27', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
