@@ -1,4 +1,4 @@
-use [Oysters_24-08-30]
+use [Oysters_24-09-25]childless prim
 go
 
 --FixedLocation info: Cages
@@ -21,17 +21,19 @@ where [CupSampleID] like 'LWL2408-02-1' or [CupSampleID] like 'CRE2408-01-1' or 
 --SL, LX
 UPDATE [dbo].[Dermo]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
-where [OysterID] like 'SLND2408-08' or [OysterID] like 'LXND2408-13'
+where [OysterID] like 'SLND2408-08' or [OysterID] like 'LXND2408-13' or [OysterID] like 'LXSD2409-09'
 
 --RCRT: 
 --Remove incorrectly created trips
-DELETE from [dbo].[TripInfo] where [TripID] like 'CRRCRT_20240806_1%' or [TripID] like 'LWRCRT_20240820_1'
+DELETE from [dbo].[TripInfo] where [TripID] like 'CRRCRT_20240806_1%' or [TripID] like 'LWRCRT_20240820_1' or [TripID] like 'CRRCRT_20240919_1%'
 --Correct incorrect deployed dates
 UPDATE [dbo].[Recruitment] set DeployedDate = '2024-07-09' where SampleEventID like 'LWRCRT_20240806_1_0235_1' or SampleEventID like 'LWRCRT_20240806_1_0237_1'
 --Confirm TB data
 UPDATE [dbo].[SampleEventWQ]
 set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end)
 where [SampleEventWQID] like 'TBRCRT_20240823_1_0528_1_01' or [SampleEventWQID] like 'TBRCRT_20240823_1_0527_1_01' or [SampleEventWQID] like 'TBRCRT_20240823_1_0529_1_02' or [SampleEventWQID] like 'TBRCRT_20240823_1_0278_1_01' or [SampleEventWQID] like 'TBRCRT_20240823_1_0277_1_01'
+--Add proofing tags
+UPDATE [dbo].[Recruitment] set DataStatus = 'Proofed',  DateProofed = '2024-09-10 00:00:00', ProofedBy = 'Darian Blackiston' where SampleEventID like 'SLRCRT_202409%' or SampleEventID like 'LXRCRT_202409%'
 
 --CAGE LX 3-10/2023
 --10/2023 Missing SHs
@@ -190,15 +192,17 @@ UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.1 where SampleEven
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.3 where SampleEventWQID like 'LWCOLL_20230207_1_0312_1_01'
 UPDATE [dbo].[Dermo] set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end) where [OysterID] like 'LXSD2301-13'
 
-EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksWave] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2023-03-01', @CheckEnd = '2023-10-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-01-01', @CheckEnd = '2023-02-27', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
