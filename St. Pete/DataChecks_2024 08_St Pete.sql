@@ -1,10 +1,10 @@
-use [Oysters_24-09-25]childless prim
+use [Oysters_24-10-02]
 go
 
 --FixedLocation info: Cages
 UPDATE [dbo].[FixedLocations] set Cage = 'N' where Estuary like 'TB' or StationName like 'SL-N-4'
 
---Cage data: CR
+--Cage data: CR 08/2024
 --Update missing SH
 UPDATE [dbo].[CageCount] set TotalCount = 16 where [CageCountID] like 'CRCAGE_20240813_1_0231_1_R_B'
 INSERT into CageSH(ShellHeightID, CageCountID, ShellHeight, DataStatus, DateEntered, EnteredBy, DateProofed, ProofedBy, DateCompleted, CompletedBy, Comments, AdminNotes)
@@ -191,13 +191,33 @@ UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 114.2 where SampleEven
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.1 where SampleEventWQID like 'LWCOLL_20230207_1_0241_1_01'
 UPDATE [dbo].[SampleEventWQ] set PercentDissolvedOxygen = 102.3 where SampleEventWQID like 'LWCOLL_20230207_1_0312_1_01'
 UPDATE [dbo].[Dermo] set [Comments] = CONCAT(Comments, case when Comments is null then 'Data confirmed' else ' Data confirmed' end) where [OysterID] like 'LXSD2301-13'
+UPDATE [dbo].[FixedLocations] set Cage = 'N' where FixedLocationID like '0600'
+
+--Survey data: 9/2024
+UPDATE [dbo].[SurveyQuadrat] set NumLive = 7 where QuadratID like 'LXSRVY_20240904_1_0247_1_03'
+UPDATE [dbo].[SurveyQuadrat] set NumLive = 5 where QuadratID like 'LXSRVY_20240904_1_0249_1_05'
+--Add missing random station information
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = 'CRSRVY_20240812_1_C048_1_01', QuadratNumber = 1, NumLive = 0, NumDead = 0, DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine', Comments = 'presence/absense' where QuadratID like 'CRSRVY_20240812_1_C048_1_00'
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = 'CRSRVY_20240812_1_C049_1_01', QuadratNumber = 1, NumLive = 0, NumDead = 0, DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine', Comments = 'presence/absense' where QuadratID like 'CRSRVY_20240812_1_C049_1_00'
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = 'CRSRVY_20240812_1_C050_1_01', QuadratNumber = 1, NumLive = 0, NumDead = 0, DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine', Comments = 'presence/absense' where QuadratID like 'CRSRVY_20240812_1_C050_1_00'
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = 'CRSRVY_20240812_1_C051_1_01', QuadratNumber = 1, NumLive = 0, NumDead = 0, DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine', Comments = 'presence/absense' where QuadratID like 'CRSRVY_20240812_1_C051_1_00'
+UPDATE [dbo].[SurveyQuadrat] set QuadratID = 'CRSRVY_20240812_1_C053_1_01', QuadratNumber = 1, NumLive = 0, NumDead = 0, DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine', Comments = 'presence/absense' where QuadratID like 'CRSRVY_20240812_1_C053_1_00'
+UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C048_1_01_001', QuadratID = 'CRSRVY_20240812_1_C048_1_01', DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine' where QuadratID like 'CRSRVY_20240812_1_C048_1_00'
+UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C049_1_01_001', QuadratID = 'CRSRVY_20240812_1_C049_1_01', DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine' where QuadratID like 'CRSRVY_20240812_1_C049_1_00'
+UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C050_1_01_001', QuadratID = 'CRSRVY_20240812_1_C050_1_01', DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine' where QuadratID like 'CRSRVY_20240812_1_C050_1_00'
+UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C051_1_01_001', QuadratID = 'CRSRVY_20240812_1_C051_1_01', DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine' where QuadratID like 'CRSRVY_20240812_1_C051_1_00'
+UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C053_1_01_001', QuadratID = 'CRSRVY_20240812_1_C053_1_01', DataStatus = 'Proofed', DateProofed = '2024-10-02 00:00:00', ProofedBy = 'Erica Levine' where QuadratID like 'CRSRVY_20240812_1_C053_1_00'
+DELETE from [dbo].[SurveyQuadrat] where QuadratID is NULL and SampleEventID like 'CRSRVY_20240812_1%' 
+UPDATE [dbo].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'WQ confirmed' else ' WQ confirmed' end) where [SampleEventWQID] like 'CRSRVY_20240812_1_C047_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C048_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C052_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C053_1_01'
+
+
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-07-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
-EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-07-01', @CheckEnd = '2024-08-31', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
@@ -213,3 +233,7 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-12-01', @CheckEnd = '2023-12-27', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
