@@ -210,7 +210,7 @@ UPDATE [dbo].[SurveySH] set ShellHeightID = 'CRSRVY_20240812_1_C053_1_01_001', Q
 DELETE from [dbo].[SurveyQuadrat] where QuadratID is NULL and SampleEventID like 'CRSRVY_20240812_1%' 
 UPDATE [dbo].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'WQ confirmed' else ' WQ confirmed' end) where [SampleEventWQID] like 'CRSRVY_20240812_1_C047_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C048_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C052_1_01' or SampleEventWQID like 'CRSRVY_20240812_1_C053_1_01'
 
-
+UPDATE [dbo].[TripInfo] set DataStatus = 'Entered' where TripID like 'SLCOLL_20240410_1'
 
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-08-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
