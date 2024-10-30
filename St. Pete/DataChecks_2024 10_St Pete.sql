@@ -1,6 +1,9 @@
 use [Oysters_24-10-30]
 go
 
+--Data corrections
+UPDATE [dbo].[SampleEventWQ] set [Secchi] = 0.80 where [SampleEventID] like 'CRCOLL_20240912_1_0232_1'
+
 --Repro checks 07-08/2024, 04-05/2024, 04/2023
 DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCOLL_20240410_2' 
 UPDATE [dbo].[SampleEventWQ] set [SampleDepth] = '0.65' where [SampleEventWQID] like 'SLCOLL_20230405_1_0269_1_01'
