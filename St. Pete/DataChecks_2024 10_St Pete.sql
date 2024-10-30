@@ -1,6 +1,5 @@
-use [Oysters_24-10-24]
+use [Oysters_24-10-30]
 go
-select * from hsdb.SampleEvent where TripID like 'CRCAGE_%' order by SampleEventID
 
 --Repro checks 07-08/2024, 04-05/2024, 04/2023
 DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCOLL_20240410_2' 
@@ -545,3 +544,7 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2023-01-01', @CheckEnd = '2024-03-31', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2023-01-01', @CheckEnd = '2024-03-31', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCage] @CheckStart = '2023-01-01', @CheckEnd = '2024-03-31', @EstuaryCode = 'LX', @DataManager = 'Erica Levine'; 
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
