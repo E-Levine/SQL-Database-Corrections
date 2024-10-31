@@ -1,7 +1,8 @@
-use [Oysters_24-10-30]
+use [Oysters_24-10-31]
 go
 
 --Data corrections
+UPDATE [dbo].[TripInfo] set [Comments] = 'Rtrd after hurricanes Helene and Milton' where TripID like 'CRRCRT_20241023_1'
 UPDATE [dbo].[SampleEventWQ] set [Secchi] = 0.80 where [SampleEventID] like 'CRCOLL_20240912_1_0232_1'
 
 --Repro checks 07-08/2024, 04-05/2024, 04/2023
@@ -551,3 +552,13 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-09-01', @CheckEnd = '2024-09-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2024-10-01', @CheckEnd = '2024-10-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
