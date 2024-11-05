@@ -5,8 +5,34 @@ go
 UPDATE [dbo].[TripInfo] set [Comments] = 'Rtrd after hurricanes Helene and Milton' where TripID like 'CRRCRT_20241023_1'
 UPDATE [dbo].[SampleEventWQ] set [Secchi] = 0.80 where [SampleEventID] like 'CRCOLL_20240912_1_0232_1'
 
---Repro checks 07-08/2024, 04-05/2024, 04/2023
+--Repro/dermo/CI checks 07-08/2024, 04-05/2024, 04/2023
 DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCOLL_20240410_2' 
+DELETE FROM [dbo].[TripInfo] where [TripID] like 'SLCOLL_20240410_3' 
+UPDATE [dbo].[TripInfo] set [DataStatus] = 'Proofed', DateProofed = '2024-10-30 00:00:00', ProofedBy = 'Erica Levine'  where [TripID] like 'SLCOLL_202404%'
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY TripID, TripType, TripDate ORDER BY TripID) AS RowNum
+  FROM TripInfo WHERE TripID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY SampleEventID, TripID, FixedLocationID ORDER BY SampleEventID) AS RowNum
+  FROM SampleEvent WHERE TripID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY SampleEventWQID, SampleEventID, Temperature, Salinity, pH ORDER BY SampleEventWQID) AS RowNum
+  FROM SampleEventWQ WHERE SampleEventID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY OysterID, SampleEventID, ShellHeight, ShellLength, ShellWidth ORDER BY OysterID) AS RowNum
+  FROM ConditionIndex WHERE SampleEventID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY OysterID, SampleEventID, ShellHeight, TotalWeight, ShellWetWeight ORDER BY OysterID) AS RowNum
+  FROM Dermo WHERE SampleEventID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
+WITH CTE AS (SELECT *, 
+    ROW_NUMBER() OVER (PARTITION BY OysterID, SampleEventID, Sex, ReproStage, BadSlide ORDER BY OysterID) AS RowNum
+  FROM Repro WHERE SampleEventID like 'SLCOLL_202404%')
+DELETE FROM CTE WHERE RowNum > 1;
 UPDATE [dbo].[SampleEventWQ] set [SampleDepth] = '0.65' where [SampleEventWQID] like 'SLCOLL_20230405_1_0269_1_01'
 
 --Cage checks
@@ -541,7 +567,7 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-07-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-07-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-07-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-07-01', @CheckEnd = '2024-08-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
---EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-04-01', @CheckEnd = '2024-05-30', @EstuaryCode = 'CR', @DataManager = 'Erica Levine';
