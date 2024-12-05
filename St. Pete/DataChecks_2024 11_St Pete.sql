@@ -21,6 +21,11 @@ UPDATE [hsdb].[SedimentTrap] set AshWeight = '53.23' where CupSampleID like 'TBR
 UPDATE [hsdb].[SedimentTrap] set AshWeight = '61.64' where CupSampleID like 'TBR2405-07-2'
 UPDATE [hsdb].[SedimentTrap] set AshWeight = '36.38' where CupSampleID like 'TBR2405-08-1'
 UPDATE [hsdb].[SedimentTrap] set AshWeight = '37.05' where CupSampleID like 'TBR2405-08-2'
+UPDATE [hsdb].[SedimentTrap] set PortionofSample = '0.50' where CupSampleID like 'TBR2312-07-2'
+UPDATE [hsdb].[SedimentTrap] set PortionofSample = '0.10' where CupSampleID like 'TBL2401-06-2'
+UPDATE [hsdb].[SedimentTrap] set PortionofSample = '0.10' where CupSampleID like 'TBL2404-01-1'
+UPDATE [hsdb].[SedimentTrap] set PortionofSample = '0.10' where CupSampleID like 'TBL2404-01-2'
+
 
 --Dermo: All 11/2024
 --Delete incorrect Trip
