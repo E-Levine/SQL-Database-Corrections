@@ -14,3 +14,6 @@ FILE STRUCTURE: <br>
 /Crystal River - Queries that are applied to the Crystal River Lab's data. <br>
 /Eastpoint - Queries that are applied to the Eastpoint Lab's data. <br>
 /St. Pete - Queries that are applied to the St. Pete Lab's data. <br>
+/Uploads - Files to upload larger amounts of data using R to convert from Excel data to SQL code. <br>
+&emsp; /Data/ - Data Excel files. Does not copy to git. <br>
+&emsp; /R Files/ - R project and code files.
