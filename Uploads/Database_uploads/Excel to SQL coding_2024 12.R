@@ -1,4 +1,5 @@
 ##Code to compile SQL code from Excel data for upload
+#Work with one estuary * one table at a time I.e., TBRCRT.
 #
 #Select appropriate template file, eneter data into copied file, and save to 'Data' folder before running R code.
 #Code will output SQL file into main folder.
@@ -11,7 +12,10 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
                glue, #SQL
                install = TRUE) #Mapping and figures
 #
-#
+#Initials of person adding data
+Initials <- c("EW")
+#Set type of data being added (WQ, TripInfo, SrvySH) - used only for file naming
+Type_Data <- c("WQ")
 #
 ###Load data file - change file name, confirm sheet name
 Excel_data <- read_excel("../Data/SampleEventWQ_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
@@ -23,7 +27,9 @@ Excel_data <- Excel_data %>% mutate(DateEntered = excel_numeric_to_date(as.numer
 #Check data
 head(Excel_data)
 #Excel_data <- Excel_data %>% mutate(Salinity = case_when(Salinity == '33.700000000000003' ~ "33.7", TRUE ~ Salinity))
-#
+#Extract parameter for file output
+Estuary <- Excel_data[1,1] %>% substr(1,2)
+DataType <- Excel_data[1,1] %>% substr(3,6)
 #
 #####Sample Event Water Quality Data####
 #
@@ -68,7 +74,7 @@ SampleEventWQ <- rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FAL
 SEWQSQLtemplate <- "
 INSERT INTO [hsdb].[SampleEventWQ]
     ([SampleEventWQID]
-      ,[SampleEventWQ]
+      ,[SampleEventID]
       ,[Temperature]
       ,[Salinity]
       ,[DissolvedOxygen]
@@ -93,7 +99,7 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSINotes])
   VALUES
       ({SampleEventWQID}
-      ,{SampleEventWQ}
+      ,{SampleEventID}
       ,{Temperature}
       ,{Salinity}
       ,{DissolvedOxygen}
@@ -119,7 +125,9 @@ INSERT INTO [hsdb].[SampleEventWQ]
 GO"
 #
 # Use the glue function to fill in the template with the data frame values
-SEWQ_SQL <- glue(SEWQSQLtemplate, .envir = globalenv(SampleEventWQ))
+SEWQ_SQL <- glue_data(SEWQSQLtemplate, SampleEventWQ)
 #
+#Save SQL code
+write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Initials, ".sql"))
 #
 #
