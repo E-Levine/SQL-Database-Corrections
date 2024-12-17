@@ -57,6 +57,10 @@ UPDATE dbo.SampleEventWQ set Depth = 0.20 where SampleEventWQID like 'SLCOLL_202
 UPDATE dbo.SampleEventWQ set PercentDissolvedOyxgen = 100.5 where SampleEventWQID like 'CRCOLL_20230314_1_0232_1_01'
 UPDATE dbo.SampleEventWQ set PercentDissolvedOyxgen = 100.3 where SampleEventWQID like 'CRCOLL_20230314_1_0233_1_01'
 
+--HSDB: TB RCRT 2008
+DELETE from [hsdb].[TripInfo] where TripID like 'TBRCRT_20080828_1' or TripID like 'TBRCRT_20080829_1' or TripID like 'TBRCRT_20080903_1' or TripID like 'TBRCRT_20080915_1' or TripID like 'TBRCRT_20080916_1' or TripID like 'TBRCRT_20080917_1'
+
+--Data completed:
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-11-01', @CheckEnd = '2024-11-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-11-01', @CheckEnd = '2024-11-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-11-01', @CheckEnd = '2024-11-30', @EstuaryCode = 'LW', @DataManager = 'Erica Levine';
