@@ -1,5 +1,5 @@
 #Ignore data files within the Data folder but keep the folder for use.
-Data/*.xlsx
+/Data/*.xlsx
 !Data/*TEMPLATE
 !Data/.gitkeep
 
