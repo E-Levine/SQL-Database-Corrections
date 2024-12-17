@@ -127,6 +127,42 @@ GO"
 # Use the glue function to fill in the template with the data frame values
 SEWQ_SQL <- glue_data(SEWQSQLtemplate, SampleEventWQ)
 #
+#
+##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 
+SEWQSQLheader <- "
+INSERT INTO [hsdb].[SampleEventWQ]
+    ([SampleEventWQID]
+      ,[SampleEventID]
+      ,[Temperature]
+      ,[Salinity]
+      ,[DissolvedOxygen]
+      ,[pH]
+      ,[Depth]
+      ,[SampleDepth]
+      ,[Secchi]
+      ,[TurbidityYSI]
+      ,[TurbidityHach]
+      ,[DataStatus]
+      ,[DateEntered]
+      ,[EnteredBy]
+      ,[DateProofed]
+      ,[ProofedBy]
+      ,[DateCompleted]
+      ,[CompletedBy]
+      ,[Comments]
+      ,[AdminNotes]
+      ,[CollectionTime]
+      ,[PercentDissolvedOxygen]
+      ,[YSICalibration]
+      ,[YSINotes])
+  VALUES"
+temp <- character(length(nrow(SampleEventWQ)))
+for(i in 1:nrow(SampleEventWQ)){
+  temp[i] <- paste0(SEWQSQLheader, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+}
+#
+SEWQ_SQL <- paste(temp, collapse = "\n\n")
+#
 #Save SQL code
 write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Initials, ".sql"))
 #
