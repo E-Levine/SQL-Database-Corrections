@@ -1,6 +1,6 @@
 #Ignore data files within the Data folder but keep the folder for use.
 Data/*
-!Data/
+!Data/*TEMPLATE
 !Data/.gitkeep
 
 # R files to ignore
