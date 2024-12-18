@@ -125,7 +125,7 @@ INSERT INTO [hsdb].[SampleEventWQ]
 GO"
 #
 # Use the glue function to fill in the template with the data frame values
-SEWQ_SQL <- glue_data(SEWQSQLtemplate, SampleEventWQ)
+SEWQ_SQL <- glue(SEWQSQLtemplate, .envir = SampleEventWQ)
 #
 #
 ##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 

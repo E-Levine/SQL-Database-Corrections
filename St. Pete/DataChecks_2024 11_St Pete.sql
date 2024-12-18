@@ -123,9 +123,6 @@ UPDATE [dbo].[SurveySH] set DataStatus = 'Proofed', DateProofed = '2024-11-21 00
 
 --Cages November 2024 - none
 
---HSDB: TB RCRT 2008
-DELETE from [hsdb].[TripInfo] where TripID like 'TBRCRT_20080828_1' or TripID like 'TBRCRT_20080829_1' or TripID like 'TBRCRT_20080903_1' or TripID like 'TBRCRT_20080915_1' or TripID like 'TBRCRT_20080916_1' or TripID like 'TBRCRT_20080917_1'
-
 --Data completed:
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-11-01', @CheckEnd = '2024-12-30', @EstuaryCode = 'SL', @DataManager = 'Erica Levine';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2024-11-01', @CheckEnd = '2024-12-30', @EstuaryCode = 'LX', @DataManager = 'Erica Levine';
