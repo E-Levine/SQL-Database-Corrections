@@ -69,17 +69,42 @@ UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar on ground' else ', T-bar on ground' end) where SampleEventID like 'TBRCRT_20110815_1_0282%' and ShellReplicate like '1'
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar on ground' else ', T-bar on ground' end) where SampleEventID like 'TBRCRT_20111215_1_0282%' and ShellReplicate like '3'
 
---TB RCRT 2012
+--TB RCRT 2012-2015
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringers missing' else ', Stringers missing' end) where SampleEventID like 'TBRCRT_20121018_1_0280%' and ShellReplicate not like '1'
-
---TB RCRT 2013
 UPDATE [hsdb].[Recruitment] set NumTop = NULL, NumBottom = NULL, Comments = 'Shells found on ground off wire' where ShellID like 'TBRCRT_20130408_1_0280_1_31' or ShellID like 'TBRCRT_20130408_1_0280_1_32' or ShellID like 'TBRCRT_20130408_1_0280_1_33' or ShellID like 'TBRCRT_20130408_1_0280_1_34' or ShellID like 'TBRCRT_20130408_1_0280_1_35' or ShellID like 'TBRCRT_20130408_1_0280_1_36'
-
---TB RCRT 2014
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20141015_1_0280_1' and ShellReplicate not like '1'
-
---TB RCRT 2015
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20150519_1_0280_1' and ShellReplicate like '3'
 
+--TB RCRT 2016 - incorrectly numbers shells (bottom shell is always last number/bottom), Comments for missing stringers.
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where SampleEventID like 'TBRCRT_20160223_1_0277%' and ShellReplicate like '3'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where SampleEventID like 'TBRCRT_20160223_1_0277%' and ShellReplicate like '2' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where SampleEventID like 'TBRCRT_20160624_1_0277_1' and ShellReplicate like '3' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where SampleEventID like 'TBRCRT_20160914_1_0280_1' and ShellReplicate like '3'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where SampleEventID like 'TBRCRT_20160914_1_0280_1' and ShellReplicate like '2' and ShellPosition like '11'
+UPDATE [hsdb].[Recruitment] set NumTop = NULL, NumBottom = NULL where ShellID like 'TBRCRT_20160914_1_0280_1_23' --Shell missing from stringer. Bottom shell still is bottom shell.
+UPDATE [hsdb].[Recruitment] set NumTop = 4, NumBottom = 6 where ShellID like 'TBRCRT_20160914_1_0280_1_24'
+UPDATE [hsdb].[Recruitment] set NumTop = NULL, NumBottom = NULL where ShellID like 'TBRCRT_20160914_1_0280_1_10' --Shell missing from stringer. Bottom shell still is bottom shell.
+UPDATE [hsdb].[Recruitment] set NumTop = 3, NumBottom = 1 where ShellID like 'TBRCRT_20160914_1_0280_1_12'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Shells missing' else ', Shells missing' end) where ShellID like 'TBRCRT_20160914_1_0280_1_11' or ShellID like 'TBRCRT_20160914_1_0280_1_10'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20161013_1_0277_1%' and ShellReplicate like '1' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20161013_1_0277_1%' and ShellReplicate like '2' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20161013_1_0277_1%' and ShellReplicate like '3' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20161114_1_0280_1%' and ShellReplicate like '2' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20161114_1_0280_1' and ShellReplicate like '3'
 
-EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2015-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+--TB RCRT 2017
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20170117_1_0280_1' and ShellReplicate like '3' and ShellPosition > 6
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20171219_1_0280_1' and ShellReplicate like '3'
+UPDATE [hsdb].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'PctDO not recorded' else ', PctDO not recorded' end) where SampleEventID like 'TBRCRT_2017%'
+
+--TB RCRT 2018
+UPDATE [hsdb].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'PctDO not recorded' else ', PctDO not recorded' end) where SampleEventID like 'TBRCRT_2018%'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20180418_1_0277_1' and ShellReplicate like '3'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20180724_1_0280_1'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20180920_1_0280_1' and ShellReplicate like '3'
+
+--TB RCRT 2019
+UPDATE [hsdb].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'PctDO not recorded' else ', PctDO not recorded' end) where SampleEventID like 'TBRCRT_2019%'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20190422_1_0280_1' and ShellReplicate like '2' and ShellPosition > 6
+
+EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2018-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
