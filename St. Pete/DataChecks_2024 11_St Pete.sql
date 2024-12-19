@@ -52,7 +52,7 @@ set [Comments] = CONCAT(Comments, case when Comments is null then 'Ret delayed d
 where [SampleEventID] like 'TBSDTP_202411%'
 
 
---Dermo: All sites 11/2024, 03-04/2023 (all data)
+--Dermo: All sites 11-12/2024, 03-04/2023 (all data)
 --Delete incorrect Trip
 DELETE from [dbo].[TripInfo] where [TripID] like 'SLCOLL_20241105%'
 UPDATE dbo.Dermo set TotalWeight = 17.21 where OysterID like 'LWRD2303-07'
@@ -110,6 +110,7 @@ DELETE FROM [dbo].[SampleEventWQ] where SampleEventID like 'CRCOLL_20240219%' or
 --CI- TB 5/2024, 8/2024
 UPDATE [dbo].[SampleEvent] set DataStatus = 'Proofed', DateProofed = '2024-09-11 00:00:00', ProofedBy = 'Lily Harmon' where TripID like 'TBCOLL_202408%'
 UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed', DateProofed = '2024-09-11 00:00:00', ProofedBy = 'Lily Harmon' where SampleEventID like 'TBCOLL_202408%'
+UPDATE [dbo].[TripInfo] set DataStatus = 'Not Entered' where TripID like 'CRCOLL_202412%'
 
 
 --Survey: December - SL, CR-none
