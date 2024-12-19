@@ -26,7 +26,7 @@ Excel_data <- read_excel("../Data/SampleEventWQ_TEMPLATE.xlsx", sheet = "Templat
 Excel_data <- Excel_data %>% mutate(DateEntered = excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"))
 #Check data
 head(Excel_data)
-#Excel_data <- Excel_data %>% mutate(Salinity = case_when(Salinity == '33.700000000000003' ~ "33.7", TRUE ~ Salinity))
+#Excel_data <- Excel_data %>% mutate(Salinity = case_when(Salinity == '33.700000000000003' ~ "33.7", TRUE ~ Salinity), Temperature = case_when(Temperature == '19.100000000000001' ~ "19.1", TRUE ~ Temperature), DissolvedOxygen = case_when(DissolvedOxygen == '8.6199999999999992' ~ "8.62", TRUE ~ DissolvedOxygen)) 
 #Extract parameter for file output
 Estuary <- Excel_data[1,1] %>% substr(1,2)
 DataType <- Excel_data[1,1] %>% substr(3,6)
