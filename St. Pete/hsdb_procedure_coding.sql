@@ -57,3 +57,62 @@ BEGIN
 	INSERT INTO hsdb.Recruitment SELECT * FROM Recruitment WHERE DataStatus = 'Completed';
 
 END
+
+--hsdb.Collections
+CREATE PROCEDURE [hsdb].[spChecksCollections](
+	@CheckStart AS DATE,
+	@CheckEnd AS DATE,
+	@EstuaryCode AS VARCHAR(2),
+	@DataManager AS VARCHAR(max)
+	)
+AS
+BEGIN
+	DECLARE @CompletedDate DATE;
+	SET @CompletedDate = cast(getDate() as date);
+
+	IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL
+	BEGIN
+    DROP TABLE #ValidTrips;
+  END
+
+	CREATE TABLE #ValidTrips (
+		TripID VARCHAR(50)
+	);
+
+	INSERT INTO #ValidTrips (TripID)
+	SELECT TripID
+	FROM hsdb.TripInfo
+	WHERE TripDate >= @CheckStart AND TripDate <= @CheckEnd
+	AND DataStatus = 'Proofed' AND TripID like CONCAT(@EstuaryCode, 'COLL%');
+
+	-- Query the TripInfo table using the temporary table
+	UPDATE hsdb.TripInfo 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+
+	-- Query the SampleEvent table using the temporary table
+	UPDATE hsdb.SampleEvent 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+
+	-- Query the SampleEventWQ table using the temporary table
+	UPDATE hsdb.SampleEventWQ 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+
+  -- Query the ConditionIndex table using the temporary table
+  UPDATE hsdb.ConditionIndex 
+  SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+  WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+  
+  -- Query the Dermo table using the temporary table
+  UPDATE hsdb.Dermo 
+  SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+  WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+  
+  -- Query the Repro table using the temporary table
+  UPDATE hsdb.Repro 
+  SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+  WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+
+END
