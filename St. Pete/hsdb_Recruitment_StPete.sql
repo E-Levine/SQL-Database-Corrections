@@ -53,7 +53,14 @@ DELETE FROM [hsdb].[Recruitment] where SampleEventID like 'TBRCRT_20090803%' or 
 DELETE FROM [hsdb].[SampleEvent] where TripID like 'TBRCRT_20090901%' or TripID like 'TBRCRT_20090908%' or TripID like 'TBRCRT_20090910%' 
 DELETE FROM [hsdb].[SampleEventWQ] where SampleEventID like 'TBRCRT_20090901%' or SampleEventID like 'TBRCRT_20090908%' or SampleEventID like 'TBRCRT_20090910%' 
 DELETE FROM [hsdb].[Recruitment] where SampleEventID like 'TBRCRT_20090901%' or SampleEventID like 'TBRCRT_20090908%' or SampleEventID like 'TBRCRT_20090910%'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20091020_1_0280%' and ShellReplicate like '3' and NumBottom is NULL
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20090724_1_0280%'
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20090317_1_0278%' and (ShellReplicate like '2' or ShellReplicate like '1')
 
-EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2009-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+--TB RCRT 2010
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bars missing' else ', T-bars missing' end) where SampleEventID like 'TBRCRT_20100315_1_0282%'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20100512_1_0280%' and ShellReplicate like '3'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bars moved' else ', T-bars moved' end) where SampleEventID like 'TBRCRT_20100609_1_0280%'
+UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'T-bar missing' else ', T-bar missing' end) where SampleEventID like 'TBRCRT_20100713_1_0280%' and ShellReplicate like '3'
+
+EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2010-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
