@@ -23,5 +23,9 @@ UPDATE [hsdb].[Repro] set Sex = REPLACE(Sex, 'F', 'Z') where OysterID like 'TBLD
 --TB COLL 2018
 --Run TB_COLL_WQ_2018_EW
 
+--TB COLL 2019
+--Run TB_COLL_WQ_2019_EW
 
-EXECUTE [hsdb].[spChecksCollections] @CheckStart = '2008-01-01', @CheckEnd = '2018-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+
+
+EXECUTE [hsdb].[spChecksCollections] @CheckStart = '2008-01-01', @CheckEnd = '2019-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
