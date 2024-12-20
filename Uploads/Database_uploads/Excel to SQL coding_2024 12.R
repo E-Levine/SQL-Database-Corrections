@@ -15,11 +15,11 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 #Initials of person adding data
 Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
-Type_Data <- c("WQ")
-Data_Year <- c("2018")
+Type_Data <- c("SRVYSH")
+Data_Year <- c("2019")
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/SampleEventWQ_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/SurveySH_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
                          .name_repair = "unique")
@@ -167,5 +167,95 @@ SEWQ_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
 write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Initials, ".sql"))
+#
+#
+
+#####Survey Shell Height Data####
+#
+##Create empty data frame to fill
+SrvySH <- data.frame(matrix(ncol = 12, nrow = 0))
+#
+#Modify data frame of data to upload
+Is_Proofed <- c("Y") #Should data status be changed to "Proofed"? Y/N
+Proofed_By <- c("Erica Williams") #ProofedBy name
+AdminNote <- c("none") #Anything to add as an Admin Note to ALL rows of data? If none, = "none"
+#
+Excel_data_updated <- Excel_data %>% 
+  mutate(ShellHeightID = paste0("'", ShellHeightID, "'"),
+         QuadratID = paste0("'", QuadratID, "'"),
+         ShellHeight = as.numeric(ShellHeight),
+         DataStatus = case_when(Is_Proofed == "Y" ~ paste0("'", "Proofed", "'"), TRUE ~ DataStatus),
+         DateEntered = paste0("'", DateEntered, "'"),
+         EnteredBy = paste0("'", EnteredBy, "'"),
+         DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'"), TRUE ~ DateProofed),
+         ProofedBy = case_when(Is_Proofed == "Y" ~ paste0("'", Proofed_By, "'"), TRUE ~ ProofedBy),
+         DateCompleted = paste0("'", DateCompleted, "'"),
+         CompletedBy = paste0("'", CompletedBy, "'"),
+         Comments = paste0("'", Comments, "'"),
+         AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
+#
+#Fill data frame with information
+SrvySH <- rbind(SrvySH, Excel_data_updated, stringsAsFactors = FALSE)
+#
+#SQL base template code - confirm location of data (dbo/hsdb) in first line 
+##Skip to 'SEWQSQLheader' is glue function not working
+SRVYSH_SQLtemplate <- "
+INSERT INTO [hsdb].[SurveySH]
+    ([ShellHeightID]
+      ,[QuadratID]
+      ,[ShellHeight]
+      ,[DataStatus]
+      ,[DateEntered]
+      ,[EnteredBy]
+      ,[DateProofed]
+      ,[ProofedBy]
+      ,[DateCompleted]
+      ,[CompletedBy]
+      ,[Comments]
+      ,[AdminNotes])
+  VALUES
+      ({ShellHeightID}
+      ,{QuadratID}
+      ,{ShellHeight}
+      ,{DataStatus}
+      ,{DateEntered}
+      ,{EnteredBy}
+      ,{DateProofed}
+      ,{ProofedBy}
+      ,{DateCompleted}
+      ,{CompletedBy}
+      ,{Comments}
+      ,{AdminNotes})
+GO"
+#
+# Use the glue function to fill in the template with the data frame values then skip to 'write_lines()'
+SRVYSH_SQL <- glue(SRVYSH_SQLtemplate, .envir = SrvySH)
+#
+#
+##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 
+SRVYSH_SQLheader <- "
+INSERT INTO [hsdb].[SurveySH]
+    ([ShellHeightID]
+      ,[QuadratID]
+      ,[ShellHeight]
+      ,[DataStatus]
+      ,[DateEntered]
+      ,[EnteredBy]
+      ,[DateProofed]
+      ,[ProofedBy]
+      ,[DateCompleted]
+      ,[CompletedBy]
+      ,[Comments]
+      ,[AdminNotes])
+  VALUES"
+temp <- character(length(nrow(SrvySH)))
+for(i in 1:nrow(SrvySH)){
+  temp[i] <- paste0(SRVYSH_SQLheader, "\n      (",paste(SrvySH[i,], collapse = "\n      ,"), ")\n GO")
+}
+#
+SRVYSH_SQL <- paste(temp, collapse = "\n\n")
+#
+#Save SQL code
+write_lines(SRVYSH_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Initials, ".sql"))
 #
 #
