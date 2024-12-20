@@ -1,3 +1,6 @@
+use[Oysters]
+go
+
 --HSDB Checks: TB COLL 2008-2011
 
 --TB COLL 2008 - dermo only

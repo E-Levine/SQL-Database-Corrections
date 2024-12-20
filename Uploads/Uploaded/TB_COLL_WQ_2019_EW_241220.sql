@@ -1,4 +1,4 @@
-use [Oysters_24-12-18]
+use [Oysters]
 go
 
 INSERT INTO [hsdb].[SampleEventWQ]
@@ -27,8 +27,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170117_1_0278_1_01'
-      ,'TBCOLL_20170117_1_0278_1'
+      ('TBCOLL_20190118_1_0278_1_01'
+      ,'TBCOLL_20190118_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -80,8 +80,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170117_1_0280_1_01'
-      ,'TBCOLL_20170117_1_0280_1'
+      ('TBCOLL_20190118_1_0280_1_01'
+      ,'TBCOLL_20190118_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -133,8 +133,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170117_1_0282_1_01'
-      ,'TBCOLL_20170117_1_0282_1'
+      ('TBCOLL_20190118_1_0282_1_01'
+      ,'TBCOLL_20190118_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -186,8 +186,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170117_1_0277_1_01'
-      ,'TBCOLL_20170117_1_0277_1'
+      ('TBCOLL_20190118_1_0277_1_01'
+      ,'TBCOLL_20190118_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -239,8 +239,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170117_1_0291_1_01'
-      ,'TBCOLL_20170117_1_0291_1'
+      ('TBCOLL_20190118_1_0291_1_01'
+      ,'TBCOLL_20190118_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -292,8 +292,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170214_1_0278_1_01'
-      ,'TBCOLL_20170214_1_0278_1'
+      ('TBCOLL_20190219_1_0278_1_01'
+      ,'TBCOLL_20190219_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -345,8 +345,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170214_1_0280_1_01'
-      ,'TBCOLL_20170214_1_0280_1'
+      ('TBCOLL_20190219_1_0280_1_01'
+      ,'TBCOLL_20190219_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -398,8 +398,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170214_1_0282_1_01'
-      ,'TBCOLL_20170214_1_0282_1'
+      ('TBCOLL_20190219_1_0282_1_01'
+      ,'TBCOLL_20190219_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -451,8 +451,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170214_1_0277_1_01'
-      ,'TBCOLL_20170214_1_0277_1'
+      ('TBCOLL_20190219_1_0277_1_01'
+      ,'TBCOLL_20190219_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -504,8 +504,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170214_1_0291_1_01'
-      ,'TBCOLL_20170214_1_0291_1'
+      ('TBCOLL_20190219_1_0291_1_01'
+      ,'TBCOLL_20190219_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -557,8 +557,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170320_1_0278_1_01'
-      ,'TBCOLL_20170320_1_0278_1'
+      ('TBCOLL_20190315_1_0278_1_01'
+      ,'TBCOLL_20190315_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -610,8 +610,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170320_1_0280_1_01'
-      ,'TBCOLL_20170320_1_0280_1'
+      ('TBCOLL_20190315_1_0280_1_01'
+      ,'TBCOLL_20190315_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -663,8 +663,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170320_1_0282_1_01'
-      ,'TBCOLL_20170320_1_0282_1'
+      ('TBCOLL_20190315_1_0282_1_01'
+      ,'TBCOLL_20190315_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -716,8 +716,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170320_1_0277_1_01'
-      ,'TBCOLL_20170320_1_0277_1'
+      ('TBCOLL_20190315_1_0277_1_01'
+      ,'TBCOLL_20190315_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -769,8 +769,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170320_1_0291_1_01'
-      ,'TBCOLL_20170320_1_0291_1'
+      ('TBCOLL_20190315_1_0291_1_01'
+      ,'TBCOLL_20190315_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -822,8 +822,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170426_1_0278_1_01'
-      ,'TBCOLL_20170426_1_0278_1'
+      ('TBCOLL_20190422_1_0278_1_01'
+      ,'TBCOLL_20190422_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -875,8 +875,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170426_1_0280_1_01'
-      ,'TBCOLL_20170426_1_0280_1'
+      ('TBCOLL_20190422_1_0280_1_01'
+      ,'TBCOLL_20190422_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -928,8 +928,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170426_1_0282_1_01'
-      ,'TBCOLL_20170426_1_0282_1'
+      ('TBCOLL_20190422_1_0282_1_01'
+      ,'TBCOLL_20190422_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -981,8 +981,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170426_1_0277_1_01'
-      ,'TBCOLL_20170426_1_0277_1'
+      ('TBCOLL_20190422_1_0277_1_01'
+      ,'TBCOLL_20190422_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1034,8 +1034,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170426_1_0291_1_01'
-      ,'TBCOLL_20170426_1_0291_1'
+      ('TBCOLL_20190422_1_0291_1_01'
+      ,'TBCOLL_20190422_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1087,8 +1087,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170516_1_0278_1_01'
-      ,'TBCOLL_20170516_1_0278_1'
+      ('TBCOLL_20190521_1_0278_1_01'
+      ,'TBCOLL_20190521_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1140,8 +1140,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170516_1_0280_1_01'
-      ,'TBCOLL_20170516_1_0280_1'
+      ('TBCOLL_20190521_1_0280_1_01'
+      ,'TBCOLL_20190521_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1193,8 +1193,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170516_1_0282_1_01'
-      ,'TBCOLL_20170516_1_0282_1'
+      ('TBCOLL_20190521_1_0282_1_01'
+      ,'TBCOLL_20190521_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1246,8 +1246,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170516_1_0277_1_01'
-      ,'TBCOLL_20170516_1_0277_1'
+      ('TBCOLL_20190521_1_0277_1_01'
+      ,'TBCOLL_20190521_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1299,8 +1299,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170516_1_0291_1_01'
-      ,'TBCOLL_20170516_1_0291_1'
+      ('TBCOLL_20190521_1_0291_1_01'
+      ,'TBCOLL_20190521_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1352,8 +1352,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170616_1_0278_1_01'
-      ,'TBCOLL_20170616_1_0278_1'
+      ('TBCOLL_20190624_1_0278_1_01'
+      ,'TBCOLL_20190624_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1405,8 +1405,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170616_1_0280_1_01'
-      ,'TBCOLL_20170616_1_0280_1'
+      ('TBCOLL_20190624_1_0280_1_01'
+      ,'TBCOLL_20190624_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1458,8 +1458,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170616_1_0282_1_01'
-      ,'TBCOLL_20170616_1_0282_1'
+      ('TBCOLL_20190624_1_0282_1_01'
+      ,'TBCOLL_20190624_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1511,8 +1511,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170616_1_0277_1_01'
-      ,'TBCOLL_20170616_1_0277_1'
+      ('TBCOLL_20190624_1_0277_1_01'
+      ,'TBCOLL_20190624_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1564,8 +1564,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170616_1_0291_1_01'
-      ,'TBCOLL_20170616_1_0291_1'
+      ('TBCOLL_20190624_1_0291_1_01'
+      ,'TBCOLL_20190624_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1617,8 +1617,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170718_1_0278_1_01'
-      ,'TBCOLL_20170718_1_0278_1'
+      ('TBCOLL_20190724_1_0278_1_01'
+      ,'TBCOLL_20190724_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1670,8 +1670,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170718_1_0280_1_01'
-      ,'TBCOLL_20170718_1_0280_1'
+      ('TBCOLL_20190724_1_0280_1_01'
+      ,'TBCOLL_20190724_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1723,8 +1723,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170718_1_0282_1_01'
-      ,'TBCOLL_20170718_1_0282_1'
+      ('TBCOLL_20190724_1_0282_1_01'
+      ,'TBCOLL_20190724_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1776,8 +1776,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170718_1_0277_1_01'
-      ,'TBCOLL_20170718_1_0277_1'
+      ('TBCOLL_20190724_1_0277_1_01'
+      ,'TBCOLL_20190724_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1829,8 +1829,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170718_1_0291_1_01'
-      ,'TBCOLL_20170718_1_0291_1'
+      ('TBCOLL_20190724_1_0291_1_01'
+      ,'TBCOLL_20190724_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1882,8 +1882,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170815_1_0278_1_01'
-      ,'TBCOLL_20170815_1_0278_1'
+      ('TBCOLL_20190819_1_0278_1_01'
+      ,'TBCOLL_20190819_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1935,8 +1935,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170815_1_0280_1_01'
-      ,'TBCOLL_20170815_1_0280_1'
+      ('TBCOLL_20190819_1_0280_1_01'
+      ,'TBCOLL_20190819_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -1988,8 +1988,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170815_1_0282_1_01'
-      ,'TBCOLL_20170815_1_0282_1'
+      ('TBCOLL_20190819_1_0282_1_01'
+      ,'TBCOLL_20190819_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2041,8 +2041,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170815_1_0277_1_01'
-      ,'TBCOLL_20170815_1_0277_1'
+      ('TBCOLL_20190819_1_0277_1_01'
+      ,'TBCOLL_20190819_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2094,8 +2094,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170815_1_0291_1_01'
-      ,'TBCOLL_20170815_1_0291_1'
+      ('TBCOLL_20190819_1_0291_1_01'
+      ,'TBCOLL_20190819_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2147,8 +2147,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170906_1_0278_1_01'
-      ,'TBCOLL_20170906_1_0278_1'
+      ('TBCOLL_20190925_1_0278_1_01'
+      ,'TBCOLL_20190925_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2200,8 +2200,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170906_1_0280_1_01'
-      ,'TBCOLL_20170906_1_0280_1'
+      ('TBCOLL_20190925_1_0280_1_01'
+      ,'TBCOLL_20190925_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2253,8 +2253,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170906_1_0282_1_01'
-      ,'TBCOLL_20170906_1_0282_1'
+      ('TBCOLL_20190925_1_0282_1_01'
+      ,'TBCOLL_20190925_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2306,8 +2306,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170906_1_0277_1_01'
-      ,'TBCOLL_20170906_1_0277_1'
+      ('TBCOLL_20190925_1_0277_1_01'
+      ,'TBCOLL_20190925_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2359,8 +2359,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20170906_1_0291_1_01'
-      ,'TBCOLL_20170906_1_0291_1'
+      ('TBCOLL_20190925_1_0291_1_01'
+      ,'TBCOLL_20190925_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2412,8 +2412,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171011_1_0278_1_01'
-      ,'TBCOLL_20171011_1_0278_1'
+      ('TBCOLL_20191028_1_0278_1_01'
+      ,'TBCOLL_20191028_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2465,8 +2465,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171011_1_0280_1_01'
-      ,'TBCOLL_20171011_1_0280_1'
+      ('TBCOLL_20191028_1_0280_1_01'
+      ,'TBCOLL_20191028_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2518,8 +2518,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171011_1_0282_1_01'
-      ,'TBCOLL_20171011_1_0282_1'
+      ('TBCOLL_20191028_1_0282_1_01'
+      ,'TBCOLL_20191028_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2571,8 +2571,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171011_1_0277_1_01'
-      ,'TBCOLL_20171011_1_0277_1'
+      ('TBCOLL_20191028_1_0277_1_01'
+      ,'TBCOLL_20191028_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2624,8 +2624,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171011_1_0291_1_01'
-      ,'TBCOLL_20171011_1_0291_1'
+      ('TBCOLL_20191028_1_0291_1_01'
+      ,'TBCOLL_20191028_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2677,8 +2677,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171117_1_0278_1_01'
-      ,'TBCOLL_20171117_1_0278_1'
+      ('TBCOLL_20191118_1_0278_1_01'
+      ,'TBCOLL_20191118_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2730,8 +2730,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171117_1_0280_1_01'
-      ,'TBCOLL_20171117_1_0280_1'
+      ('TBCOLL_20191118_1_0280_1_01'
+      ,'TBCOLL_20191118_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2783,8 +2783,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171117_1_0282_1_01'
-      ,'TBCOLL_20171117_1_0282_1'
+      ('TBCOLL_20191118_1_0282_1_01'
+      ,'TBCOLL_20191118_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2836,8 +2836,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171117_1_0277_1_01'
-      ,'TBCOLL_20171117_1_0277_1'
+      ('TBCOLL_20191118_1_0277_1_01'
+      ,'TBCOLL_20191118_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2889,8 +2889,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171117_1_0291_1_01'
-      ,'TBCOLL_20171117_1_0291_1'
+      ('TBCOLL_20191118_1_0291_1_01'
+      ,'TBCOLL_20191118_1_0291_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2942,8 +2942,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171219_1_0278_1_01'
-      ,'TBCOLL_20171219_1_0278_1'
+      ('TBCOLL_20191217_1_0278_1_01'
+      ,'TBCOLL_20191217_1_0278_1'
       ,NULL
       ,NULL
       ,NULL
@@ -2995,8 +2995,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171219_1_0280_1_01'
-      ,'TBCOLL_20171219_1_0280_1'
+      ('TBCOLL_20191217_1_0280_1_01'
+      ,'TBCOLL_20191217_1_0280_1'
       ,NULL
       ,NULL
       ,NULL
@@ -3048,8 +3048,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171219_1_0282_1_01'
-      ,'TBCOLL_20171219_1_0282_1'
+      ('TBCOLL_20191217_1_0282_1_01'
+      ,'TBCOLL_20191217_1_0282_1'
       ,NULL
       ,NULL
       ,NULL
@@ -3101,8 +3101,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171219_1_0277_1_01'
-      ,'TBCOLL_20171219_1_0277_1'
+      ('TBCOLL_20191217_1_0277_1_01'
+      ,'TBCOLL_20191217_1_0277_1'
       ,NULL
       ,NULL
       ,NULL
@@ -3154,8 +3154,8 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES
-      ('TBCOLL_20171219_1_0291_1_01'
-      ,'TBCOLL_20171219_1_0291_1'
+      ('TBCOLL_20191217_1_0291_1_01'
+      ,'TBCOLL_20191217_1_0291_1'
       ,NULL
       ,NULL
       ,NULL

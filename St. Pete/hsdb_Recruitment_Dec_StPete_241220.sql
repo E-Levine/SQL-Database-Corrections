@@ -1,3 +1,6 @@
+use [Oysters]
+go
+
 --HSDB Checks: TB RCRT 2008-2011
 
 --TB RCRT 2008
@@ -107,4 +110,4 @@ UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments
 UPDATE [hsdb].[SampleEventWQ] set [Comments] = CONCAT(Comments, case when Comments is null then 'PctDO not recorded' else ', PctDO not recorded' end) where SampleEventID like 'TBRCRT_2019%'
 UPDATE [hsdb].[Recruitment] set [Comments] = CONCAT(Comments, case when Comments is null then 'Stringer missing' else ', Stringer missing' end) where SampleEventID like 'TBRCRT_20190422_1_0280_1' and ShellReplicate like '2' and ShellPosition > 6
 
-EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2018-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';
+EXECUTE [hsdb].[spChecksRecruitment] @CheckStart = '2008-01-01', @CheckEnd = '2019-12-30', @EstuaryCode = 'TB', @DataManager = 'Erica Levine';

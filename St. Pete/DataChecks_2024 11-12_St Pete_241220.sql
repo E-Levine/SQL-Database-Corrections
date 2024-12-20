@@ -1,4 +1,4 @@
-use [Oysters_24-12-18]
+use [Oysters]
 go
 
 --Run first. Then continue with datachecks.
