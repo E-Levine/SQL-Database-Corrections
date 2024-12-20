@@ -14,8 +14,9 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 #
 #Initials of person adding data
 Initials <- c("EW")
-#Set type of data being added (WQ, TripInfo, SrvySH) - used only for file naming
+#Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("WQ")
+Data_Year <- c("2018")
 #
 ###Load data file - change file name, confirm sheet name
 Excel_data <- read_excel("../Data/SampleEventWQ_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
@@ -70,7 +71,8 @@ Excel_data_updated <- Excel_data %>%
 #Fill data frame with information
 SampleEventWQ <- rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FALSE)
 #
-#SQL base template code - confirm location of data (dbo/hsdb) in first line
+#SQL base template code - confirm location of data (dbo/hsdb) in first line 
+##Skip to 'SEWQSQLheader' is glue function not working
 SEWQSQLtemplate <- "
 INSERT INTO [hsdb].[SampleEventWQ]
     ([SampleEventWQID]
@@ -124,7 +126,7 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,{YSINotes})
 GO"
 #
-# Use the glue function to fill in the template with the data frame values
+# Use the glue function to fill in the template with the data frame values then skip to 'write_lines()'
 SEWQ_SQL <- glue(SEWQSQLtemplate, .envir = SampleEventWQ)
 #
 #
@@ -164,6 +166,6 @@ for(i in 1:nrow(SampleEventWQ)){
 SEWQ_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
-write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Initials, ".sql"))
+write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Initials, ".sql"))
 #
 #
