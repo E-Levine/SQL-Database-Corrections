@@ -144,7 +144,7 @@ BEGIN
 	SELECT TripID
 	FROM TripInfo
 	WHERE TripDate > @CheckStart AND TripDate < @CheckEnd
-	AND DataStatus = 'Proofed' AND TripID like CONCAT(@EstuaryCode, 'RCRT%');
+	AND DataStatus = 'Proofed' AND TripID like CONCAT(@EstuaryCode, 'SDTP%');
 
 	-- Query the TripInfo table using the temporary table
 	UPDATE TripInfo 
@@ -717,6 +717,85 @@ BEGIN
 END
 
 GO
+
+-- Cage
+
+CREATE PROCEDURE [dbo].[spChecksCage](
+	@CheckStart AS DATE,
+	@CheckEnd AS DATE,
+	@EstuaryCode AS VARCHAR(2),
+	@DataManager AS VARCHAR(max)
+	)
+AS
+BEGIN
+	DECLARE @CompletedDate DATE;
+	SET @CompletedDate = cast(getDate() as date);
+
+	IF OBJECT_ID('tempdb..#ValidTrips') IS NOT NULL
+	BEGIN
+		DROP TABLE #ValidTrips;
+	END
+
+	CREATE TABLE #ValidTrips (
+		TripID VARCHAR(50)
+	);
+
+	INSERT INTO #ValidTrips (TripID)
+	SELECT TripID
+	FROM TripInfo
+	WHERE TripDate >= @CheckStart AND TripDate <= @CheckEnd
+	AND DataStatus = 'Proofed' AND TripID like CONCAT(@EstuaryCode, 'CAGE%');
+
+	-- Query the TripInfo table using the temporary table
+	UPDATE dbo.TripInfo 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+
+	-- Query the SampleEvent table using the temporary table
+	UPDATE dbo.SampleEvent 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE TripID IN (SELECT TripID FROM #ValidTrips);
+
+	-- Query the SampleEventWQ table using the temporary table
+	UPDATE dbo.SampleEventWQ 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+
+	-- Query the CageCounts table using the temporary table
+	UPDATE dbo.CageCounts 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips));
+	
+	-- Query the CageSH table using the temporary table
+	UPDATE dbo.CageSH 
+	SET DataStatus = 'Completed', CompletedBy = @DataManager, DateCompleted = @CompletedDate
+	WHERE CageCountID IN (SELECT CageCountID FROM CageCount WHERE SampleEventID IN (SELECT SampleEventID FROM SampleEvent WHERE TripID IN (SELECT TripID FROM #ValidTrips)));
+
+	-- Insert the Completed data into hsdb, and DELETE FROM dbo
+	INSERT INTO hsdb.TripInfo SELECT * FROM TripInfo WHERE DataStatus = 'Completed';
+
+	DELETE FROM dbo.TripInfo WHERE DataStatus = 'Completed';
+
+	INSERT INTO hsdb.SampleEvent SELECT * FROM SampleEvent WHERE DataStatus = 'Completed';
+
+	DELETE FROM dbo.SampleEvent WHERE DataStatus = 'Completed';
+
+	INSERT INTO hsdb.SampleEventWQ SELECT * FROM SampleEventWQ WHERE DataStatus = 'Completed';
+
+	DELETE FROM dbo.SampleEventWQ WHERE DataStatus = 'Completed';
+
+	INSERT INTO hsdb.CageCount SELECT * FROM CageCount WHERE DataStatus = 'Completed';
+
+	DELETE FROM dbo.CageCount WHERE DataStatus = 'Completed';
+
+  INSERT INTO hsdb.CageSH SELECT * FROM CageSH WHERE DataStatus = 'Completed';
+  
+  DELETE FROM dbo.CageSH WHERE DataStatus = 'Completed';
+
+END
+
+GO
+
 
 -- Give permission to use for OysterReader
 GRANT EXECUTE ON dbo.spChecksCollections to OysterReader
