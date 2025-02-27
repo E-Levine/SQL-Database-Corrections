@@ -1,4 +1,4 @@
-use [Oysters_25-02-06]
+use [Oysters] --Completed 2/27/25 EW
 go
 
 UPDATE [hsdb].[CageCount]
@@ -143,3 +143,31 @@ VALUES('CRCAGE_20240813_1_0231_1_D_R_01', 'CRCAGE_20240813_1_0231_1_D_R', '67', 
 --Remove incorrect TripInfo and SampleEvent data
 DELETE FROM [hsdb].[TripInfo] where TripID like 'LXCAGE_20240410_1%'
 DELETE FROM [hsdb].[SampleEvent] where SampleEventID like 'LXCAGE_20240212_1_0243_1%' and TripID like 'LXCAGE_20230308_1'
+
+--February data checks
+--SL/LW/LW/CRE - Done
+UPDATE [dbo].[Dermo] set [TotalWeight] = '37.28', [ShellWetWeight] = '33.11' where [OysterID] like 'CRWD2502-01'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '23.56', [ShellWetWeight] = '17.39' where [OysterID] like 'CRWD2502-02'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '20.48', [ShellWetWeight] = '16.56' where [OysterID] like 'CRWD2502-03'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '33.82', [ShellWetWeight] = '24.32' where [OysterID] like 'CRWD2502-04'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '16.09', [ShellWetWeight] = '11.89' where [OysterID] like 'CRWD2502-05'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '13.92', [ShellWetWeight] = '11.15' where [OysterID] like 'CRWD2502-06'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '11.73', [ShellWetWeight] = '9.25' where [OysterID] like 'CRWD2502-07'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '45.26', [ShellWetWeight] = '34.41' where [OysterID] like 'CRWD2502-08'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '16.94', [ShellWetWeight] = '12.95' where [OysterID] like 'CRWD2502-09'
+UPDATE [dbo].[Dermo] set [TotalWeight] = '15.60', [ShellWetWeight] = '12.21' where [OysterID] like 'CRWD2502-10'
+
+--SDTP Done
+--Cages Done
+--RCRT Done
+
+
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-02-01', @CheckEnd = '2025-02-28', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
