@@ -1,4 +1,4 @@
-use [Oysters_25-03-28] 
+use [Oysters] --Completed 4/15/25 EW 
 go
 
 --RCRT 03/2025 - TB, SL, LX, LW, CR
@@ -27,8 +27,25 @@ UPDATE [dbo].[Dermo] set OysterID = 'SLSD2503-13', Comments = 'Samples for SLS3 
 UPDATE [dbo].[Dermo] set OysterID = 'SLSD2503-14', Comments = 'Samples for SLS3 collected from SLS1' where OysterID like 'SLSD2503-19'
 UPDATE [dbo].[Dermo] set OysterID = 'SLSD2503-25', Comments = 'Samples for SLS3 collected from SLS1' where OysterID like 'SLSD2503-20'
 
+--SDTP 03/2025 - LW - Good.
+--SRVY 03/2025 - SL
+Update [dbo].[SurveyQuadrat] set DataStatus = 'Proofed', DateProofed = '2025-03-27 00:00:00', ProofedBy = 'Darian Blackiston' where QuadratID = 'LWSRVY_20250317_1_0312_1_09' 
+UPDATE [dbo].[SurveySH] set DataStatus = 'Proofed', DateProofed = '2025-03-27 00:00:00', ProofedBy = 'Darian Blackiston' where QuadratID = 'LWSRVY_20250317_1_0312_1_09'
+UPDATE [dbo].[SurveyQuadrat] set NumLive = 9 where QuadratID = 'SLSRVY_20250318_1_0257_1_10'
+
+--CAGE 
+UPDATE [dbo].[CageCount]set TotalCount = 30 where CageCountID = 'SLCAGE_20250318_1_0255_1_R_B'
+
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-28', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
