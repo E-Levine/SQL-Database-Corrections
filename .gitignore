@@ -53,3 +53,7 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Ignore all Excel files except Templates
+Uploads/Data/*.xlsx
+!Uploads/Data/*_TEMPLATE.xlsx
