@@ -1,7 +1,6 @@
-use [Oysters_25-04-25]
-go
+use [Oysters] -- E Williams completed 2025/05/16
 
---SKIP: DONE TO OYSTERS 04/21/2025:Adding/correcting for extra LXN COLL samples
+--SKIP: DONE TO OYSTERS db 04/21/2025:Adding/correcting for extra LXN COLL samples
 DELETE FROM [dbo].[Dermo] where OysterID like 'LXND2503%'
 Delete FROM [dbo].[TripInfo] where TripID like 'LXCOLL_20250318_2' or TripID like 'LXCOLL_20250318_3'
 Delete FROM [dbo].[SampleEvent] where TripID like 'LXCOLL_20250318_2'
@@ -30,7 +29,7 @@ DELETE from [dbo].CageSH where CageCountID like 'CRCAGE_20250401%'
 INSERT INTO [dbo].[CageSH] (ShellHeightID, CageCountID, ShellHeight, DataStatus, DateEntered, EnteredBy, DateProofed, ProofedBy, DateCompleted, CompletedBy, Comments, AdminNotes) VALUES ('CRCAGE_20250415_1_0232_1_R_Y_01', 'CRCAGE_20250415_1_0232_1_R_Y', 'Z', 'Proofed', '2025-04-25 00:00:00', 'Erica Williams', '2025-04-25 00:00:00', 'Erica Williams', NULL, NULL, 'Entered vis SMSS', NULL)
 
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
---EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+--EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams'; --Not running due to LH extra samples.
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksSediment] @CheckStart = '2025-04-01', @CheckEnd = '2025-04-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
