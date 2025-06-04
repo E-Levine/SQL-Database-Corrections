@@ -37,3 +37,35 @@ go
 
 --Update station for collections
 UPDATE FixedLocations set Collections = 'Y' where FixedLocationID like 'C027'
+
+-- TB 03/2025 SRVY -- DONE.
+--LW RCRT 01/2023-10/2023 -- DONE.
+--LX COLL 03/2025 - DONE.
+--SL, LX, CR 07/2023-09/2023, 11/2023, 01/2024
+UPDATE [dbo].[SampleEvent] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventID like 'LXCOLL_202401%' or SampleEventID like 'SLCOLL_202401%' or SampleEventID like 'CRCOLL_202401%'
+UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventWQID like 'LXCOLL_202401%' or SampleEventWQID like 'SLCOLL_202401%' or SampleEventWQID like 'CRCOLL_202401%'
+
+--TB COLL: 03/2023, 08/2023-01/2024, 03/2025
+UPDATE [dbo].[SampleEvent] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventID like 'TBCOLL_202309%' or SampleEventID like 'TBCOLL_202310%' or SampleEventID like 'TBCOLL_202312%' or SampleEventID like 'TBCOLL_202401%' 
+UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventWQID like 'TBCOLL_202309%' or SampleEventID like 'TBCOLL_202310%' or SampleEventID like 'TBCOLL_202312%' or SampleEventID like 'TBCOLL_202401%' 
+UPDATE [dbo].[SampleEvent] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventID like 'TBCOLL_202403%' or SampleEventID like 'TBCOLL_20240405%'
+UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed', DateProofed = '2025-03-12 00:00:00.0000000', ProofedBy = 'Darian Blackiston' where SampleEventWQID like 'TBCOLL_202403%' or SampleEventID like 'TBCOLL_20240405%'
+DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0291_1%' and ShellHeight is NULL
+DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0277_1%' and ShellHeight is NULL
+
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2023-01-01', @CheckEnd = '2023-10-31', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-07-01', @CheckEnd = '2023-09-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-07-01', @CheckEnd = '2023-09-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-07-01', @CheckEnd = '2023-09-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-11-01', @CheckEnd = '2023-11-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-11-01', @CheckEnd = '2023-11-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-11-01', @CheckEnd = '2023-11-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-03-01', @CheckEnd = '2023-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-08-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-03-01', @CheckEnd = '2024-04-15', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-03-01', @CheckEnd = '2025-04-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
