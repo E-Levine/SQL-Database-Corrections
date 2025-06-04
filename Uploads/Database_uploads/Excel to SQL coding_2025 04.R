@@ -17,6 +17,7 @@ Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("COLL")
 Data_Year <- c("2025")
+Data_Month <- c("05") #For file output name
 #
 ###Load data file - change file name, confirm sheet name
 Excel_data <- read_excel("../Data/COLL_DERMO_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
@@ -170,7 +171,7 @@ for(i in 1:nrow(SampleEventWQ)){
 SEWQ_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
-write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Initials, ".sql"))
+write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
 #
 #
 
@@ -260,7 +261,7 @@ for(i in 1:nrow(SrvySH)){
 SRVYSH_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
-write_lines(SRVYSH_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Initials, ".sql"))
+write_lines(SRVYSH_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
 #
 #
 #####Collections Dermo Data####
@@ -377,6 +378,6 @@ for(i in 1:nrow(Dermo)){
 Dermo_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
-write_lines(Dermo_SQL, paste0("../", Estuary, "_", Type_Data, "_", DataType, "_", Data_Year, "_", Initials, ".sql"))
+write_lines(Dermo_SQL, paste0("../", Estuary, "_", Type_Data, "_", DataType, "_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
 #
 #
