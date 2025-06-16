@@ -1,4 +1,4 @@
-use [Oysters_25-06-04]
+use [Oysters_25-06-16]
 go
 
 --Remove duplicate CR survey stations - Completed in Oysters
@@ -34,6 +34,9 @@ go
 --  VALUES
 --      ('C029','CR','W','CR W 26339_82039 33','33',NULL,NULL,NULL,26.56548,-82.06556,'N','Y','N','N','N','N','N','N','2023-08-31','2023-11-01','Completed','2024-02-05','EL',NULL,NULL,NULL,NULL,'26339_82039',NULL,'CR-W-26339_82039-33','Caloosahatchee River')
 --GO
+
+--Update Datalogger locations
+UPDATE FixedLocations set Dataloggers = 'Y' where StationNameNumber = 'SL-N-1-1' or StationNameNumber = 'LX-N-2-2' or StationNameNumber = 'PPT-1'
 
 --Update station for collections
 UPDATE FixedLocations set Collections = 'Y' where FixedLocationID like 'C027'
