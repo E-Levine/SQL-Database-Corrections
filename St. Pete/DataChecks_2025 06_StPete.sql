@@ -1,4 +1,4 @@
-use [Oysters_25-06-16]
+use [Oysters_25-06-27]
 go
 
 --Remove duplicate CR survey stations - Completed in Oysters
@@ -57,6 +57,13 @@ DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0291_1%' and Shell
 DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0277_1%' and ShellHeight is NULL
 
 -- CERP, PBC RCRT 06/2025 -- DONE.
+-- LW SDTP 06/2025 -- DONE.
+-- CERP, PBC Dermo 
+UPDATE [dbo].[SampleEventWQ] set pH = [value] where SampleEventWQID like 'CRCOLL_20250617_1_0230_1_01%' 
+-- Mini survey:
+UPDATE [dbo].SurveyQuadrat set DataStatus = 'Proofed', DateProofed = '2025-06-27 00:00:00.0000000', ProofedBy = 'Erica Williams' where SampleEventID like 'SLSRVY_202506%' 
+UPDATE [dbo].SurveySH set DataStatus = 'Proofed', DateProofed = '2025-06-27 00:00:00.0000000', ProofedBy = 'Erica Williams' where QuadratID like 'SLSRVY_20250611_1_0255_1_10%' 
+
 
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2023-01-01', @CheckEnd = '2023-10-31', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
@@ -78,3 +85,6 @@ EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSediment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
