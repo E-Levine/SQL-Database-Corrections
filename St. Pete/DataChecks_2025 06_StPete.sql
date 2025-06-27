@@ -56,6 +56,8 @@ UPDATE [dbo].[SampleEventWQ] set DataStatus = 'Proofed', DateProofed = '2025-03-
 DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0291_1%' and ShellHeight is NULL
 DELETE from Dermo where SampleEventID like 'TBCOLL_20250313_1_0277_1%' and ShellHeight is NULL
 
+-- CERP, PBC RCRT 06/2025 -- DONE.
+
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2023-01-01', @CheckEnd = '2023-10-31', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
@@ -72,3 +74,7 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-03-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-08-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-03-01', @CheckEnd = '2024-04-15', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-03-01', @CheckEnd = '2025-04-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
