@@ -65,6 +65,15 @@ UPDATE [dbo].SurveyQuadrat set DataStatus = 'Proofed', DateProofed = '2025-06-27
 UPDATE [dbo].SurveySH set DataStatus = 'Proofed', DateProofed = '2025-06-27 00:00:00.0000000', ProofedBy = 'Erica Williams' where QuadratID like 'SLSRVY_20250611_1_0255_1_10%' 
 
 
+--LW STDP 05/2025 - No DW measurements. Add ave meas to comments for each station for working tables (reports) NOT TO DATABASE
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 4.39, PanDryWeight = 177.34 where CupSampleID like 'LWL2505-01-3' or CupSampleID like 'LWL2505-01-4'
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 3.81, PanDryWeight = 18.62 where CupSampleID like 'LWL2505-02%'
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 3.97, PanDryWeight = 15.49 where CupSampleID like 'LWL2505-03-1' or CupSampleID like 'LWL2505-03-4'
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 4.28, PanDryWeight = 36.52 where CupSampleID like 'LWR2505-02-1' or CupSampleID like 'LWR2505-02-2' or CupSampleID like 'LWR2505-02-4'
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 4.30, PanDryWeight = 40.04 where CupSampleID like 'LWR2505-03%'
+--Update [hsdb].[SedimentTrap] set FilterDryWeight = 3.90 where CupSampleID like 'LWR2505-04%'
+
+
 EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2023-01-01', @CheckEnd = '2023-10-31', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-03-01', @CheckEnd = '2025-03-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
