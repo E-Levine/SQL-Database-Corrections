@@ -1,4 +1,4 @@
-use [Oysters_25-06-27]
+use [Oysters] --Completed 11/07/25 ELW
 go
 
 --Remove duplicate CR survey stations - Completed in Oysters
@@ -85,6 +85,7 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-11-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-11-01', @CheckEnd = '2023-11-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-02-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2024-01-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-03-01', @CheckEnd = '2023-03-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2023-08-01', @CheckEnd = '2024-01-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
