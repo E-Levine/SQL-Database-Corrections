@@ -1,4 +1,4 @@
-use [Oysters]
+use [Oysters_25-07-21]
 go
 
 --Update Datalogger locations --COMPLETED in OYSTERS
