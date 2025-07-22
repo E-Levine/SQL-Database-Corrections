@@ -17,10 +17,10 @@ Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("COLL")
 Data_Year <- c("2025")
-Data_Month <- c("05") #For file output name
+Data_Month <- c("06-07") #For file output name
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/COLL_DERMO_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/COLL_DERMO_ELW.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
                          .name_repair = "unique")
@@ -28,7 +28,7 @@ Excel_data <- read_excel("../Data/COLL_DERMO_TEMPLATE.xlsx", sheet = "Template",
 Excel_data <- Excel_data %>% mutate(DateEntered = excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"))
 #Check data
 head(Excel_data)
-#Excel_data <- Excel_data %>% mutate(Salinity = case_when(Salinity == '33.700000000000003' ~ "33.7", TRUE ~ Salinity), Temperature = case_when(Temperature == '19.100000000000001' ~ "19.1", TRUE ~ Temperature), DissolvedOxygen = case_when(DissolvedOxygen == '8.6199999999999992' ~ "8.62", TRUE ~ DissolvedOxygen)) 
+#Excel_data <- Excel_data %>% mutate_at(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight"), ~ as.character(round(as.numeric(.), 2)))
 #
 #Convert columns to numeric than back to character to remove extra numbers and fill missing values with NULL
 Excel_data <- Excel_data %>% mutate(across(c(ShellHeight, ShellLength, ShellWidth, TotalWeight, ShellWetWeight, DermoGill, DermoMantle), as.numeric)) %>%
