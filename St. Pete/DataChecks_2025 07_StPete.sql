@@ -28,6 +28,20 @@ UPDATE dbo.ConditionIndex set [Comments] = 'Shallow' where OysterID like 'TBRC24
 DELETE from TripInfo where TripID = 'TBCOLL_20250630_1'
 UPDATE dbo.SampleEventWQ set [Secchi] = 0.30 where SampleEventWQID like 'TBCOLL_20250623_1_0529_1_01%'
 
+--pH didn't pass CCV for TB and CR 06/2025.
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 10.82, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0230_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 9.88, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0231_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 9.22, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0232_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.13, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0233_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.11, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0277_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.14, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0278_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.94, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0291_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.39, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0527_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.76, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0528_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.62, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0529_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.6, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0529_1_02'
+
+
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-07-01', @CheckEnd = '2025-07-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-07-01', @CheckEnd = '2025-07-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
