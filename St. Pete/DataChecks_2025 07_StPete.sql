@@ -28,7 +28,7 @@ UPDATE dbo.ConditionIndex set [Comments] = 'Shallow' where OysterID like 'TBRC24
 DELETE from TripInfo where TripID = 'TBCOLL_20250630_1'
 UPDATE dbo.SampleEventWQ set [Secchi] = 0.30 where SampleEventWQID like 'TBCOLL_20250623_1_0529_1_01%'
 
---pH didn't pass CCV for TB and CR 06/2025.
+--pH didn't pass CCV for TB and CR 06/2025, nor SL/LX/LW for 07/2025
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 10.82, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0230_1_01'
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 9.88, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0231_1_01'
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 9.22, pH failed CCV' where SampleEventWQID = 'CRCOLL_20250617_1_0232_1_01'
@@ -40,6 +40,28 @@ UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.39, pH failed CCV
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.76, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0528_1_01'
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.62, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0529_1_01'
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.6, pH failed CCV' where SampleEventWQID = 'TBCOLL_20250623_1_0529_1_02'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.89, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0235_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.84, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0236_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.44, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0237_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.49, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0240_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.19, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0241_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 8.7, pH failed CCV' where SampleEventWQID = 'LWCOLL_20250708_1_0312_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.21, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0242_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.12, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0243_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.85, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0244_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.27, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0246_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 7.07, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0247_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.3, pH failed CCV' where SampleEventWQID = 'LXCOLL_20250708_1_0249_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.02, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0255_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.95, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0256_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.92, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0257_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 6.44, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0261_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.74, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0262_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.95, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0264_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.76, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0269_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.89, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0270_1_01'
+UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.74, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0271_1_01'
+
 
 
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
