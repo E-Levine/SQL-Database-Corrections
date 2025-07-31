@@ -1,4 +1,4 @@
-use [Oysters_25-07-24]
+use [Oysters_25-07-31]
 go
 
 
@@ -62,7 +62,12 @@ UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.76, pH failed CCV
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.89, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0270_1_01'
 UPDATE dbo.SampleEventWQ set [pH] = NULL, [Comments] = 'pH = 5.74, pH failed CCV' where SampleEventWQID = 'SLCOLL_20250709_1_0271_1_01'
 
+--Delete TEST trip
+DELETE from TripInfo where TripID like 'CRCOLL_20250731%' 
+DELETE from SampleEventWQ where SampleEventID like 'CRCOLL_202507%' and Comments = 'TEST'
+DELETE from Dermo where SampleEventID like 'CRCOLL_202507%' and Comments = 'TEST'
 
+--CR COLL 07/2025 Check, RCRT 07/2025 done
 
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-07-01', @CheckEnd = '2025-07-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
@@ -78,3 +83,4 @@ EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-04-01', @CheckEnd = '202
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-01-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-04-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-04-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-07-01', @CheckEnd = '2025-07-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
