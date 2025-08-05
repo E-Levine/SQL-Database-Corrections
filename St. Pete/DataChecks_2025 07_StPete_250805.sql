@@ -1,4 +1,4 @@
-use [Oysters_25-07-31]
+use [Oysters] --COMPLETED 25/08/05
 go
 
 
@@ -8,7 +8,11 @@ go
 
 --RCRT: TB 06/2025, SL/LX/LW 07/2025
 
---SDTP: LW 07/2025, add means to comments for missing 05/2025 data
+--SDTP: LW 07/2025
+UPDATE dbo.SedimentTrap set TareCrucible = '22.83', CrucibleDW = '27.68', AshWeight = '27.08', PortionofSample = NULL where CupSampleID = 'LWL2507-01-1'
+UPDATE dbo.SedimentTrap set TareCrucible = '18.39', CrucibleDW = '32.11', AshWeight = '29.87', PortionofSample = NULL where CupSampleID = 'LWL2507-01-2'
+UPDATE dbo.SedimentTrap set TareCrucible = '22.5', CrucibleDW = '46.17', AshWeight = '43.55', PortionofSample = NULL where CupSampleID = 'LWL2507-01-3'
+UPDATE dbo.SedimentTrap set TareCrucible = '20.68', CrucibleDW = '42.19', AshWeight = '40.35', PortionofSample = NULL where CupSampleID = 'LWL2507-01-4'
 --LW STDP 05/2025 - No DW measurements. Add ave meas to comments for each station for working tables (reports) NOT TO DATABASE
 UPDATE [hsdb].[SedimentTrap] set Comments = CONCAT(Comments, ', Mean previous FDW = 4.39, PDW = 177.34') where CupSampleID like 'LWL2505-01-3' or CupSampleID like 'LWL2505-01-4'
 UPDATE [hsdb].[SedimentTrap] set Comments = CONCAT(Comments, ', Mean previous FDW = 4.39') where CupSampleID like 'LWL2505-01-1' or CupSampleID like 'LWL2505-01-2'
