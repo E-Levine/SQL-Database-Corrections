@@ -17,10 +17,10 @@ Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("COLL")
 Data_Year <- c("2025")
-Data_Month <- c("06-07") #For file output name
+Data_Month <- c("08-09") #For file output name
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/COLL_DERMO_ELW.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
                          .name_repair = "unique")
@@ -274,8 +274,8 @@ Excel_data <- Excel_data %>%
 head(Excel_data)
 #
 #Modify data frame of data to upload
-Is_Proofed <- c("Y") #Should data status be changed to "Proofed"? Y/N
-Proofed_By <- c("Erica Williams") #ProofedBy name
+Is_Proofed <- c("N") #Should data status be changed to "Proofed"? Y/N
+Proofed_By <- c(NULL) #ProofedBy name
 AdminNote <- c("none") #Anything to add as an Admin Note to ALL rows of data? If none, = "none"
 #
 Excel_data_updated <- Excel_data %>% 
@@ -288,7 +288,7 @@ Excel_data_updated <- Excel_data %>%
          ShellWetWeight = paste0(ShellWetWeight),
          DermoMantle = paste0(DermoMantle),
          DermoGill = paste0(DermoGill),
-         DataStatus = case_when(Is_Proofed == "Y" ~ paste0("'", "Proofed", "'"), TRUE ~ DataStatus),
+         DataStatus = case_when(Is_Proofed == "Y" ~ paste0("'", "Proofed", "'"), TRUE ~ paste0("'","Entered","'")),
          DateEntered = paste0("'", DateEntered, "'"),
          EnteredBy = paste0("'", EnteredBy, "'"),
          DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'")),
