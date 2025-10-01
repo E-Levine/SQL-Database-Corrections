@@ -1,6 +1,6 @@
---St Pete corrections
---August 2025
-use [Oysters_25-09-22]
+--St Pete corrections - Completed Oysters 2025/10/01
+--August - September 2025
+use [Oysters]
 go
 
 --Update CR dermo: -- completed in Oysters:
@@ -33,7 +33,7 @@ UPDATE [dbo].[SedimentTrap] set FilterDryWeight = NULL, Comments = CONCAT(Commen
 UPDATE [dbo].[SedimentTrap] set FilterDryWeight = NULL, Comments = CONCAT(Comments, case when Comments is null then 'FilterDW incorrectly measured. Ave station filter DW = 1.600' else ', FilterDW incorrectly measured. Ave station filter DW = 1.600' end) where SampleEventID like 'LWSDTP_20250902_1_0312%'
 
 
- --RCRT 08/2025:
+ --RCRT 08/2025: 09/2025 DONE.
  UPDATE dbo.SampleEventWQ 
 set Comments = 'WQ same as dermo',
 	ProofedBy = 'Erica Williams'
@@ -42,6 +42,7 @@ where SampleEventWQID like 'CRRCRT_20250821_1_0230_1_01'
 --COLL D/R 07/2025 including extra LXN: GOOD.
 --COLL dermo 08/2025 - Comment correction 
 UPDATE dbo.SampleEventWQ set Comments = REPLACE(Comments, 'ccu', 'ccv') where SampleEventID like 'LXCOLL_202508%' and Comments like '%ccu%'
+--COLL dermo 09/2025
 
 -- Survey 09/2025
 --Correct NumLIve
