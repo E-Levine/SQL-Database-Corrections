@@ -17,7 +17,7 @@ Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("COLL")
 Data_Year <- c("2025")
-Data_Month <- c("08-09") #For file output name
+Data_Month <- c("10") #For file output name
 #
 ###Load data file - change file name, confirm sheet name
 Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #File name and sheet name
@@ -25,7 +25,7 @@ Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #
                          na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
                          .name_repair = "unique")
 #Convert Entered date to date value to check value
-Excel_data <- Excel_data %>% mutate(DateEntered = excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"))
+Excel_data <- Excel_data %>% mutate(DateEntered = format(excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"),"%Y-%m-%d %H:%M:%OS7"))
 #Check data
 head(Excel_data)
 #Excel_data <- Excel_data %>% mutate_at(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight"), ~ as.character(round(as.numeric(.), 2)))
@@ -291,11 +291,11 @@ Excel_data_updated <- Excel_data %>%
          DataStatus = case_when(Is_Proofed == "Y" ~ paste0("'", "Proofed", "'"), TRUE ~ paste0("'","Entered","'")),
          DateEntered = paste0("'", DateEntered, "'"),
          EnteredBy = paste0("'", EnteredBy, "'"),
-         DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'")),
-         ProofedBy = case_when(Is_Proofed == "Y" ~ paste0("'", Proofed_By, "'")),
+         DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'"), TRUE ~ paste('NULL')),
+         ProofedBy = case_when(Is_Proofed == "Y" ~ paste0("'", Proofed_By, "'"), TRUE ~ paste('NULL')),
          DateCompleted = paste0('NULL'),
          CompletedBy = paste0('NULL'),
-         Comments = ifelse(Comments == "NULL", paste0("NULL"), paste0("'", Comments, "'")),
+         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
          AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
 #
 #Fill data frame with information
