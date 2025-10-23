@@ -14,13 +14,15 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 #
 #Initials of person adding data
 Initials <- c("EW")
-#Set type of data being added (WQ, TripInfo, SrvySH) and Year (YYYY) in which data was recorded - used only for file naming 
-Type_Data <- c("COLL")
-Data_Year <- c("2022")
+#Set type of data being added (WQ, TripInfo, SrvySH,COLL) and Year (YYYY) in which data was recorded - used only for file naming 
+Type_Data <- c("SrvySH")
+Data_Year <- c("2025")
 Data_Month <- c("09") #For file output name
+#Set either 'update' for updating existing data or 'upload' for new data
+Correction_needed <- c("update")
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/SampleEventWQ_StPete.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/SurveySH_StPete.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
                          .name_repair = "unique")
@@ -31,13 +33,16 @@ head(Excel_data)
 #Excel_data <- Excel_data %>% mutate_at(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight"), ~ as.character(round(as.numeric(.), 2)))
 #
 ##Convert columns to numeric than back to character to remove extra numbers and fill missing values with NULL
-#WQ
-Excel_data <- Excel_data %>% 
-  mutate(across(c(Temperature, Salinity, DissolvedOxygen, pH, Depth, SampleDepth, Secchi, TurbidityYSI, TurbidityHach, PercentDissolvedOxygen), as.numeric)) %>%
-  mutate(across(c(Temperature, Salinity, DissolvedOxygen, pH, Depth, SampleDepth, Secchi, TurbidityYSI, TurbidityHach, PercentDissolvedOxygen), ~as.character(.) %>% replace_na('NULL')))
-#Dermo
-Excel_data <- Excel_data %>% mutate(across(c(ShellHeight, ShellLength, ShellWidth, TotalWeight, ShellWetWeight, DermoGill, DermoMantle), as.numeric)) %>%
-  mutate(across(c(ShellHeight, ShellLength, ShellWidth, TotalWeight, ShellWetWeight, DermoGill, DermoMantle), ~as.character(.) %>% replace_na('NULL')))
+#Not required for SrvySH
+if(Type_Data == "WQ"){
+  #WQ
+  Excel_data <- Excel_data %>% 
+    mutate(across(any_of(c("Temperature", "Salinity", "DissolvedOxygen", "pH", "Depth", "SampleDepth", "Secchi", "TurbidityYSI", "TurbidityHach", "PercentDissolvedOxygen")), as.numeric)) %>%
+    mutate(across(any_of(c("Temperature", "Salinity", "DissolvedOxygen", "pH", "Depth", "SampleDepth", "Secchi", "TurbidityYSI", "TurbidityHach", "PercentDissolvedOxygen")), ~as.character(.) %>% replace_na('NULL')))
+} else if(Type_Data == "COLL"){
+  Excel_data <- Excel_data %>% mutate(across(any_of(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight", "DermoGill", "DermoMantle")), as.numeric)) %>%
+    mutate(across(any_of(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight", "DermoGill", "DermoMantle")), ~as.character(.) %>% replace_na('NULL')))
+} 
 #Extract parameter for file output
 Estuary <- Excel_data[1,1] %>% substr(1,2)
 if(Type_Data == "COLL"){DataType <- "Dermo"} else {DataType <- Excel_data[1,1] %>% substr(3,6)}
@@ -86,67 +91,9 @@ Excel_data_updated <- Excel_data %>%
 SampleEventWQ <- rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FALSE)
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
-##Skip to 'SEWQSQLheader' is glue function not working
-SEWQSQLtemplate <- "
-INSERT INTO [hsdb].[SampleEventWQ]
-    ([SampleEventWQID]
-      ,[SampleEventID]
-      ,[Temperature]
-      ,[Salinity]
-      ,[DissolvedOxygen]
-      ,[pH]
-      ,[Depth]
-      ,[SampleDepth]
-      ,[Secchi]
-      ,[TurbidityYSI]
-      ,[TurbidityHach]
-      ,[DataStatus]
-      ,[DateEntered]
-      ,[EnteredBy]
-      ,[DateProofed]
-      ,[ProofedBy]
-      ,[DateCompleted]
-      ,[CompletedBy]
-      ,[Comments]
-      ,[AdminNotes]
-      ,[CollectionTime]
-      ,[PercentDissolvedOxygen]
-      ,[YSICalibration]
-      ,[YSINotes])
-  VALUES
-      ({SampleEventWQID}
-      ,{SampleEventID}
-      ,{Temperature}
-      ,{Salinity}
-      ,{DissolvedOxygen}
-      ,{pH}
-      ,{Depth}
-      ,{SampleDepth}
-      ,{Secchi}
-      ,{TurbidityYSI}
-      ,{TurbidityHach}
-      ,{DataStatus}
-      ,{DateEntered}
-      ,{EnteredBy}
-      ,{DateProofed}
-      ,{ProofedBy}
-      ,{DateCompleted}
-      ,{CompletedBy}
-      ,{Comments}
-      ,{AdminNotes}
-      ,{CollectionTime}
-      ,{PercentDissolvedOxygen}
-      ,{YSICalibration}
-      ,{YSINotes})
-GO"
-#
-# Use the glue function to fill in the template with the data frame values then skip to 'write_lines()'
-SEWQ_SQL <- glue(SEWQSQLtemplate, .envir = SampleEventWQ)
-#
-#
-##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 
-SEWQSQLheader <- "
-INSERT INTO [hsdb].[SampleEventWQ]
+if(tolower(Correction_needed) == "upload"){
+  SEWQSQLheader <- "
+INSERT INTO [dbo].[SampleEventWQ]
     ([SampleEventWQID]
       ,[SampleEventID]
       ,[Temperature]
@@ -172,9 +119,30 @@ INSERT INTO [hsdb].[SampleEventWQ]
       ,[YSICalibration]
       ,[YSINotes])
   VALUES"
-temp <- character(length(nrow(SampleEventWQ)))
-for(i in 1:nrow(SampleEventWQ)){
-  temp[i] <- paste0(SEWQSQLheader, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+  temp <- character(length(nrow(SampleEventWQ)))
+  for(i in 1:nrow(SampleEventWQ)){
+    temp[i] <- paste0(SEWQSQLheader, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+  }
+} else if(tolower(Correction_needed) == "update"){
+  temp <- character(nrow(SampleEventWQ))
+  for(i in 1:nrow(SampleEventWQ)){
+    temp[i] <- paste0("\nUPDATE [dbo].[SampleEventWQ]", 
+                      "\nSET [Temperature] = ", SampleEventWQ$Temperature[i],",",
+                      "\n[Salinity] = ", SampleEventWQ$Salinity[i],",",
+                      "\n[DissolvedOxygen] = ", SampleEventWQ$DissolvedOxygen[i],",",
+                      "\n[pH] = ", SampleEventWQ$pH[i],",",
+                      "\n[Depth] = ", SampleEventWQ$Depth[i],",",
+                      "\n[SampleDepth] = ", SampleEventWQ$SampleDepth[i],",",
+                      "\n[Secchi] = ", SampleEventWQ$Secchi[i],",",
+                      "\n[TurbidityYSI] = ", SampleEventWQ$TurbidityYSI[i],",",
+                      "\n[TurbidityHach] = ", SampleEventWQ$TurbidityHach[i],",",
+                      "\n[CollectionTime] = ", SampleEventWQ$CollectionTime[i],",",
+                      "\n[PercentDissolvedOxygen] = ", SampleEventWQ$PercentDissolvedOxygen[i],",",
+                      "\n[YSICalibration] = ", SampleEventWQ$YSICalibration[i],",",
+                      "\n[YSINotes] = ", SampleEventWQ$YSINotes[i],",",
+                      "\nComments = ", SampleEventWQ$Comments[i],
+                      "\nWHERE [SampleEventWQID] = ", SampleEventWQ$SampleEventWQID[i])  
+  }
 }
 #
 SEWQ_SQL <- paste(temp, collapse = "\n\n")
@@ -188,6 +156,10 @@ write_lines(SEWQ_SQL, paste0("../", Estuary, "_", DataType, "_", Type_Data, "_",
 #
 ##Create empty data frame to fill
 SrvySH <- data.frame(matrix(ncol = 12, nrow = 0))
+Excel_data <- Excel_data %>% 
+  mutate(DateProofed = 'NULL', ProofedBy = 'NULL', DateCompleted = 'NULL', CompletedBy = 'NULL')
+head(Excel_data)
+
 #
 #Modify data frame of data to upload
 Is_Proofed <- c("Y") #Should data status be changed to "Proofed"? Y/N
@@ -201,54 +173,20 @@ Excel_data_updated <- Excel_data %>%
          DataStatus = case_when(Is_Proofed == "Y" ~ paste0("'", "Proofed", "'"), TRUE ~ DataStatus),
          DateEntered = paste0("'", DateEntered, "'"),
          EnteredBy = paste0("'", EnteredBy, "'"),
-         DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'"), TRUE ~ DateProofed),
-         ProofedBy = case_when(Is_Proofed == "Y" ~ paste0("'", Proofed_By, "'"), TRUE ~ ProofedBy),
-         DateCompleted = paste0("'", DateCompleted, "'"),
-         CompletedBy = paste0("'", CompletedBy, "'"),
-         Comments = paste0("'", Comments, "'"),
-         AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
+         DateProofed = case_when(Is_Proofed == "Y" ~ paste0("'", ymd(Sys.Date()), "'"), TRUE ~ paste('NULL')),
+         ProofedBy = case_when(Is_Proofed == "Y" ~ paste0("'", Proofed_By, "'"), TRUE ~ paste('NULL')),
+         DateCompleted = paste0('NULL'),
+         CompletedBy = paste0('NULL'),
+         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste('NULL')))
 #
 #Fill data frame with information
 SrvySH <- rbind(SrvySH, Excel_data_updated, stringsAsFactors = FALSE)
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
-##Skip to 'SEWQSQLheader' is glue function not working
-SRVYSH_SQLtemplate <- "
-INSERT INTO [hsdb].[SurveySH]
-    ([ShellHeightID]
-      ,[QuadratID]
-      ,[ShellHeight]
-      ,[DataStatus]
-      ,[DateEntered]
-      ,[EnteredBy]
-      ,[DateProofed]
-      ,[ProofedBy]
-      ,[DateCompleted]
-      ,[CompletedBy]
-      ,[Comments]
-      ,[AdminNotes])
-  VALUES
-      ({ShellHeightID}
-      ,{QuadratID}
-      ,{ShellHeight}
-      ,{DataStatus}
-      ,{DateEntered}
-      ,{EnteredBy}
-      ,{DateProofed}
-      ,{ProofedBy}
-      ,{DateCompleted}
-      ,{CompletedBy}
-      ,{Comments}
-      ,{AdminNotes})
-GO"
-#
-# Use the glue function to fill in the template with the data frame values then skip to 'write_lines()'
-SRVYSH_SQL <- glue(SRVYSH_SQLtemplate, .envir = SrvySH)
-#
-#
-##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 
-SRVYSH_SQLheader <- "
-INSERT INTO [hsdb].[SurveySH]
+if(tolower(Correction_needed) == "upload"){
+  SRVYSH_SQLheader <- "
+INSERT INTO [dbo].[SurveySH]
     ([ShellHeightID]
       ,[QuadratID]
       ,[ShellHeight]
@@ -262,9 +200,20 @@ INSERT INTO [hsdb].[SurveySH]
       ,[Comments]
       ,[AdminNotes])
   VALUES"
-temp <- character(length(nrow(SrvySH)))
-for(i in 1:nrow(SrvySH)){
-  temp[i] <- paste0(SRVYSH_SQLheader, "\n      (",paste(SrvySH[i,], collapse = "\n      ,"), ")\n GO")
+  #
+  temp <- character(length(nrow(SrvySH)))
+  for(i in 1:nrow(SrvySH)){
+    temp[i] <- paste0(SRVYSH_SQLheader, "\n      (",paste(SrvySH[i,], collapse = "\n      ,"), ")\n GO")
+  }
+  #
+} else if(tolower(Correction_needed) == "update"){
+  temp <- character(nrow(SrvySH))
+  for(i in 1:nrow(SrvySH)){
+    temp[i] <- paste0("\nUPDATE [dbo].[SurveySH]", 
+                      "\nSET [ShellHeight] = ", SrvySH$ShellHeight[i],",",
+                        "\nComments = ", SrvySH$Comments[i],
+                      "\nWHERE [ShellHeightID] = ", SrvySH$ShellHeightID[i])  
+  }
 }
 #
 SRVYSH_SQL <- paste(temp, collapse = "\n\n")
@@ -311,54 +260,8 @@ Excel_data_updated <- Excel_data %>%
 Dermo <- rbind(Dermo, Excel_data_updated, stringsAsFactors = FALSE)
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
-##Skip to 'Dermo_SQLheader' if glue function not working
-Dermo_SQLtemplate <- "
-INSERT INTO [dbo].[Dermo]
-    ([OysterID]
-      ,[SampleEventID]
-      ,[ShellHeight]
-      ,[ShellLength]
-      ,[ShellWidth]
-      ,[TotalWeight]
-      ,[ShellWetWeight]
-      ,[DermoMantle]
-      ,[DermoGill]
-      ,[DataStatus]
-      ,[DateEntered]
-      ,[EnteredBy]
-      ,[DateProofed]
-      ,[ProofedBy]
-      ,[DateCompleted]
-      ,[CompletedBy]
-      ,[Comments]
-      ,[AdminNotes])
-  VALUES
-      ({OysterID}
-      ,{SampleEventID}
-      ,{ShellHeight}
-      ,{ShellLength}
-      ,{ShellWidth}
-      ,{TotalWeight}
-      ,{ShellWetWeight}
-      ,{DermoMantle}
-      ,{DermoGill}
-      ,{DataStatus}
-      ,{DateEntered}
-      ,{EnteredBy}
-      ,{DateProofed}
-      ,{ProofedBy}
-      ,{DateCompleted}
-      ,{CompletedBy}
-      ,{Comments}
-      ,{AdminNotes})
-GO"
-#
-# Use the glue function to fill in the template with the data frame values then skip to 'write_lines()'
-Dermo_SQL <- glue(Dermo_SQLtemplate, .envir = Dermo)
-#
-#
-##GLUE FUNCTION NOT CURRENTLY WORKING - Using method below instead. 
-Dermo_SQLheader <- "
+if(tolower(Correction_needed) == "upload"){
+  Dermo_SQLheader <- "
 INSERT INTO [dbo].[Dermo]
     ([OysterID]
       ,[SampleEventID]
@@ -379,9 +282,26 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES"
-temp <- character(length(nrow(Dermo)))
-for(i in 1:nrow(Dermo)){
-  temp[i] <- paste0(Dermo_SQLheader, "\n      (",paste(Dermo[i,], collapse = "\n      ,"), ")\n GO")
+  #
+  temp <- character(length(nrow(Dermo)))
+  for(i in 1:nrow(Dermo)){
+    temp[i] <- paste0(Dermo_SQLheader, "\n      (",paste(Dermo[i,], collapse = "\n      ,"), ")\n GO")
+  }
+  #
+} else if(tolower(Correction_needed) == "update"){
+  temp <- character(nrow(Dermo))
+  for(i in 1:nrow(Dermo)){
+    temp[i] <- paste0("\nUPDATE [dbo].[Dermo]", 
+                      "\nSET [ShellHeight] = ", Dermo$ShellHeight[i],",",
+                      "\nSET [ShellLength] = ", Dermo$ShellLength[i],",",
+                      "\nSET [ShellWidth] = ", Dermo$ShellWidth[i],",",
+                      "\nSET [TotalWeight] = ", Dermo$TotalWeight[i],",",
+                      "\nSET [ShellWetWeight] = ", Dermo$ShellWetWeight[i],",",
+                      "\nSET [DermoMantle] = ", Dermo$DermoMantle[i],",",
+                      "\nSET [DermoGill] = ", Dermo$DermoGill[i],",",
+                      "\nComments = ", Dermo$Comments[i],
+                      "\nWHERE [OysterID] = ", Dermo$OysterID[i])  
+  }
 }
 #
 Dermo_SQL <- paste(temp, collapse = "\n\n")
