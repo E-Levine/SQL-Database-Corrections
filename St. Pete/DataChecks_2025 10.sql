@@ -1,6 +1,7 @@
-use [Oysters]
+use [Oysters_25-10-23]
 go
 
+--Run TB_SRVY_SrvySH_202509 upload file!!
 
 --LXN 08/2025 extra samples: - Completed on Oysters
 --update dbo.Dermo set ShellLength = '26.14' where OysterID like 'LXND2508-18' 
@@ -62,6 +63,29 @@ UPDATE hsdb.Repro set
 	DateCompleted = '2025-10-21 00:00:00.0000000', CompletedBy = 'Erica Willams'
 	where SampleEventID like 'CRCOLL_202209%' 
 
+-- Oct CAGE, RCRT (-TB) data - GOOD
+--TB RCRT 2025-07,08,09
+DELETE from SampleEvent where SampleEventID = 'TBRCRT_20250923_1_0277_1' or SampleEventID = 'TBRCRT_20250923_1_0278_1'
+UPDATE SampleEventWQ set DataStatus = 'Proofed', ProofedBy = 'Lily Harmon', DateProofed = '2025-09-22 00:00:00.0000000' where SampleEventWQID = 'TBRCRT_20250728_1_0278_1_01'
+DELETE from SampleEventWQ where SampleEventWQID = 'TBRCRT_20250923_1_0277_1_01' or SampleEventWQID = 'TBRCRT_20250923_1_0278_1_01'
+UPDATE Recruitment set DataStatus = 'Proofed', ProofedBy = 'Lily Harmon', DateProofed = '2025-09-22 00:00:00.0000000' where SampleEventID = 'TBRCRT_20250728_1_0278_1'
+DELETE from SampleEvent where SampleEventID = 'TBSRVY_20250924_1_0291_1' or SampleEventID = 'TBSRVY_20250924_1_0528_1' or  SampleEventID = 'TBSRVY_20250924_1_0529_1'
+DELETE from SampleEventWQ where SampleEventWQID = 'TBSRVY_20250924_1_0291_1_01' or SampleEventWQID = 'TBSRVY_20250924_1_0528_1_01' or  SampleEventWQID = 'TBSRVY_20250924_1_0529_1_01'
+UPDATE SurveyQuadrat set Comments = 'Volumetrics not recorded' where SampleEventID = 'TBSRVY_20250924_1_0280_1' or SampleEventID = 'TBSRVY_20250924_1_0282_1'
+
+--TB COLL 2025/06 -- GOOD
+
+
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2016-01-01', @CheckEnd = '2022-12-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2016-01-01', @CheckEnd = '2022-12-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2016-01-01', @CheckEnd = '2022-12-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-28', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-28', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCage] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-28', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-30', @EstuaryCode = 'LW', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-10-01', @CheckEnd = '2025-10-30', @EstuaryCode = 'CR', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksRecruitment] @CheckStart = '2025-07-01', @CheckEnd = '2025-09-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksSurvey] @CheckStart = '2025-09-01', @CheckEnd = '2025-09-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
+EXECUTE [dbo].[spChecksCollections] @CheckStart = '2025-06-01', @CheckEnd = '2025-06-30', @EstuaryCode = 'TB', @DataManager = 'Erica Williams';
