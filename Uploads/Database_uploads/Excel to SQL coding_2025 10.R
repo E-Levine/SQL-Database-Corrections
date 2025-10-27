@@ -24,7 +24,7 @@ Correction_needed <- c("upload")
 ###Load data file - change file name, confirm sheet name
 Excel_data <- read_excel("../Data/COLL_REPRO_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
-                         na = c("", "Z", "z"), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space?
+                         na = c(""), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space
                          .name_repair = "unique")
 #Convert Entered/Proofed dates to date value
 Excel_data <- Excel_data %>% 
@@ -98,7 +98,7 @@ Excel_data_updated <- Excel_data %>%
                                TRUE ~ paste('NULL')),
          DateCompleted = paste0('NULL'),
          CompletedBy = paste0('NULL'),
-         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         Comments = case_when(Comments == "NULL" | is.na(Comments) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
          AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")),
          CollectionTime = paste0("'", CollectionTime, "'"),
          PercentDissolvedOxygen = paste0("'", PercentDissolvedOxygen, "'"),
@@ -106,7 +106,13 @@ Excel_data_updated <- Excel_data %>%
          YSINotes = paste0("'", YSINotes, "'"))
 #
 #Fill data frame with information
-SampleEventWQ <- rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FALSE)
+SampleEventWQ <- if(exists("SampleEventWQ") & class(SampleEventWQ) == "data.frame"){
+  rm(SampleEventWQ)
+  SampleEventWQ <- data.frame(matrix(ncol = 24, nrow = 0))
+  rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FALSE)
+} else {
+  rbind(SampleEventWQ, Excel_data_updated, stringsAsFactors = FALSE)
+}
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
 if(tolower(Correction_needed) == "upload"){
@@ -206,11 +212,17 @@ Excel_data_updated <- Excel_data %>%
                                TRUE ~ paste('NULL')),
          DateCompleted = paste0('NULL'),
          CompletedBy = paste0('NULL'),
-         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         Comments = case_when(Comments == "NULL" | is.na(Comments) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
          AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste('NULL')))
 #
 #Fill data frame with information
-SrvySH <- rbind(SrvySH, Excel_data_updated, stringsAsFactors = FALSE)
+SrvySH <- if(exists("SrvySH") & class(SrvySH) == "data.frame"){
+  rm(SrvySH)
+  SrvySH <- data.frame(matrix(ncol = 12, nrow = 0))
+  rbind(SrvySH, Excel_data_updated, stringsAsFactors = FALSE)
+} else {
+  rbind(SrvySH, Excel_data_updated, stringsAsFactors = FALSE)
+}
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
 if(tolower(Correction_needed) == "upload"){
@@ -293,11 +305,17 @@ Excel_data_updated <- Excel_data %>%
                                TRUE ~ paste('NULL')),
          DateCompleted = paste0('NULL'),
          CompletedBy = paste0('NULL'),
-         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         Comments = case_when(Comments == "NULL" | is.na(Comments) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
          AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
 #
 #Fill data frame with information
-Dermo <- rbind(Dermo, Excel_data_updated, stringsAsFactors = FALSE)
+Dermo <- if(exists("Dermo") & class(Dermo) == "data.frame"){
+  rm(Dermo)
+  Dermo <- data.frame(matrix(ncol = 18, nrow = 0))
+  rbind(Dermo, Excel_data_updated, stringsAsFactors = FALSE)
+  } else {
+  rbind(Dermo, Excel_data_updated, stringsAsFactors = FALSE)
+  }
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
 if(tolower(Correction_needed) == "upload"){
@@ -389,16 +407,22 @@ Excel_data_updated <- Excel_data %>%
                                TRUE ~ paste('NULL')),
          DateCompleted = paste0('NULL'),
          CompletedBy = paste0('NULL'),
-         Comments = case_when(Comments == "NULL" ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         Comments = case_when(Comments == "NULL" | is.na(Comments) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
          AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
 #
 #Fill data frame with information
-Repro <- rbind(Repro, Excel_data_updated, stringsAsFactors = FALSE)
+Repro <- if(exists("Repro") & class(Repro) == "data.frame"){
+  rm(Repro)
+  Repro <- data.frame(matrix(ncol = 15, nrow = 0))
+  rbind(Repro, Excel_data_updated, stringsAsFactors = FALSE)
+} else {
+  rbind(Repro, Excel_data_updated, stringsAsFactors = FALSE)
+  }
 #
 #SQL base template code - confirm location of data (dbo/hsdb) in first line 
 if(tolower(Correction_needed) == "upload"){
   Repro_SQLheader <- "
-INSERT INTO [dbo].[Dermo]
+INSERT INTO [dbo].[Repro]
     ([OysterID]
       ,[SampleEventID]
       ,[Sex]
