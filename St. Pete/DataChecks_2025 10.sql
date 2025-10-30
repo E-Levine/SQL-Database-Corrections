@@ -1,4 +1,4 @@
-use [Oysters_25-10-27]
+use [Oysters] --COMPLETED 30/10/25
 go
 
 --Run TB_SRVY_SrvySH_202509 & LX_Repro_Repro_2025_09 upload files!!
@@ -84,6 +84,10 @@ UPDATE SurveyQuadrat set Comments = 'Volumetrics not recorded' where SampleEvent
 UPDATE SampleEventWQ set Comments = 'WQ same as dermo' where SampleEventWQID = 'LWSDTP_20251007_1_0235_1_01'
 
 DELETE from TripInfo where TripID = 'LWCAGE_20250902_1'
+
+--Update cage comments for SLC
+UPDATE SampleEvent set Comments = 'Oysters from SLC1, cages at SCL2' where SampleEventID like 'SLCAGE%'
+UPDATE hsdb.SampleEvent set Comments = 'Oysters from SLC1, cages at SCL2' where SampleEventID like 'SLCAGE_2024%' or SampleEventID like 'SLCAGE_2025%' 
 
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2016-01-01', @CheckEnd = '2022-12-30', @EstuaryCode = 'LX', @DataManager = 'Erica Williams';
 EXECUTE [dbo].[spChecksCollections] @CheckStart = '2016-01-01', @CheckEnd = '2022-12-30', @EstuaryCode = 'SL', @DataManager = 'Erica Williams';
