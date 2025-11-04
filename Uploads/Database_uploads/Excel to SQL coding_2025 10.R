@@ -1,4 +1,5 @@
 ##Code to compile SQL code from Excel data for upload
+##TripInfo and SampleEvent data must already exist in the database! - Data is currently only created for tables noted
 #Work with one estuary * one table at a time I.e., TBRCRT.
 #
 #Select appropriate template file, enter data into copied file, and save to 'Data' folder before running R code.
