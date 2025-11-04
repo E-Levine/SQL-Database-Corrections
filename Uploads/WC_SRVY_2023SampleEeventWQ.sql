@@ -1,3 +1,5 @@
+use [Oysters_25-10-31]
+go
 
 INSERT INTO [dbo].[SampleEventWQ]
            ([SampleEventWQID]
@@ -29,7 +31,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'0919')
  GO
 
@@ -64,7 +66,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'0935')
  GO
 
@@ -99,7 +101,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'0949')
  GO
 
@@ -134,7 +136,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'1004')
  GO
 
@@ -169,7 +171,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = Q1 and Q15 switched in logger  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'Notes = Q1 and Q15 switched in logger BOTTOM_TYP = Hash'
       ,'1020')
  GO
 
@@ -204,7 +206,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Mud  Class = NA '
+      ,'BOTTOM_TYP = Mud'
       ,'1113')
  GO
 
@@ -239,7 +241,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'1203')
  GO
 
@@ -274,7 +276,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,'1224')
  GO
 
@@ -309,7 +311,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'BOTTOM_TYP = Rock'
       ,'1240')
  GO
 
@@ -344,7 +346,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'BOTTOM_TYP = Rock'
       ,'1249')
  GO
 
@@ -379,7 +381,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'BOTTOM_TYP = Rock'
       ,'1259')
  GO
 
@@ -414,7 +416,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1321')
  GO
 
@@ -449,7 +451,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1425')
  GO
 
@@ -484,7 +486,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Seagrass  Class = NA '
+      ,'BOTTOM_TYP = Seagrass'
       ,'0952')
  GO
 
@@ -519,7 +521,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'BOTTOM_TYP = Rock'
       ,'1001')
  GO
 
@@ -554,7 +556,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1045')
  GO
 
@@ -589,7 +591,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Oyster  Class = NA '
+      ,'BOTTOM_TYP = Oyster'
       ,'1238')
  GO
 
@@ -624,7 +626,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = rock oyster  DPTH_STRTA = NA  BOTTOM_TYP = Oyster  Class = NA '
+      ,'Notes = rock oyster BOTTOM_TYP = Oyster'
       ,NULL)
  GO
 
@@ -659,7 +661,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1409')
  GO
 
@@ -694,7 +696,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Sand  Class = NA '
+      ,'BOTTOM_TYP = Sand'
       ,NULL)
  GO
 
@@ -729,7 +731,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Oyster  Class = NA '
+      ,'BOTTOM_TYP = Oyster'
       ,'1024')
  GO
 
@@ -764,7 +766,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Mud  Class = NA '
+      ,'BOTTOM_TYP = Mud'
       ,'1237')
  GO
 
@@ -799,7 +801,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = sand on rock  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'Notes = sand on rock BOTTOM_TYP = Rock'
       ,'1252')
  GO
 
@@ -834,7 +836,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = scarce  DPTH_STRTA = NA  BOTTOM_TYP = Mud  Class = NA '
+      ,'Notes = scarce BOTTOM_TYP = Mud'
       ,'0909')
  GO
 
@@ -869,7 +871,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1042')
  GO
 
@@ -904,7 +906,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Hash  Class = NA '
+      ,'BOTTOM_TYP = Hash'
       ,'1226')
  GO
 
@@ -939,6 +941,6 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Tomena Scholze'
       ,'2024-01-26 00:00:00.000'
       ,'Tomena Scholze'
-      ,'Notes = NA  DPTH_STRTA = NA  BOTTOM_TYP = Rock  Class = NA '
+      ,'BOTTOM_TYP = Rock'
       ,'1347')
  GO

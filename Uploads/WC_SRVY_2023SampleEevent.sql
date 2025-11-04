@@ -1,3 +1,5 @@
+use [Oysters_25-10-31]
+go
 
 INSERT INTO [dbo].[SampleEvent]
            ([SampleEventID]
