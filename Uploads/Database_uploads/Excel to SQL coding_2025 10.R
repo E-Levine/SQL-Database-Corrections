@@ -16,14 +16,14 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 #Initials of person adding data
 Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH, Dermo, Repro) and Year (YYYY) in which data was recorded - used only for file naming 
-Type_Data <- c("Repro") #Only used for file naming
+Type_Data <- c("Dermo") #Only used for file naming
 Data_Year <- c("2025")
-Data_Month <- c("09") #For file output name
+Data_Month <- c("11") #For file output name
 #Set either 'update' for updating existing data or 'upload' for new data
 Correction_needed <- c("upload")
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/COLL_REPRO_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c(""), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space
                          .name_repair = "unique")

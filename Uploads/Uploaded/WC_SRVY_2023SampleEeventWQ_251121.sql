@@ -1,4 +1,4 @@
-use [Oysters_25-10-31]
+use [Oysters] --COMPLETED 21/11/25
 go
 
 INSERT INTO [dbo].[SampleEventWQ]
