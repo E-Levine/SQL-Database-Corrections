@@ -18,7 +18,7 @@ Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH, Dermo, Repro) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("Dermo") #Only used for file naming
 Data_Year <- c("2025")
-Data_Month <- c("11") #For file output name
+Data_Month <- c("12") #For file output name
 #Set either 'update' for updating existing data or 'upload' for new data
 Correction_needed <- c("upload")
 #
@@ -29,8 +29,8 @@ Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #
                          .name_repair = "unique")
 #Convert Entered/Proofed dates to date value
 Excel_data <- Excel_data %>% 
-  mutate(DateEntered = format(excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"),"%Y-%m-%d %H:%M:%OS7"),
-         DateProofed = case_when(!is.na(DateProofed) ~ format(excel_numeric_to_date(as.numeric(DateProofed), date_system = "modern"),"%Y-%m-%d %H:%M:%OS7"),
+  mutate(DateEntered = format(excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"),"%Y-%m-%d %H:%M:%S"),
+         DateProofed = case_when(!is.na(DateProofed) ~ format(excel_numeric_to_date(as.numeric(DateProofed), date_system = "modern"),"%Y-%m-%d %H:%M:%S"),
                                  TRUE ~ 'NULL'))
 #Check data
 head(Excel_data)
