@@ -1,3 +1,5 @@
+use [Oysters_25-12-22]
+go
 
 INSERT INTO [dbo].[TripInfo]
            ([TripID]

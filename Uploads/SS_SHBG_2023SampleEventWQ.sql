@@ -1,3 +1,5 @@
+use [Oysters_25-12-22]
+go
 
 INSERT INTO [dbo].[SampleEventWQ]
            ([SampleEventWQID]
@@ -13,7 +15,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230706_1_601_1_01'
       ,'SSSHBG_20230706_1_601_1'
@@ -47,7 +50,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230706_1_602_1_01'
       ,'SSSHBG_20230706_1_602_1'
@@ -81,14 +85,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230712_1_603_1_01'
       ,'SSSHBG_20230712_1_603_1'
       ,'29'
       ,'18.85'
       ,'6.72'
-      ,'11.87'
+      ,NULL
       ,'1.75'
       ,'2.68'
       ,'Proofed'
@@ -96,7 +101,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 11.87; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -115,14 +120,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230712_1_604_1_01'
       ,'SSSHBG_20230712_1_604_1'
       ,'28.9'
       ,'23.78'
       ,'5.44'
-      ,'10.83'
+      ,NULL
       ,'2.37'
       ,'9.62'
       ,'Proofed'
@@ -130,7 +136,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 10.83; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -149,7 +155,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230712_1_605_1_01'
       ,'SSSHBG_20230712_1_605_1'
@@ -183,14 +190,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230712_1_606_1_01'
       ,'SSSHBG_20230712_1_606_1'
       ,'28.9'
       ,'22.66'
       ,'5.27'
-      ,'11.66'
+      ,NULL
       ,'1.5'
       ,'3.08'
       ,'Proofed'
@@ -198,7 +206,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 11.66; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -217,14 +225,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230802_1_615_1_01'
       ,'SSSHBG_20230802_1_615_1'
       ,'31.5'
       ,'15.94'
       ,'7.02'
-      ,'11.05'
+      ,NULL
       ,'1.25'
       ,'27.45'
       ,'Proofed'
@@ -232,7 +241,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 11.05; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -251,7 +260,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230802_1_616_1_01'
       ,'SSSHBG_20230802_1_616_1'
@@ -285,7 +295,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230802_1_617_1_01'
       ,'SSSHBG_20230802_1_617_1'
@@ -319,14 +330,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230731_1_607_1_01'
       ,'SSSHBG_20230731_1_607_1'
       ,'30.9'
       ,'20.08'
       ,'7.1'
-      ,'10.17'
+      ,NULL
       ,'2'
       ,'6.48'
       ,'Proofed'
@@ -334,7 +346,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 10.17; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -353,7 +365,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230731_1_608_1_01'
       ,'SSSHBG_20230731_1_608_1'
@@ -387,7 +400,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230718_1_609_1_01'
       ,'SSSHBG_20230718_1_609_1'
@@ -421,7 +435,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230718_1_610_1_01'
       ,'SSSHBG_20230718_1_610_1'
@@ -455,14 +470,15 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230731_1_611_1_01'
       ,'SSSHBG_20230731_1_611_1'
       ,'30.8'
       ,'20.42'
       ,'5.78'
-      ,'10.81'
+      ,NULL
       ,'1.8'
       ,'15.37'
       ,'Proofed'
@@ -470,7 +486,7 @@ INSERT INTO [dbo].[SampleEventWQ]
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
-      ,'Notes = NA  NumQuads = 15 '
+      ,' pH = 10.81; Notes = NA  NumQuads = 15 '
       ,NULL)
  GO
 
@@ -489,7 +505,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230718_1_612_1_01'
       ,'SSSHBG_20230718_1_612_1'
@@ -523,7 +540,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_601_1_01'
       ,'SSSHBG_20230919_1_601_1'
@@ -557,7 +575,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_602_1_01'
       ,'SSSHBG_20230919_1_602_1'
@@ -591,7 +610,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_603_1_01'
       ,'SSSHBG_20230919_1_603_1'
@@ -625,7 +645,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_604_1_01'
       ,'SSSHBG_20230919_1_604_1'
@@ -659,7 +680,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_605_1_01'
       ,'SSSHBG_20230919_1_605_1'
@@ -693,7 +715,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230919_1_606_1_01'
       ,'SSSHBG_20230919_1_606_1'
@@ -727,7 +750,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230921_1_615_1_01'
       ,'SSSHBG_20230921_1_615_1'
@@ -761,7 +785,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230921_1_616_1_01'
       ,'SSSHBG_20230921_1_616_1'
@@ -795,7 +820,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230921_1_617_1_01'
       ,'SSSHBG_20230921_1_617_1'
@@ -829,7 +855,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_607_1_01'
       ,'SSSHBG_20230918_1_607_1'
@@ -863,7 +890,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_608_1_01'
       ,'SSSHBG_20230918_1_608_1'
@@ -897,7 +925,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_609_1_01'
       ,'SSSHBG_20230918_1_609_1'
@@ -931,7 +960,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_610_1_01'
       ,'SSSHBG_20230918_1_610_1'
@@ -965,7 +995,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_611_1_01'
       ,'SSSHBG_20230918_1_611_1'
@@ -999,7 +1030,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES
       ('SSSHBG_20230918_1_612_1_01'
       ,'SSSHBG_20230918_1_612_1'
