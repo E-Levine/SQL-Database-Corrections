@@ -180,7 +180,7 @@ SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A4$Estuary,"SHBG_",A4$D
                             Temperature =  ifelse(is.na(A4$TemperatureC),"NULL",paste0("'",A4$TemperatureC,"'")),
                             Salinity = ifelse(is.na(A4$Salinity),"NULL",paste0("'",A4$Salinity,"'")),
                             DissolvedOxygen = ifelse(is.na(A4$DissolvedOxygenmgL),"NULL",paste0("'",A4$DissolvedOxygenmgL,"'")),
-                            pH = ifelse(is.na(A4$pH),"NULL",paste0("'",A4$pH,"'")),
+                            pH = ifelse(is.na(A4$pH)| A4$pH >= 10,"NULL", paste0("'",A4$pH,"'")),
                             Depth = ifelse(is.na(A4$SampleDepthm),"NULL",paste0("'",A4$SampleDepthm,"'")),
                             TurbidityYSI = ifelse(is.na(A4$TurbidityFNU),"NULL",paste0("'",A4$TurbidityFNU,"'")),
                             DataStatus = paste0("'","Proofed","'"),
@@ -188,8 +188,9 @@ SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A4$Estuary,"SHBG_",A4$D
                             EnteredBy =  paste0("'",Proofed_by,"'"),
                             DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
                             ProofedBy = paste0("'",Proofed_by,"'"),
-                            Comments = paste0("'",paste("Notes =", A4$Comments," NumQuads =",
-                                                        A4$ofQuadrats,"'")),
+                            Comments = paste0("'",
+                                              ifelse(!is.na(A4$pH) & A4$pH >= 10, paste0(" pH = ", A4$pH, "; "), ""),
+                                              paste("Notes =", A4$Comments," NumQuads =", A4$ofQuadrats,"'")),
                             CollectionTime = "NULL")
 
 SampleEventWQtemplate<- "
@@ -207,7 +208,8 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
+           ,[Comments]
+           ,[CollectionTime])
      VALUES"
 
 temp <- character(length(nrow(SampleEventWQ)))
@@ -217,7 +219,7 @@ for(i in 1:nrow(SampleEventWQ)){
 SampleEventWQ_SQL <- paste(temp, collapse = "\n\n")
 
 # Save SQL code
-write_lines(SampleEventWQ_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEeventWQ.sql"))
+write_lines(SampleEventWQ_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEventWQ.sql"))
 #
 #
 #
@@ -415,7 +417,8 @@ INSERT INTO [dbo].[ShellBudgetSH]
            ,[DateEntered]
            ,[EnteredBy]
            ,[DateProofed]
-           ,[ProofedBy])
+           ,[ProofedBy]
+           ,[Comments])
      VALUES"
 
 temp <- character(length(nrow(SBSH)))
