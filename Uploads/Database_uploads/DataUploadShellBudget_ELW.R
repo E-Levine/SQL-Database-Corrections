@@ -188,7 +188,8 @@ SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A4$Estuary,"SHBG_",A4$D
                             EnteredBy =  paste0("'",Proofed_by,"'"),
                             DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
                             ProofedBy = paste0("'",Proofed_by,"'"),
-                            Comments = ifelse(is.na(A4$Comments), "NULL", paste0(A4$Comments)),
+                            Comments = paste0("'",paste("Notes =", A4$Comments," NumQuads =",
+                                                        A4$ofQuadrats,"'")),
                             CollectionTime = "NULL")
 
 SampleEventWQtemplate<- "
@@ -222,54 +223,59 @@ write_lines(SampleEventWQ_SQL, paste0("../", SiteCode, "_", DataType, "_", DataD
 #
 #### ShellBudgetQuadrat ####
 #
-A3<- BSWQ %>% mutate( Date= format(mdy(Date), "%Y%m%d"),
-                      Station= sprintf("%04d", Station),
-                      Estuary = "SS",
-                      SampleEventID = paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) %>%
-  select(SampleEventID,Survey,Date,Estuary,Section,Station,FixedLocationID)
+#Working with A4 from above:
+head(A4)
+A5 <- A4 %>% 
+  mutate(SampleEventID = paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) %>%
+  dplyr::select(SampleEventID,
+                Survey,
+                Date,
+                Estuary,
+                Section,
+                StationName,
+                FixedLocationID)
 
+B2 <- A2 %>% 
+  mutate(Quadrat = sprintf("%02d", Quadrat..1.4.m2.),
+         StationName = Station_Name,
+         SampleEventID = paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) 
 
+B3 <- left_join(B2, 
+                A5, 
+                by= c("SampleEventID","Survey","Date","Estuary","Section","StationName","FixedLocationID"))
 
-B2<- BSQ %>%  mutate(Date= format(mdy(Date.Collected), "%Y%m%d"),
-                     Quadrat= sprintf("%02d", Quadrat..1.4.m2.),
-                     Station= sprintf("%04d", Station),
-                     Estuary = "SS",
-                     SampleEventID= paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) 
-
-B3<- left_join(B2,A3, by= c("SampleEventID","Survey","Date","Estuary","Section","Station","FixedLocationID"))
-
-B3<- B3 %>% mutate(Quadrat= ifelse(is.na(Quadrat),"00",Quadrat),
-                   TotalSampleVolume= ifelse(Total.Sample.Vol..L.=="Z",NA,
-                                    ifelse(Total.Sample.Vol..L. == "N", 0.04 , Total.Sample.Vol..L.)),
-                   TotalSampleWeight= ifelse(trimws(Total.Sample.Wt..kg.) == "Z", NA,
+B3 <- B3 %>% mutate(Quadrat= ifelse(is.na(Quadrat),"01",Quadrat),
+                    TotalSampleVolume = ifelse(Total.Sample.Vol..L. == "Z", NA,
+                                               ifelse(Total.Sample.Vol..L. == "N", 0.04 , Total.Sample.Vol..L.)),
+                    TotalSampleWeight = ifelse(trimws(Total.Sample.Wt..kg.) == "Z", NA,
                                                ifelse(trimws(Total.Sample.Wt..kg.) == "N", 0.01, Total.Sample.Wt..kg.)),
-                   LiveOysterVolume= ifelse(Live.Oyster.Volume..L.=="Z",NA,
-                                             ifelse(Live.Oyster.Volume..L. == "N", 0.04 , Live.Oyster.Volume..L.)),
-                   LiveOysterWeight= ifelse(trimws(Live.Oyster.Weight..kg.)=="Z",NA,
-                                             ifelse(trimws(Live.Oyster.Weight..kg.) == "N", 0.01 , Live.Oyster.Weight..kg.)),
-                   Drill.Weight..kg.= ifelse(Drill.Weight..kg.=="Z",NA,
-                                            ifelse(Drill.Weight..kg. == "N", 0.01 , Drill.Weight..kg.)),
-                   Crown.Conch.Wt..kg.= ifelse(Crown.Conch.Wt..kg.=="Z",NA,
-                                             ifelse(Crown.Conch.Wt..kg. == "N", 0.01 , Crown.Conch.Wt..kg.)),
-                   OtherBiotaWeight= ifelse(Other.Biota.Weight..kg.=="Z",NA,
-                                               ifelse(Other.Biota.Weight..kg. == "N", 0.01 , Other.Biota.Weight..kg.)),
-                   OysterShellVolume= ifelse(Oyster.Shell.Volume..L. =="Z",NA,
-                                            ifelse(Oyster.Shell.Volume..L. == "N", 0.04 , Oyster.Shell.Volume..L.)),
-                   OysterShellWeight= ifelse(Oyster.Shell.Weight..kg. =="Z",NA,
-                                            ifelse(Oyster.Shell.Weight..kg. == "N", 0.01 , Oyster.Shell.Weight..kg.)),
-                   PlantedShellVolume= ifelse(Planted.Shell.Volume..L. =="Z",NA,
-                                             ifelse(Planted.Shell.Volume..L. == "N", 0.04 , Planted.Shell.Volume..L.)),
-                   PlantedShellWeight= ifelse(Planted.Shell.Weight..kg. =="Z",NA,
-                                             ifelse(Planted.Shell.Weight..kg. == "N", 0.01 , Planted.Shell.Weight..kg.)),
-                   ShellHashVolume= ifelse(Shell.Hash.Volume..L. =="Z",NA,
-                                              ifelse(Shell.Hash.Volume..L. == "N", 0.04 , Shell.Hash.Volume..L.)),
-                   ShellHashWeight= ifelse(Shell.Hash.Weight..kg. =="Z",NA,
-                                              ifelse(Shell.Hash.Weight..kg. == "N", 0.01 , Shell.Hash.Weight..kg.)),
-                   BlackAndOtherSubstrateVolume= ifelse(Black.and.Other.Substrate.Volume..L. =="Z",NA,
-                                           ifelse(Black.and.Other.Substrate.Volume..L. == "N", 0.04 , Black.and.Other.Substrate.Volume..L.)),
-                   BlackAndOtherSubstrateWeight= ifelse(Black.and.Other.Substrate.Weight..kg. =="Z",NA,
-                                           ifelse(Black.and.Other.Substrate.Weight..kg. == "N", 0.01 , Black.and.Other.Substrate.Weight..kg.))
-                   )
+                    LiveOysterVolume = ifelse(Live.Oyster.Volume..L. == "Z", NA,
+                                              ifelse(Live.Oyster.Volume..L. == "N", 0.04 , Live.Oyster.Volume..L.)),
+                    LiveOysterWeight = ifelse(trimws(Live.Oyster.Weight..kg.) == "Z", NA,
+                                              ifelse(trimws(Live.Oyster.Weight..kg.) == "N", 0.01 , Live.Oyster.Weight..kg.)),
+                    DrillWeight = ifelse(Drill.Weight..kg. == "Z", NA,
+                                         ifelse(Drill.Weight..kg. == "N", 0.01 , Drill.Weight..kg.)),
+                    Crown.Conch.Wt..kg.= ifelse(Crown.Conch.Wt..kg. == "Z", NA,
+                                          ifelse(Crown.Conch.Wt..kg. == "N", 0.01 , Crown.Conch.Wt..kg.)),
+                    OtherBiotaWeight = ifelse(Other.Biota.Weight..kg. == "Z", NA,
+                                              ifelse(Other.Biota.Weight..kg. == "N", 0.01 , Other.Biota.Weight..kg.)),
+                    OysterShellVolume = ifelse(Oyster.Shell.Volume..L. == "Z", NA,
+                                               ifelse(Oyster.Shell.Volume..L. == "N", 0.04 , Oyster.Shell.Volume..L.)),
+                    OysterShellWeight = ifelse(Oyster.Shell.Weight..kg. == "Z", NA,
+                                               ifelse(Oyster.Shell.Weight..kg. == "N", 0.01 , Oyster.Shell.Weight..kg.)),
+                    PlantedShellVolume = ifelse(Planted.Shell.Volume..L. == "Z", NA,
+                                                ifelse(Planted.Shell.Volume..L. == "N", 0.04 , Planted.Shell.Volume..L.)),
+                    PlantedShellWeight = ifelse(Planted.Shell.Weight..kg. == "Z", NA,
+                                                ifelse(Planted.Shell.Weight..kg. == "N", 0.01 , Planted.Shell.Weight..kg.)),
+                    ShellHashVolume = ifelse(Shell.Hash.Volume..L. == "Z", NA,
+                                             ifelse(Shell.Hash.Volume..L. == "N", 0.04 , Shell.Hash.Volume..L.)),
+                    ShellHashWeight = ifelse(Shell.Hash.Weight..kg. == "Z", NA,
+                                             ifelse(Shell.Hash.Weight..kg. == "N", 0.01 , Shell.Hash.Weight..kg.)),
+                    BlackAndOtherSubstrateVolume = ifelse(Black.and.Other.Substrate.Volume..L. == "Z", NA,
+                                                          ifelse(Black.and.Other.Substrate.Volume..L. == "N", 0.04 , Black.and.Other.Substrate.Volume..L.)),
+                    BlackAndOtherSubstrateWeight = ifelse(Black.and.Other.Substrate.Weight..kg. == "Z", NA,
+                                                          ifelse(Black.and.Other.Substrate.Weight..kg. == "N", 0.01 , Black.and.Other.Substrate.Weight..kg.))
+                    )
 
 ShellBudgetQuadrat<- data.frame(QuadratID = paste0("'",B3$SampleEventID,"_",B3$Quadrat,"'"),
                            SampleEventID = paste0("'",B3$SampleEventID,"'"),
@@ -278,11 +284,11 @@ ShellBudgetQuadrat<- data.frame(QuadratID = paste0("'",B3$SampleEventID,"_",B3$Q
                            TotalSampleWeight= ifelse(is.na(B3$TotalSampleWeight),"NULL",paste0("'",B3$TotalSampleWeight,"'")),
                            LiveOysterVolume= ifelse(is.na(B3$LiveOysterVolume),"NULL",paste0("'",B3$LiveOysterVolume,"'")),
                            LiveOysterWeight= ifelse(is.na(B3$LiveOysterWeight),"NULL",paste0("'",B3$LiveOysterWeight,"'")),
-                           NumDrills = ifelse(is.na(B3$X..Drills),"NULL",paste0("'",B3$X..Drills,"'")),
-                           DrillWeight = ifelse(is.na(B3$Drill.Weight..kg.),"NULL",paste0("'",B3$Drill.Weight..kg.,"'")),
+                           NumDrills = ifelse(is.na(B3$..Drills),"NULL",paste0("'",B3$..Drills,"'")),
+                           DrillWeight = ifelse(is.na(B3$DrillWeight),"NULL",paste0("'",B3$DrillWeight,"'")),
                            OtherBiotaWeight = ifelse(is.na(B3$OtherBiotaWeight),"NULL",paste0("'",B3$OtherBiotaWeight,"'")),
-                           NumLiveOysters= ifelse(is.na(B3$X..total.Live.Oysters),"NULL",paste0("'",B3$X..total.Live.Oysters,"'")),
-                           NumDeadOysters= ifelse(is.na(B3$X..Dead.Oysters),"NULL",paste0("'",B3$X..Dead.Oysters,"'")),
+                           NumLiveOysters= ifelse(is.na(B3$Total...Live.Oysters),"NULL",paste0("'",B3$Total...Live.Oysters,"'")),
+                           NumDeadOysters= ifelse(is.na(B3$Total...Dead.Oysters),"NULL",paste0("'",B3$Total...Dead.Oysters,"'")),
                            OysterShellVolume= ifelse(is.na(B3$OysterShellVolume),"NULL",paste0("'",B3$OysterShellVolume,"'")),
                            OysterShellWeight= ifelse(is.na(B3$OysterShellWeight),"NULL",paste0("'",B3$OysterShellWeight,"'")),
                            PlantedShellVolume= ifelse(is.na(B3$PlantedShellVolume),"NULL",paste0("'",B3$PlantedShellVolume,"'")),
@@ -292,14 +298,14 @@ ShellBudgetQuadrat<- data.frame(QuadratID = paste0("'",B3$SampleEventID,"_",B3$Q
                            BlackAndOtherSubstrateVolume= ifelse(is.na(B3$BlackAndOtherSubstrateVolume),"NULL",paste0("'",B3$BlackAndOtherSubstrateVolume,"'")),
                            BlackAndOtherSubstrateWeight= ifelse(is.na(B3$BlackAndOtherSubstrateWeight),"NULL",paste0("'",B3$BlackAndOtherSubstrateWeight,"'")),
                            DataStatus = paste0("'","Proofed","'"),
-                           DateEntered = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                           EnteredBy =  paste0("'","Berlynna Heres","'"),
-                           DateProofed = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                           ProofedBy = paste0("'","Berlynna Heres","'"),
+                           DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                           EnteredBy =  paste0("'",Proofed_by,"'"),
+                           DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                           ProofedBy = paste0("'",Proofed_by,"'"),
                            Comments = paste0("'",paste("Notes =", B3$Comments),
-                                             paste("CrownConchNumber =",
-                                                   B3$X..Crown.Conch),
-                                             paste("CrownConchWt =",
+                                             paste(" CrownConchNumber =",
+                                                   B3$..Crown.Conch),
+                                             paste(" CrownConchWt =",
                                                    B3$Crown.Conch.Wt..kg.),"'"))
 
 
@@ -333,42 +339,21 @@ INSERT INTO [dbo].[ShellBudgetQuadrat]
            ,[DateProofed]
            ,[ProofedBy]
            ,[Comments])
-     VALUES
-           ({QuadratID}
-           ,{SampleEventID}
-           ,{QuadratNumber}
-           ,{TotalSampleVolume}
-           ,{TotalSampleWeight}
-           ,{LiveOysterVolume}
-           ,{LiveOysterWeight}
-           ,{NumDrills}
-           ,{DrillWeight}
-           ,{OtherBiotaWeight}
-           ,{NumLiveOysters}
-           ,{NumDeadOysters}
-           ,{OysterShellVolume}
-           ,{OysterShellWeight}
-           ,{PlantedShellVolume}
-           ,{PlantedShellWeight}
-           ,{ShellHashVolume}
-           ,{ShellHashWeight}
-           ,{BlackAndOtherSubstrateVolume}
-           ,{BlackAndOtherSubstrateWeight}
-           ,{DataStatus}
-           ,{DateEntered}
-           ,{EnteredBy}
-           ,{DateProofed}
-           ,{ProofedBy}
-           ,{Comments})
-GO"
+     VALUES"
 
+temp <- character(length(nrow(ShellBudgetQuadrat)))
+for(i in 1:nrow(ShellBudgetQuadrat)){
+  temp[i] <- paste0(ShellBudgetQuadrattemplate, "\n      (",paste(ShellBudgetQuadrat[i,], collapse = "\n      ,"), ")\n GO")
+}
+ShellBudgetQuadrat_SQL <- paste(temp, collapse = "\n\n")
 
-ShellBudgetQuadratSQL <- glue(ShellBudgetQuadrattemplate, .envir = ShellBudgetQuadrat)
-
-write_lines(ShellBudgetQuadratSQL,"ShellBudgetQuadrat.sql")
-
-
-
+# Save SQL code
+write_lines(ShellBudgetQuadrat_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"ShellBudgetQuadrat.sql"))
+#
+#
+#
+#
+####
 #D4<- bind_rows(D1,D2,D3)
 D2<- BSSH %>%  mutate(Date= format(mdy(Date.Collected), "%Y%m%d"),
                       Quadrat= sprintf("%02d", Quadrat..1.4.m2.),
