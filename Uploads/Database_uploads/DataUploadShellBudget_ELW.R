@@ -1,30 +1,56 @@
 #Original file located on network and as start for git file - working/in progress
 #Updating for use in R project 
 
+SiteCode <- "SS"
+DataType <- "SHBG"
+DataDate <- "2023"
+Proof_date <- as.Date("2023-11-22")
+Proofed_by <- "Gabe Hopkins"
+
+#### Set up ####
 library(tidyverse)
 library(lubridate) 
 library(readxl)
 library(glue)
-
-
+#
 # Read Excel files and check columns 
-BSQ <- read_excel("../Data/SS_ShellBudget_Survey1.xlsx", sheet = "Vols, Wts, Counts", skip = 3, .name_repair = "universal") %>% 
+file_name <- "SS_SemiAnnual_ShellBudget_2023Summer"
+WQ_file_name <- "SS_SemiAnnual_ShellBudget_WQ"
+#
+FLIDS <- read_excel("../Data/FIxedLocations.xlsx", sheet = "Sheet1", skip = 0, .name_repair = "universal") 
+BSQ <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "Vols, Wts, Counts", skip = 3, .name_repair = "universal") %>% 
   drop_na(Date.Collected)
-BSWQ <- read_excel("../Data/SS_ShellBudget_Survey1_WQ.xlsx", sheet = "WQ", skip = 4,  .name_repair = "universal")
-BSSH <- read_excel("../Data/SS_ShellBudget_Survey1.xlsx", sheet = "SHs", skip = 3, .name_repair = "universal")
-
-
-
-
-
+BSWQ <- read_excel(paste0("../Data/Datalogger/",WQ_file_name,".xlsx"), sheet = "WQ", skip = 4,  .name_repair = "unique")
+BSSH <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "SHs", skip = 3, .name_repair = "universal")
+#
+#
+#### Trip Info####
+#
 #Clean date, station, and Estuary in quadrat data
-A2<- BSQ %>% mutate(Date= format(Date.Collected, "%Y%m%d"),
-                    Station= sprintf("%04d", Station),
-                    Estuary = substr(Section, 1, 2))
-
-
-Proof_date <- as.Date("2022-08-10")
-Proofed_by <- "Gabe Hopkins"
+A2<- BSQ %>% 
+  #Remove datalogger rows
+  filter(str_to_lower(Comments) != "entered in datalogger") %>%
+  rename(Station_Name = Station) %>%
+  #Add FID
+  mutate(
+    station_key = Station_Name %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>%
+  mutate(
+    Date = format(Date.Collected, "%Y%m%d"),
+    Estuary = SiteCode)
+#
+#
 #Build the PKs and wrap everything in single quotes so that SQL can read it
 TripTable<- data.frame(TripID= paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1","'"),
                        TripType= paste0("'","Shell Budget","'"),
@@ -42,7 +68,6 @@ TripTable<- unique(TripTable)
 #USE [Oysters]
 #GO
 
-
 # Create a template for the TripInfo SQL script
 TripInfoSQLtemplate <- "
 INSERT INTO [dbo].[TripInfo]
@@ -54,46 +79,59 @@ INSERT INTO [dbo].[TripInfo]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy])
-     VALUES
-           ({TripID}
-           ,{TripType}
-           ,{TripDate}
-           ,{DataStatus}
-           ,{DateEntered}
-           ,{EnteredBy}
-           ,{DateProofed}
-           ,{ProofedBy})
-GO
-"
-
-# Use the glue function to fill in the template with the data frame values
-TripInfoSQL <- glue(TripInfoSQLtemplate, .envir = TripTable)
-
-
-write_lines(TripInfoSQL,"TripInfo.sql")
-
-
-
-
-A2<- BSWQ %>% mutate( Date= format(mdy(Date), "%Y%m%d"),
-                      Station= sprintf("%04d", Station),
-                      Estuary = "SS")
-
-
-SampleEvent<- data.frame(SampleEventID = paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1_",A2$FixedLocationID,"_1","'"),
-                         TripID= paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1","'"),
-                         FixedLocationID = paste0("'",A2$FixedLocationID,"'"),
-                         LatitudeDec = ifelse(is.na(A2$Lat),"NULL",paste0("'",A2$Lat,"'")),
-                         LongitudeDec = ifelse(is.na(A2$Lon),"NULL",paste0("'",A2$Lon,"'")),
+     VALUES"
+temp <- character(length(nrow(TripTable)))
+for(i in 1:nrow(TripTable)){
+  temp[i] <- paste0(TripInfoSQLtemplate, "\n      (",paste(TripTable[i,], collapse = "\n      ,"), ")\n GO")
+}
+Trip_SQL <- paste(temp, collapse = "\n\n")
+#
+# Save SQL code
+write_lines(Trip_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"TripInfo.sql"))
+#
+#
+#
+#
+#### Sample Event ####
+### Get data and create SampleEvent table
+#A2 created above. Using WQ to get Lat, Long
+#Clean date, station, and Estuary in quadrat data
+A3<- BSWQ %>% 
+  rename(Station_Name = Station) %>%
+  #Add FID
+  mutate(
+    station_key = Station_Name %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>%
+  mutate(
+    Date = format(Date, "%Y%m%d"),
+    Estuary = SiteCode) %>%
+  #Filter to dates that match survey data
+  filter(Date %in% A2$Date)
+#
+SampleEvent<- data.frame(SampleEventID = paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1_",A3$FixedLocationID,"_1","'"),
+                         TripID= paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1","'"),
+                         FixedLocationID = paste0("'",A3$FixedLocationID,"'"),
+                         LatitudeDec = ifelse(is.na(A3$Lat),"NULL",paste0("'",A3$Lat,"'")),
+                         LongitudeDec = ifelse(is.na(A3$Lon),"NULL",paste0("'",A3$Lon,"'")),
                          DataStatus = paste0("'","Proofed","'"),
-                         DateEntered = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                         EnteredBy =  paste0("'","Berlynna Heres","'"),
-                         DateProofed = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                         ProofedBy = paste0("'","Berlynna Heres","'")) 
-
-
+                         DateEntered = paste0("'",format(Proof_date, "%Y-%m-%d %H:%M:%OS3"),"'"),
+                         EnteredBy =  paste0("'",Proofed_by,"'"),
+                         DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                         ProofedBy = paste0("'",Proofed_by,"'")) 
+#
 SampleEvent<- unique(SampleEvent)
-
+#
 SampleEventtemplate<- "
 INSERT INTO [dbo].[SampleEvent]
            ([SampleEventID]
@@ -106,27 +144,21 @@ INSERT INTO [dbo].[SampleEvent]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy])
-     VALUES
-           ({SampleEventID}
-           ,{TripID}
-           ,{FixedLocationID}
-           ,{LatitudeDec}
-           ,{LongitudeDec}
-           ,{DataStatus}
-           ,{DateEntered}
-           ,{EnteredBy}
-           ,{DateProofed}
-           ,{ProofedBy})
-GO"
+     VALUES"
 
+temp <- character(length(nrow(SampleEvent)))
+for(i in 1:nrow(SampleEvent)){
+  temp[i] <- paste0(SampleEventtemplate, "\n      (",paste(SampleEvent[i,], collapse = "\n      ,"), ")\n GO")
+}
+SampleEvent_SQL <- paste(temp, collapse = "\n\n")
 
-SampleEventSQL <- glue(SampleEventtemplate, .envir = SampleEvent)
-
-write_lines(SampleEventSQL,"SampleEvent.sql")
-
-
-
-
+# Save SQL code
+write_lines(SampleEvent_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEevent.sql"))
+#
+#
+#
+#### SampleEventWQ ####
+#
 A2<- BSWQ %>% mutate( Date= format(mdy(Date), "%Y%m%d"),
                       Station= sprintf("%04d", Station),
                       Estuary = "SS",
