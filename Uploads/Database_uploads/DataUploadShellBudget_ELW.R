@@ -353,40 +353,60 @@ write_lines(ShellBudgetQuadrat_SQL, paste0("../", SiteCode, "_", DataType, "_", 
 #
 #
 #
-####
-#D4<- bind_rows(D1,D2,D3)
-D2<- BSSH %>%  mutate(Date= format(mdy(Date.Collected), "%Y%m%d"),
-                      Quadrat= sprintf("%02d", Quadrat..1.4.m2.),
-                      Estuary = "SS",
-                      Station= sprintf("%04d", Station),
+#### ShellBudgetSH####
+#Every station needs at least one SH record, even if no SH measured
+
+D2<- BSSH %>% 
+  rename(StationName = Station) %>% 
+  #Add FID
+  mutate(
+    station_key = StationName %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>% 
+  mutate(Date = format(Date.Collected, "%Y%m%d"),
+                      Quadrat = sprintf("%02d", Quadrat..1.4.m2.),
+                      Estuary = SiteCode,
                       SampleEventID= paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) 
 
-D1<- left_join(D2,A3, by= c("SampleEventID","Survey","Date","Estuary","Section","Station","FixedLocationID"))
+D3 <- left_join(D2,
+                A5, 
+                by = c("SampleEventID", "Date", "Estuary", "StationName", "FixedLocationID"))
 
-D2<- D1 %>% mutate(Quadrat= ifelse(is.na(Quadrat),"00",Quadrat),
-                   QuadratID=paste0(D2$Estuary,"SHBG_",D2$Date,"_1_",D2$FixedLocationID,"_1_",D2$Quadrat),
-                   SH..mm.= ifelse(SH..mm.== "Z",NA, SH..mm.))%>%
-  group_by(QuadratID) %>% mutate(Qnum= sprintf("%02d", row_number()), Qnum= ifelse(Quadrat== "00", "00", Qnum)) %>% ungroup()
-
-
-# D1<- D %>% mutate(Station= sprintf("%04d", STATION), 
-#                    Quadrat= sprintf("%02d", QDRT),
-#                    ShellNumber= sprintf("%03d",OYSTER_NUM))
-# 
-# D2<- left_join(D1,B3, by= c("Station", "FileName","STATION","QDRT","Quadrat"))
-
-SBSH<- data.frame(ShellHeightID = paste0("'",D2$QuadratID,"_",D2$Qnum,"'"),
-                      QuadratID = paste0("'",D2$QuadratID,"'"),
-                      LiveOrDead = ifelse(is.na(D2$Live.or.Dead),"NULL",paste0("'",D2$Live.or.Dead,"'")),
-                      ShellHeight = ifelse(is.na(D2$SH..mm.),"NULL",paste0("'",D2$SH..mm.,"'")),
-                      DataStatus = paste0("'","Proofed","'"),
-                      DateEntered = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                      EnteredBy =  paste0("'","Berlynna Heres","'"),
-                      DateProofed = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                      ProofedBy = paste0("'","Berlynna Heres","'"))
+D4 <- D3 %>%
+  mutate(Quadrat = ifelse(is.na(Quadrat),"01",Quadrat),
+         QuadratID =paste0(D3$Estuary,"SHBG_",D3$Date,"_1_",D3$FixedLocationID,"_1_",D3$Quadrat),
+         SH..mm. = ifelse(SH..mm. == "Z", NA, SH..mm.),
+         Comments = NA)%>%
+  group_by(QuadratID) %>% 
+  mutate(Qnum = sprintf("%02d", row_number()), 
+         Qnum = ifelse(Quadrat== "01", "01", Qnum)) %>% 
+  ungroup()
 
 
-SBSHtemplate<- "INSERT INTO [dbo].[ShellBudgetSH]
+SBSH <- data.frame(ShellHeightID = paste0("'",D4$QuadratID,"_",D4$Qnum,"'"),
+                   QuadratID = paste0("'",D4$QuadratID,"'"),
+                   LiveOrDead = ifelse(is.na(D4$Live.or.Dead),"NULL",paste0("'",D4$Live.or.Dead,"'")),
+                   ShellHeight = ifelse(is.na(D4$SH..mm.),"NULL",paste0("'",D4$SH..mm.,"'")),
+                   DataStatus = paste0("'","Proofed","'"),
+                   DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                   EnteredBy =  paste0("'",Proofed_by,"'"),
+                   DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                   ProofedBy = paste0("'",Proofed_by,"'"),
+                   Comments = ifelse(is.na(D4$Comments), "NULL", paste0(D4$Comments)))
+
+
+SBSHtemplate<- "
+INSERT INTO [dbo].[ShellBudgetSH]
            ([ShellHeightID]
            ,[QuadratID]
            ,[LiveOrDead]
@@ -396,20 +416,14 @@ SBSHtemplate<- "INSERT INTO [dbo].[ShellBudgetSH]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy])
-     VALUES
-           ({ShellHeightID}
-           ,{QuadratID}
-           ,{LiveOrDead}
-           ,{ShellHeight}
-           ,{DataStatus}
-           ,{DateEntered}
-           ,{EnteredBy}
-           ,{DateProofed}
-           ,{ProofedBy})
-GO"
+     VALUES"
 
+temp <- character(length(nrow(SBSH)))
+for(i in 1:nrow(SBSH)){
+  temp[i] <- paste0(SBSHtemplate, "\n      (",paste(SBSH[i,], collapse = "\n      ,"), ")\n GO")
+}
+SBSH_SQL <- paste(temp, collapse = "\n\n")
 
-
-SBSHSQL <- glue(SBSHtemplate, .envir = SBSH)
-
-write_lines(SBSHSQL,"SBSH.sql")
+# Save SQL code
+write_lines(SBSH_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SBSH.sql"))
+#
