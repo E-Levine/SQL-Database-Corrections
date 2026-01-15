@@ -159,38 +159,37 @@ write_lines(SampleEvent_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDat
 #
 #### SampleEventWQ ####
 #
-A2<- BSWQ %>% mutate( Date= format(mdy(Date), "%Y%m%d"),
-                      Station= sprintf("%04d", Station),
-                      Estuary = "SS",
-                      Temperature..C.= ifelse(Temperature..C.=="Z",NA, Temperature..C.),
-                      Salinity= ifelse(Salinity=="Z",NA,
-                                       ifelse(Salinity == "N", 0, Salinity)),
-                      Dissolved.Oxygen..mg.L.= ifelse(Dissolved.Oxygen..mg.L.=="Z",NA,
-                                                      ifelse(Dissolved.Oxygen..mg.L. == "N", 0, Dissolved.Oxygen..mg.L.)),
-                      pH= ifelse(pH=="Z",NA, pH),
-                      Sample.Depth...m.= ifelse(Sample.Depth...m.=="Z",NA, Sample.Depth...m.),
-                      Turbidity..FNU.= ifelse(Turbidity..FNU.=="Z",NA, Turbidity..FNU.),
-                      Comments= gsub("'", "", Comments),
-                      Comments= gsub(",","", Comments))
+#Working with A3 created above:
+head(A3)
+#
+A4 <- A3 %>% 
+  rename_with(~ str_replace_all(.x, "[^A-Za-z0-9]", "")) %>%
+mutate(TemperatureC= ifelse(TemperatureC == "Z",NA, TemperatureC),
+       Salinity= ifelse(Salinity == "Z",NA,
+                        ifelse(Salinity == "N", 0, Salinity)),
+       DissolvedOxygenmgL = ifelse(DissolvedOxygenmgL == "Z",NA,
+                                   ifelse(DissolvedOxygenmgL == "N", 0, DissolvedOxygenmgL)),
+       pH = ifelse(pH == "Z",NA, pH),
+       SampleDepthm = ifelse(SampleDepthm=="Z",NA, SampleDepthm),
+       TurbidityFNU = ifelse(TurbidityFNU=="Z",NA, TurbidityFNU),
+       Comments = NA)
 
 
-
-
-SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1_",A2$FixedLocationID,"_1_01","'"),
-                            SampleEventID = paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1_",A2$FixedLocationID,"_1","'"),
-                            Temperature =  ifelse(is.na(A2$Temperature..C.),"NULL",paste0("'",A2$Temperature..C.,"'")),
-                            Salinity = ifelse(is.na(A2$Salinity),"NULL",paste0("'",A2$Salinity,"'")),
-                            DissolvedOxygen = ifelse(is.na(A2$Dissolved.Oxygen..mg.L.),"NULL",paste0("'",A2$Dissolved.Oxygen..mg.L.,"'")),
-                            pH = ifelse(is.na(A2$pH),"NULL",paste0("'",A2$pH,"'")),
-                            Depth = ifelse(is.na(A2$Sample.Depth...m.),"NULL",paste0("'",A2$Sample.Depth...m.,"'")),
-                            TurbidityYSI = ifelse(is.na(A2$Turbidity..FNU.),"NULL",paste0("'",A2$Turbidity..FNU.,"'")),
+SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A4$Estuary,"SHBG_",A4$Date,"_1_",A4$FixedLocationID,"_1_01","'"),
+                            SampleEventID = paste0("'",A4$Estuary,"SHBG_",A4$Date,"_1_",A4$FixedLocationID,"_1","'"),
+                            Temperature =  ifelse(is.na(A4$TemperatureC),"NULL",paste0("'",A4$TemperatureC,"'")),
+                            Salinity = ifelse(is.na(A4$Salinity),"NULL",paste0("'",A4$Salinity,"'")),
+                            DissolvedOxygen = ifelse(is.na(A4$DissolvedOxygenmgL),"NULL",paste0("'",A4$DissolvedOxygenmgL,"'")),
+                            pH = ifelse(is.na(A4$pH),"NULL",paste0("'",A4$pH,"'")),
+                            Depth = ifelse(is.na(A4$SampleDepthm),"NULL",paste0("'",A4$SampleDepthm,"'")),
+                            TurbidityYSI = ifelse(is.na(A4$TurbidityFNU),"NULL",paste0("'",A4$TurbidityFNU,"'")),
                             DataStatus = paste0("'","Proofed","'"),
-                            DateEntered = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                            EnteredBy =  paste0("'","Berlynna Heres","'"),
-                            DateProofed = paste0("'",format(Sys.time(),"%Y-%m-%d %H:%M:%OS3"),"'"),
-                            ProofedBy = paste0("'","Berlynna Heres","'"),
-                            Comments = paste0("'",paste("Notes =", A2$Comments," NumQuads =",
-                                                        A2$Number.of..Quadrats,"'")))
+                            DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            EnteredBy =  paste0("'",Proofed_by,"'"),
+                            DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            ProofedBy = paste0("'",Proofed_by,"'"),
+                            Comments = ifelse(is.na(A4$Comments), "NULL", paste0(A4$Comments)),
+                            CollectionTime = "NULL")
 
 SampleEventWQtemplate<- "
 INSERT INTO [dbo].[SampleEventWQ]
@@ -208,31 +207,21 @@ INSERT INTO [dbo].[SampleEventWQ]
            ,[DateProofed]
            ,[ProofedBy]
            ,[Comments])
-     VALUES
-           ({SampleEventWQID}
-           ,{SampleEventID}
-           ,{Temperature}
-           ,{Salinity}
-           ,{DissolvedOxygen}
-           ,{pH}
-           ,{Depth}
-           ,{TurbidityYSI}
-           ,{DataStatus}
-           ,{DateEntered}
-           ,{EnteredBy}
-           ,{DateProofed}
-           ,{ProofedBy}
-           ,{Comments})
-GO"
+     VALUES"
 
+temp <- character(length(nrow(SampleEventWQ)))
+for(i in 1:nrow(SampleEventWQ)){
+  temp[i] <- paste0(SampleEventWQtemplate, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+}
+SampleEventWQ_SQL <- paste(temp, collapse = "\n\n")
 
-
-SampleEventWQSQL <- glue(SampleEventWQtemplate, .envir = SampleEventWQ)
-
-write_lines(SampleEventWQSQL,"SampleEventWQ.sql")
-
-
-
+# Save SQL code
+write_lines(SampleEventWQ_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEeventWQ.sql"))
+#
+#
+#
+#### ShellBudgetQuadrat ####
+#
 A3<- BSWQ %>% mutate( Date= format(mdy(Date), "%Y%m%d"),
                       Station= sprintf("%04d", Station),
                       Estuary = "SS",
