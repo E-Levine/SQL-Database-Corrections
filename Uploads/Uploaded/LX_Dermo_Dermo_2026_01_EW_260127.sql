@@ -1,5 +1,7 @@
-use [Oysters] --COMPLETED in db 01/27/2026
+use [Oysters] --COMPLETED in db 01/28/2026
 go
+
+Delete from dbo.Dermo where SampleEventID like 'LXCOLL_20250106%'
 
 INSERT INTO [dbo].[Dermo]
     ([OysterID]
@@ -21,8 +23,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-16'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-16'
+      ,'LXCOLL_20260106_1_0242_1'
       ,34.59
       ,34.81
       ,18.13
@@ -62,8 +64,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-17'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-17'
+      ,'LXCOLL_20260106_1_0242_1'
       ,35.29
       ,33.46
       ,21.85
@@ -103,8 +105,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-18'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-18'
+      ,'LXCOLL_20260106_1_0242_1'
       ,31.5
       ,31.99
       ,12.39
@@ -144,8 +146,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-19'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-19'
+      ,'LXCOLL_20260106_1_0242_1'
       ,32.83
       ,24.63
       ,13.28
@@ -185,8 +187,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-20'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-20'
+      ,'LXCOLL_20260106_1_0242_1'
       ,23.45
       ,16.37
       ,8.02
@@ -226,8 +228,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-21'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-21'
+      ,'LXCOLL_20260106_1_0242_1'
       ,20.83
       ,16.62
       ,8.96
@@ -267,8 +269,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-22'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-22'
+      ,'LXCOLL_20260106_1_0242_1'
       ,22.24
       ,13.37
       ,9.11
@@ -308,8 +310,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-23'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-23'
+      ,'LXCOLL_20260106_1_0242_1'
       ,18.3
       ,17.46
       ,9.81
@@ -349,8 +351,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-24'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-24'
+      ,'LXCOLL_20260106_1_0242_1'
       ,21.66
       ,12.17
       ,9.66
@@ -390,8 +392,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-25'
-      ,'LXCOLL_20250106_1_0242_1'
+      ('LXND2601-25'
+      ,'LXCOLL_20260106_1_0242_1'
       ,14.52
       ,11.77
       ,6.73
@@ -431,8 +433,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-26'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-26'
+      ,'LXCOLL_20260106_1_0243_1'
       ,39.94
       ,31.27
       ,20.68
@@ -472,8 +474,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-27'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-27'
+      ,'LXCOLL_20260106_1_0243_1'
       ,41.24
       ,29.58
       ,13.46
@@ -513,8 +515,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-28'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-28'
+      ,'LXCOLL_20260106_1_0243_1'
       ,35.9
       ,25.37
       ,14.8
@@ -554,8 +556,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-29'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-29'
+      ,'LXCOLL_20260106_1_0243_1'
       ,28.05
       ,25
       ,10.1
@@ -595,8 +597,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-30'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-30'
+      ,'LXCOLL_20260106_1_0243_1'
       ,26.59
       ,22.4
       ,13.55
@@ -636,8 +638,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-31'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-31'
+      ,'LXCOLL_20260106_1_0243_1'
       ,20.61
       ,16.55
       ,5.94
@@ -677,8 +679,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-32'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-32'
+      ,'LXCOLL_20260106_1_0243_1'
       ,20.17
       ,21.08
       ,5.49
@@ -718,8 +720,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-33'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-33'
+      ,'LXCOLL_20260106_1_0243_1'
       ,23.58
       ,15.28
       ,10.2
@@ -759,8 +761,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-34'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-34'
+      ,'LXCOLL_20260106_1_0243_1'
       ,19.7
       ,11.31
       ,10.56
@@ -800,8 +802,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-35'
-      ,'LXCOLL_20250106_1_0243_1'
+      ('LXND2601-35'
+      ,'LXCOLL_20260106_1_0243_1'
       ,16.44
       ,11.02
       ,6.8
@@ -841,8 +843,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-36'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-36'
+      ,'LXCOLL_20260106_1_0244_1'
       ,42.98
       ,27.72
       ,12
@@ -882,8 +884,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-37'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-37'
+      ,'LXCOLL_20260106_1_0244_1'
       ,36.29
       ,28.66
       ,17.85
@@ -923,8 +925,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-38'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-38'
+      ,'LXCOLL_20260106_1_0244_1'
       ,33.33
       ,35.05
       ,13.61
@@ -964,8 +966,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-39'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-39'
+      ,'LXCOLL_20260106_1_0244_1'
       ,19.45
       ,21.9
       ,8.72
@@ -1005,8 +1007,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-40'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-40'
+      ,'LXCOLL_20260106_1_0244_1'
       ,29.13
       ,18.41
       ,13.52
@@ -1046,8 +1048,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-41'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-41'
+      ,'LXCOLL_20260106_1_0244_1'
       ,25.61
       ,17.05
       ,7.37
@@ -1087,8 +1089,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-42'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-42'
+      ,'LXCOLL_20260106_1_0244_1'
       ,20.22
       ,22.58
       ,11.23
@@ -1128,8 +1130,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-43'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-43'
+      ,'LXCOLL_20260106_1_0244_1'
       ,20.87
       ,18.92
       ,5.74
@@ -1169,8 +1171,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-44'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-44'
+      ,'LXCOLL_20260106_1_0244_1'
       ,18.28
       ,15.01
       ,10.21
@@ -1210,8 +1212,8 @@ INSERT INTO [dbo].[Dermo]
       ,[Comments]
       ,[AdminNotes])
   VALUES
-      ('LXND2501-45'
-      ,'LXCOLL_20250106_1_0244_1'
+      ('LXND2601-45'
+      ,'LXCOLL_20260106_1_0244_1'
       ,16.3
       ,11.34
       ,4.9
