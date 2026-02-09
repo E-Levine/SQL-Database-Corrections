@@ -1,6 +1,6 @@
---January 2026 data checks:
+--January 2026 data checks: COMPLETED 02/09/2026
 
-use [Oysters_26-01-28]
+use [Oysters]
 go
 
 --Quarterly repro data: DONE
