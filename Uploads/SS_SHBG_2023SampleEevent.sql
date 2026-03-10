@@ -1,5 +1,3 @@
-use [Oysters_25-12-22]
-go
 
 INSERT INTO [dbo].[SampleEvent]
            ([SampleEventID]
@@ -22,7 +20,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -47,7 +46,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -72,7 +72,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -97,7 +98,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -122,7 +124,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -147,7 +150,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -172,7 +176,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -197,7 +202,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -222,7 +228,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -247,7 +254,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -272,7 +280,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -297,7 +306,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -322,7 +332,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -347,7 +358,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -372,7 +384,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Pre')
  GO
 
 
@@ -397,7 +410,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -422,7 +436,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -447,7 +462,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -472,7 +488,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -497,7 +514,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -522,7 +540,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -547,7 +566,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -572,7 +592,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -597,7 +618,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -622,7 +644,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -647,7 +670,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -672,7 +696,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -697,7 +722,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -722,7 +748,8 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO
 
 
@@ -747,5 +774,6 @@ INSERT INTO [dbo].[SampleEvent]
       ,'2023-11-22 00:00:00.000'
       ,'Gabe Hopkins'
       ,'2023-11-22 00:00:00.000'
-      ,'Gabe Hopkins')
+      ,'Gabe Hopkins'
+      ,'Post')
  GO

@@ -16,16 +16,50 @@ library(glue)
 # Read Excel files and check columns 
 file_name <- "SS_SemiAnnual_ShellBudget_2023Summer"
 WQ_file_name <- "SS_SemiAnnual_ShellBudget_WQ"
+datalogger_base_name <- "2023 SS Summer SBM"
 #
-FLIDS <- read_excel("../Data/FIxedLocations.xlsx", sheet = "Sheet1", skip = 0, .name_repair = "universal") 
+if (file.exists("../Data/FixedLocations.xlsx")) {
+  FLIDS <- readxl::read_excel("../Data/FixedLocations.xlsx", sheet = "Sheet1", skip = 0, .name_repair = "universal")
+  } else {
+    warning(paste("File not found:", "../Data/FixedLocations.xlsx"))
+    FLIDS <- NULL
+    }
 BSQ <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "Vols, Wts, Counts", skip = 3, .name_repair = "universal") %>% 
   drop_na(Date.Collected)
 BSWQ <- read_excel(paste0("../Data/Datalogger/",WQ_file_name,".xlsx"), sheet = "WQ", skip = 4,  .name_repair = "unique")
 BSSH <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "SHs", skip = 3, .name_repair = "universal")
+# Datalogger files to add:
+files <- list.files(
+  path = "../Data/Datalogger",
+  pattern = paste0("^",datalogger_base_name, ".*\\.xlsx$"),
+  full.names = TRUE
+)
+# Load Wts and Vols with Date of survey from file name:
+DLWV <- files %>%
+  map_dfr(
+    ~{df <- read_excel(.x, sheet = "WT & VOL", .name_repair = "universal")
+      file_name <- basename(.x)
+      # Extract M.DD.YY from filename
+      date_str <- str_extract(file_name, "\\d{1,2}\\.\\d{1,2}\\.\\d{2}")
+      df %>%
+        mutate(
+          source_file = file_name,
+          Date = as.POSIXct(as.Date(date_str, format = "%m.%d.%y"), tz = "UTC"))}
+  )
+DLWQ <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "WQ", .name_repair = "universal"), .id = "source_file")
+DLSH <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "SH", .name_repair = "universal"), .id = "source_file")
+DLLD <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "LIVE & DEAD", .name_repair = "universal"), .id = "source_file")
+#
 #
 #
 #### Trip Info####
 #
+# Check that dates match between data file and datalogger files:
+unique(BSQ$Date.Collected)
+unique(DLWV$Date)
 #Clean date, station, and Estuary in quadrat data
 A2<- BSQ %>% 
   #Remove datalogger rows
@@ -117,7 +151,24 @@ A3<- BSWQ %>%
     Date = format(Date, "%Y%m%d"),
     Estuary = SiteCode) %>%
   #Filter to dates that match survey data
-  filter(Date %in% A2$Date)
+  filter(Date %in% A2$Date) %>%
+  #Check if Pre/Post column exists and add to Comment to specify which survey.
+  {
+    df <- .
+    prepost_cols <- names(df)[stringr::str_detect(names(df), regex("pre|post", ignore_case = TRUE))]
+    
+    if (length(prepost_cols) > 0) {
+      df <- df %>%
+        mutate(
+          Comments = case_when(
+            stringr::str_detect(.data[[prepost_cols[1]]], regex("pre", ignore_case = TRUE)) ~ "Pre",
+            stringr::str_detect(.data[[prepost_cols[1]]], regex("post", ignore_case = TRUE)) ~ "Post",
+            TRUE ~ NA_character_
+          )
+        )
+    }
+    df
+  }
 #
 SampleEvent<- data.frame(SampleEventID = paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1_",A3$FixedLocationID,"_1","'"),
                          TripID= paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1","'"),
@@ -128,7 +179,8 @@ SampleEvent<- data.frame(SampleEventID = paste0("'",A3$Estuary,"SHBG_",A3$Date,"
                          DateEntered = paste0("'",format(Proof_date, "%Y-%m-%d %H:%M:%OS3"),"'"),
                          EnteredBy =  paste0("'",Proofed_by,"'"),
                          DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
-                         ProofedBy = paste0("'",Proofed_by,"'")) 
+                         ProofedBy = paste0("'",Proofed_by,"'"),
+                         Comments = paste0("'", A3$Comments, "'")) 
 #
 SampleEvent<- unique(SampleEvent)
 #
