@@ -12,3 +12,8 @@
 Located within the *Database_uploads* folder.
 - DataloggerFormatOysters_ELW: Code to convert datalogger Excel files into cleaned, compiled data files. Output saved within the *Data/Dataloggers/Raw* folder. This code can be used to combine datalogger survey data with datasheet survey data.
 -  
+
+## Process
+1. Add required datasheet, datalogger raw Excel, and/or cleaned and organized datalogger Excel files to appropriate folders.
+2. Run 'DataloggerFormatOysters_ELW' to clean and organize datalogger files as needed.
+3. Run 'DataUpload[...]_ELW' to load and combine datasheet and datalogger files. This file outputs SQL code to upload data to the database. 
