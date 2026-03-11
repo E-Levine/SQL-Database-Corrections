@@ -12,9 +12,9 @@ library(writexl)
 Year_of_survey <- c("2023")
 Site <- c("SS")
 Survey_season <- c("Winter")
-Station_name <- c("Big Reef")
-Station_code <- c("BR")
-Survey_date <- c("11.20.23")
+Station_name <- c("Trout Creek")
+Station_code <- c("TC")
+Survey_date <- c("1.24.24")
 #
 # The basics ----
 #
@@ -162,7 +162,7 @@ C2 <- left_join(C, FL, by = c("STATION" = "StationNumber"))
 #
 #
 #### SH ####
-#
+# Need to update code to add Date to SH data
 Dfiles = list.files(
   path = base_dir,
   pattern="11010",
@@ -199,36 +199,6 @@ D2 <- left_join(D, FL, by = c("STATION" = "StationNumber"))  %>%
     dplyr::select(StationName, QDRT, OYSTER_NUM, SH, TYPE) %>%
     rename("STATION" = StationName))
 #
-# Need code to check if any SH are missing, add note if so:
-(MissingSHs <- full_join(
-  # Total count per quadrats
-  C3 %>% 
-    group_by(STATION, QDRT) %>%
-    summarise(Total = max(LIVE, na.rm = T)),
-  # Number of SHs
-  D3 %>% 
-    group_by(STATION, QDRT) %>%
-    summarise(SHCount = n())) %>%
-  # Note if any SH are missing
-  mutate(Missing = case_when(SHCount == 50 ~ NA,
-                             is.na(SHCount) ~ Total,
-                             Total > SHCount & SHCount != 50 ~ Total-SHCount, 
-                             TRUE ~ NA)) %>%
-  # Identify missing data
-  filter(!is.na(Missing)))
-#
-temp <- MissingSHs %>%
-  transmute(
-    STATION = STATION,
-    QDRT = QDRT,
-    OYSTER_NUM = 1,
-    SH = NA,
-    TYPE = 1
-  )
-D4 <- bind_rows(D3, temp) %>%
-  drop_na(STATION, QDRT) %>%
-  arrange(STATION, QDRT)
-#
 #
 #
 #### Output cleaned files ####
@@ -247,22 +217,13 @@ D4 <- bind_rows(D3, temp) %>%
 # Add extension and optional directory
 file_path <- file.path("../Data/Datalogger", paste0(file_name, ".xlsx"))
 
-
-SH_sheet <- if (exists("D4")) {
-  D4
-} else if (exists("D3")) {
-  D3
-} else {
-  data.frame(Note = "Shell height data not found")
-}
-
 # Write multiple sheets
 write_xlsx(
   list(
     "WQ" = A3,
     "WT & VOL" = B3,
     "LIVE & DEAD" = C3,
-    "SH" = SH_sheet
+    "SH" = D3
   ),
   path = file_path
 )
