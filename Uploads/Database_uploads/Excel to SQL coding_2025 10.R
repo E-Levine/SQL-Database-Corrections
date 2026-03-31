@@ -17,8 +17,8 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH, Dermo, Repro) and Year (YYYY) in which data was recorded - used only for file naming 
 Type_Data <- c("Dermo") #Only used for file naming
-Data_Year <- c("2025")
-Data_Month <- c("12") #For file output name
+Data_Year <- c("2026")
+Data_Month <- c("03") #For file output name
 #Set either 'update' for updating existing data or 'upload' for new data
 Correction_needed <- c("upload")
 #
@@ -280,7 +280,7 @@ head(Excel_data)
 #
 #Modify data frame of data to upload
 Is_Proofed <- c("N") #Should data status be changed to "Proofed"? Y/N - 'N' if already marked as proofed
-Proofed_By <- c(NULL) #ProofedBy name
+Proofed_By <- c(NA) #ProofedBy name
 AdminNote <- c("none") #Anything to add as an Admin Note to ALL rows of data? If none, = "none"
 #
 Excel_data_updated <- Excel_data %>% 
