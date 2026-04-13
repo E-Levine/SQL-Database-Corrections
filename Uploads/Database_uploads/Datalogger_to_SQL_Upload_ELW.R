@@ -93,7 +93,8 @@ FID <- FixedInfo %>%
   fill(DATE, .direction = "up") %>% 
   mutate(DATE= first(DATE)) %>%
   filter(!is.na(ESTUARY)) %>%  
-  mutate(Time = as.character(TIME),
+  mutate(Date = gsub("-", "", DATE),
+    Time = as.character(TIME),
          Time = gsub(":","",Time),
          Time = str_sub(Time,end = -3))
 #
@@ -103,7 +104,7 @@ FID <- FixedInfo %>%
 head(FID)
 #
 # Build the PKs and wrap everything in single quotes so that SQL can read it
-TripTable <- data.frame(TripID = paste0("'",FID$ESTUARY,"SRVY_",FID$DATE,"_1","'"),
+TripTable <- data.frame(TripID = paste0("'",FID$ESTUARY,"SRVY_",FID$Date,"_1","'"),
                        TripType = paste0("'","Survey","'"),
                        TripDate = paste0("'",ymd(FID$DATE),"'"),
                        DataStatus = paste0("'","Proofed","'"),
@@ -148,8 +149,8 @@ write_lines(Trip_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_
 head(FID)
 #
 #
-SampleEvent<- data.frame(SampleEventID = paste0("'",FID$Estuary,"SRVY_",FID$DATE,"_1_",Station_code,"_1","'"),
-                         TripID= paste0("'",FID$Estuary,"SRVY_",FID$DATE,"_1","'"),
+SampleEvent<- data.frame(SampleEventID = paste0("'",FID$Estuary,"SRVY_",FID$Date,"_1_",Station_code,"_1","'"),
+                         TripID= paste0("'",FID$Estuary,"SRVY_",FID$Date,"_1","'"),
                          FixedLocationID = paste0("'",Station_code,"'"),
                          LatitudeDec = paste0("'",FID$LATITUDE,"'"),
                          LongitudeDec = paste0("'",FID$LONGITUDE,"'"),
@@ -187,6 +188,79 @@ SampleEvent_SQL <- paste(temp, collapse = "\n\n")
 write_lines(SampleEvent_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEvent.sql"))
 #
 #
+#
+#
+#
+#### SampleEventWQ ####
+#
+SEWQ <- FID %>% 
+  mutate(TEMP= ifelse(TEMP == "Z", NA, TEMP),
+         SALINITY= ifelse(SALINITY == "Z", NA, SALINITY),
+         DO= ifelse(DO == "Z", NA, DO),
+         PH = ifelse(PH == "Z", NA, PH),
+         DEPTH = ifelse(DEPTH == "Z", NA, DEPTH),
+         TURBIDITY = ifelse(TURBIDITY == "Z", NA, TURBIDITY),
+         TIME = ifelse(TIME == "Z", NA, as.numeric(TIME)*86400),
+         TIME= format(as.POSIXct(TIME, origin = "1970-01-01", tz = "UTC"), "%H%M"),#Time..hh.mm.= gsub(":", "", Time..hh.mm.),
+         Comments = gsub("'", "", NOTES),
+         Comments = gsub(",","", Comments)) %>%
+  #Create comments:
+  rowwise() %>%
+  mutate(Comments = {
+    parts <- c()
+    if (!is.na(Comments)) parts <- c(parts, paste("Notes =", Comments))
+    if (!is.na(DPTH_STRTA)) parts <- c(parts, paste("DPTH_STRTA =", DPTH_STRTA))
+    if (!is.na(BOTTOM_TYP)) parts <- c(parts, paste("BOTTOM_TYP =", BOTTOM_TYP))
+    if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
+    if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
+  })
+
+
+
+SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",SEWQ$ESTUARY,"SRVY_",SEWQ$Date,"_1_",Station_code,"_1_01","'"),
+                            SampleEventID = paste0("'",SEWQ$ESTUARY,"SRVY_",SEWQ$Date,"_1_",Station_code,"_1","'"),
+                            Temperature =  ifelse(is.na(SEWQ$TEMP),"NULL",paste0("'",SEWQ$TEMP,"'")),
+                            Salinity = ifelse(is.na(SEWQ$SALINITY),"NULL",paste0("'",SEWQ$SALINITY,"'")),
+                            DissolvedOxygen = ifelse(is.na(SEWQ$DO),"NULL",paste0("'",SEWQ$DO,"'")),
+                            pH = ifelse(is.na(SEWQ$PH),"NULL",paste0("'",SEWQ$PH,"'")),
+                            Depth = ifelse(is.na(SEWQ$DEPTH),"NULL",paste0("'",SEWQ$DEPTH,"'")),
+                            TurbidityYSI = ifelse(is.na(SEWQ$TURBIDITY),"NULL",paste0("'",SEWQ$TURBIDITY,"'")),
+                            DataStatus = paste0("'","Proofed","'"),
+                            DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            EnteredBy =  paste0("'",Proofed_by,"'"),
+                            DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            ProofedBy = paste0("'",Proofed_by,"'"),
+                            Comments = ifelse(is.na(SEWQ$Comments), "NULL", paste0(SEWQ$Comments)),
+                            CollectionTime = ifelse(is.na(SEWQ$Time),"NULL",paste0("'",SEWQ$Time,"'")))
+#
+#
+SampleEventWQtemplate<- "
+INSERT INTO [dbo].[SampleEventWQ]
+           ([SampleEventWQID]
+           ,[SampleEventID]
+           ,[Temperature]
+           ,[Salinity]
+           ,[DissolvedOxygen]
+           ,[pH]
+           ,[Depth]
+           ,[TurbidityYSI]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments]
+           ,[CollectionTime])
+     VALUES"
+#
+temp <- character(length(nrow(SampleEventWQ)))
+for(i in 1:nrow(SampleEventWQ)){
+  temp[i] <- paste0(SampleEventWQtemplate, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+}
+SampleEventWQ_SQL <- paste(temp, collapse = "\n\n")
+#
+# Save SQL code
+write_lines(SampleEventWQ_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEventWQ.sql"))
 #
 #
 #
