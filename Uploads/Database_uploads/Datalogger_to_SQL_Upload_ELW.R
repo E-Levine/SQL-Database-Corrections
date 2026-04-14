@@ -264,3 +264,85 @@ write_lines(SampleEventWQ_SQL, paste0("../", Site, "_", Station_code, "_", Surve
 #
 #
 #
+#### SurveyQuadrat ####
+#
+#
+QuadCounts <- list.files(path = data_path, 
+                        pattern = "\\Data.dbf$", 
+                        full.names = TRUE) %>%
+  setNames(nm = basename(.)) %>%
+  map(read.dbf) %>%
+  bind_rows(.id = "FileName")
+#
+QuadInfo <- list.files(path = data_path, 
+                         pattern = "Quadrat", 
+                         full.names = TRUE) %>%
+  setNames(nm = basename(.)) %>%
+  map(read.dbf) %>%
+  bind_rows(.id = "FileName")
+#
+QuadData <- full_join(QuadInfo %>% dplyr::select(-FileName), 
+                      QuadCounts %>% dplyr::select(-FileName))
+#
+# NOTE: Every station needs at least one Quadrat record, even if no SH measured
+Quads <- QuadData %>% 
+  left_join(FID %>% dplyr::select(KEY_A, Date, ESTUARY, STATION, CLASS, Notes = NOTES)) %>%
+  mutate(SampleEventID = paste0(ESTUARY, "SRVY_", Date, "_1_", Station_code, "_1"),
+         Quadrat = ifelse(is.na(QDRT), "01", sprintf("%02d", QDRT))) %>%
+  #Compile comments and notes into one Comment
+  rowwise() %>%
+  mutate(Comments = {
+    parts <- c()
+    if (any(!is.na(c(NOTES, Notes)))) parts <- c(parts, paste("Notes =", paste(na.omit(c(NOTES, Notes)), collapse = "; ")))
+    if (!is.na(CC)) parts <- c(parts, paste("Conch =", CC))
+    if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
+    if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
+  })
+
+SurveyQuadrat <- data.frame(
+  QuadratID = paste0("'",Quads$SampleEventID,"_",Quads$Quadrat,"'"),
+  SampleEventID = paste0("'",Quads$SampleEventID,"'"),
+  QuadratNumber = paste0("'",Quads$QDRT,"'"),
+  NumLive= ifelse(is.na(Quads$LIVE),"NULL",paste0("'",Quads$LIVE,"'")),
+  NumDead=ifelse(is.na(Quads$DEAD),"NULL",paste0("'",Quads$DEAD,"'")),
+  TotalVolume = ifelse(is.na(Quads$VOL),"NULL",paste0("'",Quads$VOL,"'")),
+  TotalWeight = ifelse(is.na(Quads$WGHT),"NULL",paste0("'",Quads$WGHT,"'")),
+  NumDrills = ifelse(is.na(Quads$DRILLS),"NULL",paste0("'",Quads$DRILLS,"'")),
+  DataStatus = paste0("'","Proofed","'"),
+  DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  EnteredBy =  paste0("'",Proofed_by,"'"),
+  DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  ProofedBy = paste0("'",Proofed_by,"'"),
+  Comments = ifelse(is.na(Quads$Comments), "NULL", paste0(Quads$Comments)),
+  NumLegal = ifelse(is.na(Quads$LEGAL),"NULL",paste0("'",Quads$LEGAL,"'"))
+)
+#
+#
+SurveyQuadrattemplate<- "
+INSERT INTO [dbo].[SurveyQuadrat]
+           ([QuadratID]
+           ,[SampleEventID]
+           ,[QuadratNumber]
+           ,[NumLive]
+           ,[NumDead]
+           ,[TotalVolume]
+           ,[TotalWeight]
+           ,[NumDrills]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments])
+           ,[NumLegal]
+     VALUES"
+#
+temp <- character(length(nrow(SurveyQuadrat)))
+for(i in 1:nrow(SurveyQuadrat)){
+  temp[i] <- paste0(SurveyQuadrattemplate, "\n      (",paste(SurveyQuadrat[i,], collapse = "\n      ,"), ")\n GO")
+}
+SurveyQuadrat_SQL <- paste(temp, collapse = "\n\n")
+#
+# Save SQL code
+write_lines(SurveyQuadrat_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SurveyQuadrat.sql"))
+#
