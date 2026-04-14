@@ -346,3 +346,61 @@ SurveyQuadrat_SQL <- paste(temp, collapse = "\n\n")
 # Save SQL code
 write_lines(SurveyQuadrat_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SurveyQuadrat.sql"))
 #
+#
+#
+#
+#
+#### SurveySH ####
+#
+#
+ShellHeights <- list.files(path = data_path, 
+                         pattern = "\\Shell_Height.dbf$", 
+                         full.names = TRUE) %>%
+  setNames(nm = basename(.)) %>%
+  map(read.dbf) %>%
+  bind_rows(.id = "FileName")
+#
+#
+# Every station needs at least one SH record, even if no SH measured
+SHData <- ShellHeights %>%
+  left_join(FID %>% dplyr::select(KEY_A, Date, ESTUARY)) %>%
+  mutate(Quadrat = sprintf("%02d", QDRT),
+         QuadratID = paste0(ESTUARY,"SRVY_",Date,"_1_",Station_code,"_1_",Quadrat),
+         SHnum = sprintf("%02d", OYSTER_NUM))
+#
+#
+SurveySH <- data.frame(
+  ShellHeightID = paste0("'",SHData$QuadratID,"_",SHData$SHnum,"'"),
+  QuadratID = paste0("'",SHData$QuadratID,"'"),
+  ShellHeight = ifelse(is.na(SHData$SH),"NULL",paste0("'",SHData$SH,"'")),
+  DataStatus = paste0("'","Proofed","'"),
+  DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  EnteredBy =  paste0("'",Proofed_by,"'"),
+  DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  ProofedBy = paste0("'",Proofed_by,"'"),
+  Comments = "NULL"
+)
+#
+SurveySHtemplate<- "INSERT INTO [dbo].[SurveySH]
+           ([ShellHeightID]
+           ,[QuadratID]
+           ,[ShellHeight]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments])
+     VALUES"
+#
+temp <- character(length(nrow(SurveySH)))
+for(i in 1:nrow(SurveySH)){
+  temp[i] <- paste0(SurveySHtemplate, "\n      (",paste(SurveySH[i,], collapse = "\n      ,"), ")\n GO")
+}
+SurveySH_SQL <- paste(temp, collapse = "\n\n")
+#
+# Save SQL code
+write_lines(SurveySH_SQL, paste0("../",Site, "_", Station_code, "_", Survey_date,"_SurveySH.sql"))
+#
+#
+#
