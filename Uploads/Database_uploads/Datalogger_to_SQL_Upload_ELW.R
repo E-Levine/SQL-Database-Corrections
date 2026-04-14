@@ -98,6 +98,83 @@ FID <- FixedInfo %>%
          Time = gsub(":","",Time),
          Time = str_sub(Time,end = -3))
 #
+LongName <- (FLIDS %>% filter(Estuary == as.character(FID$ESTUARY)) %>% slice(1))$EstuaryLongName
+#
+FLTab <- data.frame(
+  FixedLocationID = paste0("'",Station_code,"'"),
+  Estuary = paste0("'",FID$ESTUARY,"'"),
+  SectionName = paste0("'",FID$SECTION,"'"),
+  StationName = paste0("'",FID$STATION,"'"),
+  StationNumber = paste0("'",substr(FID$STATION,3,nchar(as.character(FID$STATION))),"'"),
+  LatitudeDec = paste0("'",FID$LATITUDE,"'"),
+  LongitudeDec = paste0("'",FID$LONGITUDE,"'"),
+  Recruitment = paste0("'","N","'"),
+  Survey = paste0("'","Y","'"),
+  Sediment = paste0("'","N","'"),
+  Collections = paste0("'","N","'"),
+  ShellBudget = paste0("'","N","'"),
+  Dataloggers = paste0("'","N","'"),
+  Cage = paste0("'","N","'"),
+  Wave = paste0("'","N","'"),
+  StartDate = paste0("'",FID$DATE,"'"),
+  EndDate = paste0("'",FID$DATE,"'"),
+  DataStatus = paste0("'","Proofed","'"),
+  DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  EnteredBy =  paste0("'",Proofed_by,"'"),
+  DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+  ProofedBy = paste0("'",Proofed_by,"'"),
+  Comments = ifelse(is.na(FID$NOTES), "NULL", paste0(FID$NOTES)),
+  StationNameNumber = paste0("'",FID$STATION,"-",substr(FID$STATION,3,nchar(as.character(FID$STATION))),"'"),
+  EstuaryLongName = paste0("'",LongName,"'")
+)
+#
+#Check to make sure everything is in single quotes 
+FLTab<- unique(FLTab)
+#
+#ADD TO BEGINNING OF CODE
+#USE [Oysters]
+#GO
+
+# Create a template for the TripInfo SQL script 
+FLIDSQLtemplate <- "
+INSERT INTO [dbo].[FixedLocations]
+           ([FixedLocationID]
+           ,[Estuary]
+           ,[SectionName]
+           ,[StationName]
+           ,[StationNumber]
+           ,[LatitudeDec]
+           ,[LongitudeDec]
+           ,[Recruitment]
+           ,[Survey]
+           ,[Sediment]
+           ,[Collections]
+           ,[ShellBudget]
+           ,[Dataloggers]
+           ,[Cage]
+           ,[Wave]
+           ,[StartDate]
+           ,[EndDate]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments]
+           ,[StationNameNumber]
+           ,[EstuaryLongName])
+VALUES"
+temp <- character(length(nrow(FLTab)))
+for(i in 1:nrow(FLTab)){
+  temp[i] <- paste0(FLIDSQLtemplate, "\n      (",paste(FLTab[i,], collapse = "\n      ,"), ")\n GO")
+}
+FLID_SQL <- paste(temp, collapse = "\n\n")
+
+# Save SQL code
+write_lines(FLID_SQL, paste0("../", Site, "_", Station_code, "_FixedLocations.sql"))
+#
+#
+#
 #
 #### TripInfo ####
 #
