@@ -16,19 +16,20 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
 #Initials of person adding data
 Initials <- c("EW")
 #Set type of data being added (WQ, TripInfo, SrvySH, Dermo, Repro) and Year (YYYY) in which data was recorded - used only for file naming 
-Type_Data <- c("Dermo") #Only used for file naming
+Type_Data <- c("Rcrt") #Only used for file naming
 Data_Year <- c("2026")
-Data_Month <- c("03") #For file output name
+Data_Month <- c("02") #For file output name
 #Set either 'update' for updating existing data or 'upload' for new data
 Correction_needed <- c("upload")
 #
 ###Load data file - change file name, confirm sheet name
-Excel_data <- read_excel("../Data/COLL_DERMO_StPete.xlsx", sheet = "Template", #File name and sheet name
+Excel_data <- read_excel("../Data/RCRT_TEMPLATE.xlsx", sheet = "Template", #File name and sheet name
                          skip = 0, col_names = TRUE, col_types = "text", #How many rows to skip at top; are column names to be used
                          na = c(""), trim_ws = TRUE, #Values/placeholders for NAs; trim extra white space
                          .name_repair = "unique")
 #Convert Entered/Proofed dates to date value
 Excel_data <- Excel_data %>% 
+  mutate(across(any_of("DeployedDate"), ~excel_numeric_to_date(as.numeric(.), date_system = "modern"))) %>% 
   mutate(DateEntered = format(excel_numeric_to_date(as.numeric(DateEntered), date_system = "modern"),"%Y-%m-%d %H:%M:%S"),
          DateProofed = case_when(!is.na(DateProofed) ~ format(excel_numeric_to_date(as.numeric(DateProofed), date_system = "modern"),"%Y-%m-%d %H:%M:%S"),
                                  TRUE ~ 'NULL'))
@@ -44,6 +45,9 @@ if(Type_Data == "WQ"){
 } else if(Type_Data == "Dermo"){
   Excel_data <- Excel_data %>% mutate(across(any_of(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight", "DermoGill", "DermoMantle")), as.numeric)) %>%
     mutate(across(any_of(c("ShellHeight", "ShellLength", "ShellWidth", "TotalWeight", "ShellWetWeight", "DermoGill", "DermoMantle")), ~as.character(.) %>% replace_na('NULL')))
+} else if(Type_Data == "Rcrt"){
+  Excel_data <- Excel_data %>% mutate(across(any_of(c("ShellReplicate", "ShellPosition", "NumTop", "NumBottom")), as.numeric)) %>%
+    mutate(across(any_of(c("NumTop", "NumBottom")), ~as.character(.) %>% replace_na('NULL')))
 } else if(Type_Data == "SrvySH" | Type_Data == "Repro"){
   message("No data changes made.")
 }
@@ -55,6 +59,9 @@ if(Type_Data == "Dermo"){
 } else if(Type_Data == "Repro"){
   DataType <- "Repro"
   message("Skip to the 'Repro' section.")
+} else if(Type_Data == "Rcrt"){
+  DataType <- "Rcrt"
+  message("Skip to the 'Rcrt' section.")
 } else {
   DataType <- Excel_data[1,1] %>% substr(3,6)
   message(paste0("Skip to the '", DataType, "' section."))
@@ -468,5 +475,168 @@ Repro_SQL <- paste(temp, collapse = "\n\n")
 #
 #Save SQL code
 write_lines(Repro_SQL, paste0("../", Estuary, "_", Type_Data, "_", DataType, "_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
+#
+#
+#####Collections Rcrt Data####
+#
+## If updating or adding to Existing data, all following Y/N should be N:
+TripID <- c("N") #Does a TripID need to be created?
+# If WQ is needed, use the WQ data section
+SampleEvent <- c("N") #Does a SampleEvent need to be created?
+Is_Proofed <- c("2026-04-22") #Should data status be changed to "Proofed"? If Y, enter ProofedDate (YYYY-MM-DD), or "N"
+Proofed_By <- c("Erica") #ProofedBy name
+Is_Completed <- c("2026-04-22") #Should data status be changed to "Completed"? If Y, enter CompletedDate (YYYY-MM-DD), or "N"
+Completed_By <- c("Erica") #CompletedBy name
+Comment <- (NA) #Any comments to add? Or NA
+AdminNote <- c("none") #Anything to add as an Admin Note to ALL rows of data? If none, = "none"
+#
+if(tolower(Correction_needed) == "upload" & TripID == "Y"){
+  Trip_data <- data.frame(
+    TripID = paste0("'", substr(unique(Excel_data$SampleEventID),start = 1, stop = 17), "'"),
+    TripType = paste0("'Recruitment'"),
+    TripDate = paste0("'", substr(unique(Excel_data$SampleEventID),start = 8, stop = 15) %>% as.Date(format = "%Y%m%d"), "'"),
+    DataStatus = case_when(Is_Proofed != "N" & Is_Completed == "N" ~ paste0("'", "Proofed", "'"), 
+                           Is_Completed != "N" ~ paste0("'", "Completed", "'"),
+                           TRUE ~ paste0("'","Entered","'")),
+    DateEntered = paste0("'", Sys.Date(), "'"),
+    EnteredBy = paste0("'", Proofed_By, "'"),
+    DateProofed = case_when(Is_Proofed != "N" ~ paste(as.Date(Is_Proofed)), 
+                            TRUE ~ paste('NULL')),
+    ProofedBy = case_when(Is_Proofed != "N" ~ paste0("'", Proofed_By, "'"), 
+                          TRUE ~ paste('NULL')),
+    DateCompleted = case_when(Is_Completed != "N" ~ paste(as.Date(Is_Completed)), 
+                              TRUE ~ paste('NULL')),
+    CompletedBy = case_when(Is_Completed != "N" ~ paste0("'", Completed_By, "'"), 
+                            TRUE ~ paste('NULL')),
+    Comments = case_when(is.na(Comment) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+    AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0('NULL'))
+  )
+  #
+  #SQL base template code - confirm location of data (dbo/hsdb) in first line 
+  Trip_SQLheader <- "
+INSERT INTO [dbo].[TripInfo]
+    ([TripID]
+      ,[TripType]
+      ,[TripDate]
+      ,[DataStatus]
+      ,[DateEntered]
+      ,[EnteredBy]
+      ,[DateProofed]
+      ,[ProofedBy]
+      ,[DateCompleted]
+      ,[CompletedBy]
+      ,[Comments]
+      ,[AdminNotes])
+  VALUES"
+    #
+    temp <- character(length(nrow(Trip_data)))
+    for(i in 1:nrow(Trip_data)){
+      temp[i] <- paste0(Trip_SQLheader, "\n      (",paste(Trip_data[i,], collapse = "\n      ,"), ")\n GO")
+    }
+  #
+  Trip_SQL <- paste(temp, collapse = "\n\n")
+  #
+  #Save SQL code
+  write_lines(Trip_SQL, paste0("../", Estuary, "_", Type_Data, "_TripIndfo_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
+  #
+    #
+  } else if(tolower(Correction_needed) == "update"){
+  message("TripInfo data not compiled.")
+}
+#
+#
+#
+#
+#
+##Create empty data frame to fill
+Recruit <- data.frame(matrix(ncol = 14, nrow = 0))
+Excel_data <- Excel_data %>% 
+  mutate(DateCompleted = '2026-04-22', 
+         CompletedBy = 'Erica Williams', 
+         .before = "Comments") 
+head(Excel_data)
+#
+#
+Excel_data_updated <- Excel_data %>% 
+  mutate(ShellID = paste0("'", ShellID, "'"),
+         SampleEventID = paste0("'", SampleEventID, "'"),
+         DeployedDate = paste0("'",DeployedDate,"'"),
+         ShellReplicate = paste0(ShellReplicate),
+         ShellPosition = paste0(ShellPosition),
+         NumTop = paste0(NumTop),
+         NumBottom = paste0(NumBottom),
+         DataStatus = case_when(Is_Proofed != "N" & Is_Completed == "N" ~ paste0("'", "Proofed", "'"), 
+                                Is_Completed != "N" ~ paste0("'", "Completed", "'"),
+                                TRUE ~ paste0("'","Entered","'")),
+         DateEntered = paste0("'", DateEntered, "'"),
+         EnteredBy = paste0("'", EnteredBy, "'"),
+         DataStatus = case_when(Is_Proofed != "N" & Is_Completed == "N" ~ paste0("'", "Proofed", "'"), 
+                                Is_Completed != "N" ~ paste0("'", "Completed", "'"),
+                                TRUE ~ paste0("'","Entered","'")),
+         DateProofed = case_when(Is_Proofed != "N" ~ paste("'",format(as.Date(Is_Proofed), "%Y-%m-%d %H:%M:%S"),"'"), 
+                                 TRUE ~ paste('NULL')),
+         ProofedBy = paste0("'", ProofedBy, "'"),
+         DateCompleted = case_when(Is_Completed != "N" ~ paste("'",format(as.Date(Is_Completed), "%Y-%m-%d %H:%M:%S"),"'"), 
+                                   TRUE ~ paste('NULL')),
+         CompletedBy = paste0("'", CompletedBy, "'"),
+         Comments = case_when(Comments == "NULL" | is.na(Comments) ~ paste0("NULL"), Comments == '0' ~  paste('NULL'), TRUE ~ paste0("'", Comments, "'")),
+         AdminNotes = case_when(AdminNote != "none" ~ paste0("'", AdminNote, "'"), TRUE ~ paste0("'", AdminNotes, "'")))
+#
+#Fill data frame with information
+Recruit <- if(exists("Recruit") & class(Recruit) == "data.frame"){
+  rm(Recruit)
+  Recruit <- data.frame(matrix(ncol = 14, nrow = 0))
+  rbind(Recruit, Excel_data_updated, stringsAsFactors = FALSE)
+} else {
+  rbind(Recruit, Excel_data_updated, stringsAsFactors = FALSE)
+}
+#
+#SQL base template code - confirm location of data (dbo/hsdb) in first line 
+if(tolower(Correction_needed) == "upload"){
+  Rcrt_SQLheader <- "
+INSERT INTO [dbo].[Recruitment]
+    ([ShellID]
+      ,[SampleEventID]
+      ,[DeployedDate]
+      ,[ShellReplicate]
+      ,[ShellPosition]
+      ,[NumTop]
+      ,[NumBottom]
+      ,[DataStatus]
+      ,[DateEntered]
+      ,[EnteredBy]
+      ,[DateProofed]
+      ,[ProofedBy]
+      ,[DateCompleted]
+      ,[CompletedBy]
+      ,[Comments]
+      ,[AdminNotes])
+  VALUES"
+  #
+  temp <- character(length(nrow(Recruit)))
+  for(i in 1:nrow(Recruit)){
+    temp[i] <- paste0(Rcrt_SQLheader, "\n      (",paste(Recruit[i,], collapse = "\n      ,"), ")\n GO")
+  }
+  #
+} else if(tolower(Correction_needed) == "update"){
+  temp <- character(nrow(Recruit))
+  for(i in 1:nrow(Recruit)){
+    temp[i] <- paste0("\nUPDATE [dbo].[Recruitment]", 
+                      "\nSET [NumTop] = ", Recruit$NumTop[i],",",
+                      "\n[NumBottom] = ", Recruit$NumBottom[i],",",
+                      "\n[DataStatus] = ", Recruit$DataStatus[i],",",
+                      "\n[DateEntered] = ", Recruit$DateEntered[i],",",
+                      "\n[EnteredBy] = ", Recruit$EnteredBy[i],",",
+                      "\n[DateProofed] = ", Recruit$DateProofed[i],",",
+                      "\n[ProofedBy] = ", Recruit$ProofedBy[i],",",
+                      "\n[Comments] = ", Recruit$Comments[i],
+                      "\nWHERE [ShellID] = ", Recruit$ShellID[i])  
+  }
+}
+#
+Rcrt_SQL <- paste(temp, collapse = "\n\n")
+#
+#Save SQL code
+write_lines(Rcrt_SQL, paste0("../", Estuary, "_", Type_Data, "_", DataType, "_", Data_Year, "_", Data_Month, "_", Initials, ".sql"))
 #
 #
