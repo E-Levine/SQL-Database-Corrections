@@ -15,10 +15,12 @@ Year_of_survey <- c("2026")
 Site <- c("WI")
 Survey_season <- c(NA) #Season name or NA
 Station_name <- c(NA) #Station long name or NA
-Station_code <- c("I109") #Station FLID
-Survey_date <- c("2.12.26")
-Proof_date <- as.Date("2024-01-26")
+Station_code <- c("I126") #Station FLID
+Survey_date <- c("20260212")
+Proof_date <- as.Date("2026-04-22")
 Proofed_by <- "Tomena Scholze"
+#
+TripID_need <- c("N") #Only need one per date/site
 #
 # The basics ----
 #
@@ -80,6 +82,9 @@ YMD <-paste0(year,m,d)
 #
 #### FixedLocations ####
 #
+FLID_Comments <- NA
+FLID_AdminNotes <- c("datalogger upload FixedLocationID")
+#
 FixedInfo <- list.files(path = data_path, 
                            pattern = "\\STATION.dbf$", 
                            full.names = TRUE) %>%
@@ -94,9 +99,10 @@ FID <- FixedInfo %>%
   mutate(DATE= first(DATE)) %>%
   filter(!is.na(ESTUARY)) %>%  
   mutate(Date = gsub("-", "", DATE),
-    Time = as.character(TIME),
+         Time = as.character(TIME),
          Time = gsub(":","",Time),
-         Time = str_sub(Time,end = -3))
+         Time = str_sub(Time,end = -3),
+         LONGITUDE = -abs(LONGITUDE))
 #
 LongName <- (FLIDS %>% filter(Estuary == as.character(FID$ESTUARY)) %>% slice(1))$EstuaryLongName
 #
@@ -105,7 +111,7 @@ FLTab <- data.frame(
   Estuary = paste0("'",FID$ESTUARY,"'"),
   SectionName = paste0("'",FID$SECTION,"'"),
   StationName = paste0("'",FID$STATION,"'"),
-  StationNumber = paste0("'",substr(FID$STATION,3,nchar(as.character(FID$STATION))),"'"),
+  StationNumber = paste0("'",as.integer(gsub("[^0-9]", "", FID$STATION)),"'"),
   LatitudeDec = paste0("'",FID$LATITUDE,"'"),
   LongitudeDec = paste0("'",FID$LONGITUDE,"'"),
   Recruitment = paste0("'","N","'"),
@@ -123,7 +129,11 @@ FLTab <- data.frame(
   EnteredBy =  paste0("'",Proofed_by,"'"),
   DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
   ProofedBy = paste0("'",Proofed_by,"'"),
-  Comments = ifelse(is.na(FID$NOTES), "NULL", paste0(FID$NOTES)),
+  Comments = ifelse(is.na(FID$NOTES) & is.na(FLID_Comments), "NULL", 
+                    ifelse(!is.na(FID$NOTES) & is.na(FLID_Comments), paste0("'",FID$NOTES,"'"), 
+                           ifelse(is.na(FID$NOTES) & !is.na(FLID_Comments), paste0("'", FLID_Comments, "'"), 
+                                  paste0("'", FID$NOTES, ", ", FLID_Comments, "'")))),
+  AdminNotes = ifelse(is.na(FLID_AdminNotes), "NULL", paste0("'", FLID_AdminNotes, "'")),
   StationNameNumber = paste0("'",FID$STATION,"-",substr(FID$STATION,3,nchar(as.character(FID$STATION))),"'"),
   EstuaryLongName = paste0("'",LongName,"'")
 )
@@ -161,6 +171,7 @@ INSERT INTO [dbo].[FixedLocations]
            ,[DateProofed]
            ,[ProofedBy]
            ,[Comments]
+           ,[AdminNotes]
            ,[StationNameNumber]
            ,[EstuaryLongName])
 VALUES"
@@ -171,7 +182,7 @@ for(i in 1:nrow(FLTab)){
 FLID_SQL <- paste(temp, collapse = "\n\n")
 
 # Save SQL code
-write_lines(FLID_SQL, paste0("../", Site, "_", Station_code, "_FixedLocations.sql"))
+#write_lines(FLID_SQL, paste0("../", Site, "_", Station_code, "_FixedLocations.sql"))
 #
 #
 #
@@ -214,9 +225,8 @@ for(i in 1:nrow(TripTable)){
   temp[i] <- paste0(TripInfoSQLtemplate, "\n      (",paste(TripTable[i,], collapse = "\n      ,"), ")\n GO")
 }
 Trip_SQL <- paste(temp, collapse = "\n\n")
-
 # Save SQL code
-write_lines(Trip_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_TripInfo.sql"))
+#write_lines(Trip_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_TripInfo.sql"))
 #
 #
 #
@@ -226,8 +236,8 @@ write_lines(Trip_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_
 head(FID)
 #
 #
-SampleEvent<- data.frame(SampleEventID = paste0("'",FID$Estuary,"SRVY_",FID$Date,"_1_",Station_code,"_1","'"),
-                         TripID= paste0("'",FID$Estuary,"SRVY_",FID$Date,"_1","'"),
+SampleEvent<- data.frame(SampleEventID = paste0("'",FID$ESTUARY,"SRVY_",FID$Date,"_1_",Station_code,"_1","'"),
+                         TripID= paste0("'",FID$ESTUARY,"SRVY_",FID$Date,"_1","'"),
                          FixedLocationID = paste0("'",Station_code,"'"),
                          LatitudeDec = paste0("'",FID$LATITUDE,"'"),
                          LongitudeDec = paste0("'",FID$LONGITUDE,"'"),
@@ -262,7 +272,7 @@ for(i in 1:nrow(SampleEvent)){
 SampleEvent_SQL <- paste(temp, collapse = "\n\n")
 
 # Save SQL code
-write_lines(SampleEvent_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEvent.sql"))
+#write_lines(SampleEvent_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEvent.sql"))
 #
 #
 #
@@ -291,9 +301,9 @@ SEWQ <- FID %>%
     if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
     if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
   })
-
-
-
+#
+#
+#
 SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",SEWQ$ESTUARY,"SRVY_",SEWQ$Date,"_1_",Station_code,"_1_01","'"),
                             SampleEventID = paste0("'",SEWQ$ESTUARY,"SRVY_",SEWQ$Date,"_1_",Station_code,"_1","'"),
                             Temperature =  ifelse(is.na(SEWQ$TEMP),"NULL",paste0("'",SEWQ$TEMP,"'")),
@@ -337,7 +347,7 @@ for(i in 1:nrow(SampleEventWQ)){
 SampleEventWQ_SQL <- paste(temp, collapse = "\n\n")
 #
 # Save SQL code
-write_lines(SampleEventWQ_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEventWQ.sql"))
+#write_lines(SampleEventWQ_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEventWQ.sql"))
 #
 #
 #
@@ -352,11 +362,39 @@ QuadCounts <- list.files(path = data_path,
   bind_rows(.id = "FileName")
 #
 QuadInfo <- list.files(path = data_path, 
-                         pattern = "Quadrat", 
+                         pattern = "Quadrat.dbf$", 
                          full.names = TRUE) %>%
   setNames(nm = basename(.)) %>%
   map(read.dbf) %>%
   bind_rows(.id = "FileName")
+#
+if(nrow(QuadInfo) < 1){
+  QuadInfo <- data.frame(
+    "FileName" = NA,
+    "KEY_A" = FID$KEY_A,
+    "KEY_AA" = NA,
+    "DATE" = TripTable$TripDate,
+    "QDRT" = 1,
+    "WGHT" = NA, 
+    "VOL" = NA,
+    "DRILLS" = NA,
+    "CC" = NA,
+    "NOTES" = "No Quad data recorded"
+  )
+}
+if(nrow(QuadCounts) < 1){
+  QuadCounts <- data.frame(
+    "FileName" = NA,
+    "KEY_A" =  FID$KEY_A,
+    "KEY_AA" = NA,
+    "KEY_AAB" = NA,
+    "QDRT" = 1,
+    "LIVE" = NA,
+    "DEAD" = NA,
+    "LEGAL" = NA,
+    "NOTES" = "No Quad data recorded"
+  )
+}
 #
 QuadData <- full_join(QuadInfo %>% dplyr::select(-FileName), 
                       QuadCounts %>% dplyr::select(-FileName))
@@ -375,7 +413,7 @@ Quads <- QuadData %>%
     if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
     if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
   })
-
+#
 SurveyQuadrat <- data.frame(
   QuadratID = paste0("'",Quads$SampleEventID,"_",Quads$Quadrat,"'"),
   SampleEventID = paste0("'",Quads$SampleEventID,"'"),
@@ -410,8 +448,8 @@ INSERT INTO [dbo].[SurveyQuadrat]
            ,[EnteredBy]
            ,[DateProofed]
            ,[ProofedBy]
-           ,[Comments])
-           ,[NumLegal]
+           ,[Comments]
+           ,[NumLegal])
      VALUES"
 #
 temp <- character(length(nrow(SurveyQuadrat)))
@@ -421,7 +459,7 @@ for(i in 1:nrow(SurveyQuadrat)){
 SurveyQuadrat_SQL <- paste(temp, collapse = "\n\n")
 #
 # Save SQL code
-write_lines(SurveyQuadrat_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SurveyQuadrat.sql"))
+#write_lines(SurveyQuadrat_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SurveyQuadrat.sql"))
 #
 #
 #
@@ -437,13 +475,27 @@ ShellHeights <- list.files(path = data_path,
   map(read.dbf) %>%
   bind_rows(.id = "FileName")
 #
+if(nrow(ShellHeights) < 1){
+  ShellHeights <- data.frame(
+    "FileName" = NA,
+    "KEY_A" = FID$KEY_A,
+    "KEY_AA" = NA,
+    "KEY_AAA" = NA,
+    "QDRT" = 1,
+    "OYSTER_NUM" = 1, 
+    "SH" = NA,
+    "NO_DEAD" = "NULL",
+    "TOTAL_DEAD" = "NULL",
+    "TYPE" = "NULL"
+  )
+}
 #
 # Every station needs at least one SH record, even if no SH measured
 SHData <- ShellHeights %>%
   left_join(FID %>% dplyr::select(KEY_A, Date, ESTUARY)) %>%
   mutate(Quadrat = sprintf("%02d", QDRT),
          QuadratID = paste0(ESTUARY,"SRVY_",Date,"_1_",Station_code,"_1_",Quadrat),
-         SHnum = sprintf("%02d", OYSTER_NUM))
+         SHnum = sprintf("%03d", OYSTER_NUM))
 #
 #
 SurveySH <- data.frame(
@@ -477,7 +529,27 @@ for(i in 1:nrow(SurveySH)){
 SurveySH_SQL <- paste(temp, collapse = "\n\n")
 #
 # Save SQL code
-write_lines(SurveySH_SQL, paste0("../",Site, "_", Station_code, "_", Survey_date,"_SurveySH.sql"))
+#write_lines(SurveySH_SQL, paste0("../",Site, "_", Station_code, "_", Survey_date,"_SurveySH.sql"))
+#
+#
+#
+#### Combined into 1 sampling SQL file and 1 survey SQL file ####
+#
+if(TripID_need == "Y"){
+  Combined_sampling <- paste(FLID_SQL, Trip_SQL, SampleEvent_SQL, SampleEventWQ_SQL, sep = "\n\n")
+} else {
+  Combined_sampling <- paste(FLID_SQL, SampleEvent_SQL, SampleEventWQ_SQL, sep = "\n\n")
+}
+
+#
+write_lines(Combined_sampling, 
+            paste0("../", Site, "_", Station_code, "_", Survey_date,"_Trip_Sample_SQL.sql"))
+#
+#
+Survey_data <- paste(SurveyQuadrat_SQL, SurveySH_SQL, sep = "\n\n")
+#
+write_lines(Survey_data, 
+            paste0("../", Site, "_", Station_code, "_", Survey_date,"_Survey_SQL.sql"))
 #
 #
 #
