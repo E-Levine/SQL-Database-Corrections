@@ -10,7 +10,7 @@ pacman::p_load(plyr, tidyverse, #Df manipulation, basic summary
                install = TRUE) #Mapping and figures
 #
 #
-File_location <- c("//fwc-spfs1/FishBio/Molluscs/Oysters/ODIN Oyster Data Entry/Star Oddi to Database")
+File_location <- c(file)
 File_name <- "Star-Oddi-To-Upload-2025-06-16.xlsx"
 #
 #
