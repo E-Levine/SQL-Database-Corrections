@@ -15,12 +15,12 @@ Year_of_survey <- c("2026")
 Site <- c("WI")
 Survey_season <- c(NA) #Season name or NA
 Station_name <- c(NA) #Station long name or NA
-Station_code <- c("I126") #Station FLID
-Survey_date <- c("20260212")
-Proof_date <- as.Date("2026-04-22")
+Station_code <- c("I121") #Station FLID
+Survey_date <- c("20260309")
+Proof_date <- as.Date("2026-05-10")
 Proofed_by <- "Tomena Scholze"
 #
-TripID_need <- c("N") #Only need one per date/site
+TripID_need <- c("Y") #Only need one per date/site
 #
 # The basics ----
 #
@@ -70,16 +70,6 @@ data_files <- list.files(path = data_path,
 #WQ: Date, Estuary, Section, Class, Station, Latitude, Longitude, Time, Depth, Temp, Salinity, DO, PH, Turbidity, Dpth_strta, Bottom_type, Numbr_QDRT
 #SH: STATION, QDRT, OYSTER_NUM, SH, TYPE
 #LIVE & DEAD: STATION, QDRT, LIVE, DEAD, NOTES
-#### Formatting ####
-#
-time <-Sys.Date()
-m <-month(time)
-d <- day(time)
-year <- year(time)
-YMD <-paste0(year,m,d)
-#
-#
-#
 #### FixedLocations ####
 #
 FLID_Comments <- NA
@@ -233,14 +223,19 @@ Trip_SQL <- paste(temp, collapse = "\n\n")
 #
 #### SampleEvent ####
 #
+# Need NumDrills from Quad dat
 head(FID)
 #
+# Harvest status
+Harvest <- data.frame(Class = c("CA", "PD", "CR", "AP", "RR", "UN"),
+                      HarvestStatus = c("Conditionally Approved", "Prohibited", "Conditionally Restricted", "Approved", "Restricted Relay", "Unclassified"))
 #
 SampleEvent<- data.frame(SampleEventID = paste0("'",FID$ESTUARY,"SRVY_",FID$Date,"_1_",Station_code,"_1","'"),
                          TripID= paste0("'",FID$ESTUARY,"SRVY_",FID$Date,"_1","'"),
                          FixedLocationID = paste0("'",Station_code,"'"),
                          LatitudeDec = paste0("'",FID$LATITUDE,"'"),
                          LongitudeDec = paste0("'",FID$LONGITUDE,"'"),
+                         HarvestStatus = paste0("'",(Harvest %>% filter(Class == FID$CLASS))$HarvestStatus,"'"),
                          DataStatus = paste0("'","Proofed","'"),
                          DateEntered = paste0("'",format(Proof_date, "%Y-%m-%d %H:%M:%OS3"),"'"),
                          EnteredBy =  paste0("'",Proofed_by,"'"),
@@ -258,6 +253,7 @@ INSERT INTO [dbo].[SampleEvent]
            ,[FixedLocationID]
            ,[LatitudeDec]
            ,[LongitudeDec]
+           ,[HarvestStatus]
            ,[DataStatus]
            ,[DateEntered]
            ,[EnteredBy]
@@ -270,7 +266,6 @@ for(i in 1:nrow(SampleEvent)){
   temp[i] <- paste0(SampleEventtemplate, "\n      (",paste(SampleEvent[i,], collapse = "\n      ,"), ")\n GO")
 }
 SampleEvent_SQL <- paste(temp, collapse = "\n\n")
-
 # Save SQL code
 #write_lines(SampleEvent_SQL, paste0("../", Site, "_", Station_code, "_", Survey_date,"_SampleEvent.sql"))
 #
@@ -281,13 +276,13 @@ SampleEvent_SQL <- paste(temp, collapse = "\n\n")
 #### SampleEventWQ ####
 #
 SEWQ <- FID %>% 
-  mutate(TEMP= ifelse(TEMP == "Z", NA, TEMP),
-         SALINITY= ifelse(SALINITY == "Z", NA, SALINITY),
-         DO= ifelse(DO == "Z", NA, DO),
-         PH = ifelse(PH == "Z", NA, PH),
-         DEPTH = ifelse(DEPTH == "Z", NA, DEPTH),
-         TURBIDITY = ifelse(TURBIDITY == "Z", NA, TURBIDITY),
-         TIME = ifelse(TIME == "Z", NA, as.numeric(TIME)*86400),
+  mutate(TEMP= ifelse(TEMP == "Z"|TEMP == 0, NA, TEMP),
+         SALINITY= ifelse(SALINITY == "Z"|SALINITY == 0, NA, SALINITY),
+         DO= ifelse(DO == "Z"|DO == 0, NA, DO),
+         PH = ifelse(PH == "Z"|PH == 0, NA, PH),
+         DEPTH = ifelse(DEPTH == "Z"|DEPTH == 0, NA, DEPTH),
+         TURBIDITY = ifelse(TURBIDITY == "Z"|TURBIDITY == 0, NA, TURBIDITY),
+         TIME = ifelse(TIME == "Z"|TIME == 0, NA, as.numeric(TIME)*86400),
          TIME= format(as.POSIXct(TIME, origin = "1970-01-01", tz = "UTC"), "%H%M"),#Time..hh.mm.= gsub(":", "", Time..hh.mm.),
          Comments = gsub("'", "", NOTES),
          Comments = gsub(",","", Comments)) %>%
@@ -298,7 +293,7 @@ SEWQ <- FID %>%
     if (!is.na(Comments)) parts <- c(parts, paste("Notes =", Comments))
     if (!is.na(DPTH_STRTA)) parts <- c(parts, paste("DPTH_STRTA =", DPTH_STRTA))
     if (!is.na(BOTTOM_TYP)) parts <- c(parts, paste("BOTTOM_TYP =", BOTTOM_TYP))
-    if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
+    #if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
     if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
   })
 #
@@ -410,7 +405,7 @@ Quads <- QuadData %>%
     parts <- c()
     if (any(!is.na(c(NOTES, Notes)))) parts <- c(parts, paste("Notes =", paste(na.omit(c(NOTES, Notes)), collapse = "; ")))
     if (!is.na(CC)) parts <- c(parts, paste("Conch =", CC))
-    if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
+    #if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
     if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
   })
 #
@@ -533,6 +528,7 @@ SurveySH_SQL <- paste(temp, collapse = "\n\n")
 #
 #
 #
+
 #### Combined into 1 sampling SQL file and 1 survey SQL file ####
 #
 if(TripID_need == "Y"){
