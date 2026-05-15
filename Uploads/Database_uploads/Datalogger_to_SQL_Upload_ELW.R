@@ -15,12 +15,12 @@ Year_of_survey <- c("2026")
 Site <- c("WI")
 Survey_season <- c(NA) #Season name or NA
 Station_name <- c(NA) #Station long name or NA
-Station_code <- c("I121") #Station FLID
+Station_code <- c("I157") #Station FLID
 Survey_date <- c("20260309")
 Proof_date <- as.Date("2026-05-10")
 Proofed_by <- "Tomena Scholze"
-#
-TripID_need <- c("Y") #Only need one per date/site
+
+TripID_need <- c("N") #Only need one per date/site
 #
 # The basics ----
 #
@@ -392,18 +392,19 @@ if(nrow(QuadCounts) < 1){
 }
 #
 QuadData <- full_join(QuadInfo %>% dplyr::select(-FileName), 
-                      QuadCounts %>% dplyr::select(-FileName))
+                      QuadCounts %>% dplyr::select(-FileName) %>% rename("NOTES_B"= NOTES))
 #
 # NOTE: Every station needs at least one Quadrat record, even if no SH measured
 Quads <- QuadData %>% 
-  left_join(FID %>% dplyr::select(KEY_A, Date, ESTUARY, STATION, CLASS, Notes = NOTES)) %>%
+  left_join(FID %>% 
+              dplyr::select(KEY_A, Date, ESTUARY, STATION, CLASS, Notes = NOTES)) %>%
   mutate(SampleEventID = paste0(ESTUARY, "SRVY_", Date, "_1_", Station_code, "_1"),
          Quadrat = ifelse(is.na(QDRT), "01", sprintf("%02d", QDRT))) %>%
   #Compile comments and notes into one Comment
   rowwise() %>%
   mutate(Comments = {
     parts <- c()
-    if (any(!is.na(c(NOTES, Notes)))) parts <- c(parts, paste("Notes =", paste(na.omit(c(NOTES, Notes)), collapse = "; ")))
+    if (any(!is.na(c(NOTES, NOTES_B, Notes)))) parts <- c(parts, paste("Notes =", paste(na.omit(c(NOTES, NOTES_B, Notes)), collapse = "; ")))
     if (!is.na(CC)) parts <- c(parts, paste("Conch =", CC))
     #if (!is.na(CLASS)) parts <- c(parts, paste("Class =", CLASS))
     if (length(parts) == 0) NA else paste0("'", paste(parts, collapse = " "), "'")
