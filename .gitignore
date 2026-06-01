@@ -57,3 +57,6 @@ rsconnect/
 # Ignore all Excel files except Templates
 Uploads/Data/*.xlsx
 !Uploads/Data/*_TEMPLATE.xlsx
+
+# Ignore raw logger files
+Uploads/Data/Datalogger/Raw/*/*
