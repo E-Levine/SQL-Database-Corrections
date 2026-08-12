@@ -60,6 +60,5 @@ Uploads/Data/*.xlsx
 !Uploads/Data/*_TEMPLATE.xlsx
 
 # Ignore all raw datalogger files
-Uploads/Data/Datalogger/Raw/*.xlsx
-Uploads/Data/Datalogger/Raw/*.csv
+Uploads/Data/Datalogger/Raw/**
 
