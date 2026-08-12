@@ -1,7 +1,6 @@
 #Ignore data files within the Data folder but keep the folder for use.
 */Data/*.xlsx
 !Data/*TEMPLATE
-!Data/.gitkeep
 
 # R files to ignore
 # History files
@@ -59,6 +58,6 @@ Uploads/Data/*.xlsx
 !Uploads/Data/*_TEMPLATE.xlsx
 
 # Ignore all raw datalogger files
-Uploads/Data/Datalogger/Raw*
-!Uploads/Data/Datalogger/Raw/*gitkeep*
+Uploads/Data/Datalogger/Raw/*
+!Uploads/Data/Datalogger/Raw/.gitkeep
 
