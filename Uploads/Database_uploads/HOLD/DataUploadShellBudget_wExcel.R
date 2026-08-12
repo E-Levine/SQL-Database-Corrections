@@ -1,0 +1,558 @@
+#Original file located on network and as start for git file
+
+SiteCode <- "SS"
+DataType <- "SHBG"
+DataDate <- "2023"
+Proof_date <- as.Date("2023-11-22")
+Proofed_by <- "Gabe Hopkins"
+
+#### Set up ####
+library(tidyverse)
+library(lubridate) 
+library(readxl)
+library(glue)
+#
+# Read Excel files and check columns 
+file_name <- "SS_SemiAnnual_ShellBudget_2023Winter"
+WQ_file_name <- "SS_SemiAnnual_ShellBudget_WQ"
+datalogger_base_name <- "2023 SS Winter SBM"
+#
+if (file.exists("../Data/FixedLocations.xlsx")) {
+  FLIDS <- readxl::read_excel("../Data/FixedLocations.xlsx", sheet = "Sheet1", skip = 0, .name_repair = "universal")
+  } else {
+    warning(paste("File not found:", "../Data/FixedLocations.xlsx"))
+    FLIDS <- NULL
+    }
+BSQ <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "Vols, Wts, Counts", skip = 3, .name_repair = "universal") %>% 
+  drop_na(Date.Collected)
+BSWQ <- read_excel(paste0("../Data/Datalogger/",WQ_file_name,".xlsx"), sheet = "WQ", skip = 4,  .name_repair = "unique")
+BSSH <- read_excel(paste0("../Data/Datalogger/",file_name,".xlsx"), sheet = "SHs", skip = 3, .name_repair = "universal")
+# Datalogger files to add:
+files <- list.files(
+  path = "../Data/Datalogger",
+  pattern = paste0("^",datalogger_base_name, ".*\\.xlsx$"),
+  full.names = TRUE
+)
+# Load Wts and Vols with Date of survey from file name:
+DLWV <- files %>%
+  map_dfr(~ read_excel(.x, sheet = "WT & VOL", .name_repair = "universal", na = "NA"), .id = "source_file")
+ # map_dfr(
+#    ~{df <- read_excel(.x, sheet = "WT & VOL", .name_repair = "universal")
+#      file_name <- basename(.x)
+#      # Extract M.DD.YY from filename
+#      date_str <- str_extract(file_name, "\\d{1,2}\\.\\d{1,2}\\.\\d{2}")
+#      df %>%
+#        mutate(
+#          source_file = file_name,
+#          Date = as.POSIXct(as.Date(date_str, format = "%m.%d.%y"), tz = "UTC"))}
+#  )
+DLWQ <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "WQ", .name_repair = "universal", na = "NA"), .id = "source_file")
+DLSH <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "SH", .name_repair = "universal", na = "NA"), .id = "source_file")
+DLLD <- files %>% 
+  map_dfr(~ read_excel(.x, sheet = "LIVE & DEAD", .name_repair = "universal", na = "NA"), .id = "source_file")
+#
+#
+#
+#
+#### Clean data logger data ####
+#
+# Combine into survey data into one object
+temp <- full_join(DLWV %>% rename("NOTES_WV" = NOTES), 
+                  DLLD %>% rename("NOTES_LD" = NOTES)) %>%
+  mutate(
+    Logger_Comments = case_when(
+      !is.na(NOTES_WV) & !is.na(NOTES_LD) ~ paste(NOTES_WV, NOTES_LD, sep = " "),
+      !is.na(NOTES_WV) & is.na(NOTES_LD)  ~ NOTES_WV,
+      is.na(NOTES_WV) & !is.na(NOTES_LD)  ~ NOTES_LD,
+      TRUE                                ~ NA_character_
+    )
+  ) %>%
+  mutate(
+    station_key = STATION %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", ""),
+    DATE = as.POSIXct(as.Date(DATE, format = "%m/%d/%Y"), tz = "UTC")) %>%
+  ungroup() %>%
+  dplyr::select(DATE, QDRT, WGHT, VOL, LIVE, DEAD, DRILLS, CC, Logger_Comments, station_key) %>%
+  rename(Date.Collected = DATE, 
+         `Quadrat..1.4.m2.` = QDRT)
+#
+tempWQ <- DLWQ %>%
+  mutate(
+    station_key = STATION %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", ""),
+    Date = as.POSIXct(as.Date(DATE, format = "%m/%d/%y"), tz = "UTC")) %>%
+  rename(Site = ESTUARY,
+         Section = SECTION,
+         Subsection = CLASS,
+         Lat = LATITUDE, 
+         Lon = LONGITUDE)
+#
+tempSH <- DLSH %>% 
+  rename(Date.Collected = DATE,
+         StationName = STATION,
+         Quadrat..1.4.m2. = QDRT,
+         SH..mm. = SH) %>%
+  mutate(Live.or.Dead = NA,
+         TLID = NA) %>%
+  dplyr::select(-c(source_file, TYPE, TLID))
+#
+#
+#
+#### Trip Info####
+#
+# Check that dates match between data file and datalogger files:
+unique(BSQ$Date.Collected)
+unique(DLWV$DATE)
+#Clean date, station, and Estuary in quadrat data
+A2 <- BSQ %>% 
+  #Add station key for matching
+  mutate(
+    station_key = Station %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  # Add datalogger data
+  left_join(temp, 
+            by = c("Date.Collected", "Quadrat..1.4.m2.", "station_key")) %>%
+  mutate(
+    `Total.Sample.Wt..kg.` = if_else(is.na(`Total.Sample.Wt..kg.`), WGHT, `Total.Sample.Wt..kg.`),
+    `Total.Sample.Vol..L.`  = if_else(is.na(`Total.Sample.Vol..L.`), VOL, `Total.Sample.Vol..L.`),
+    `Total...Live.Oysters`  = if_else(is.na(`Total...Live.Oysters`), LIVE, `Total...Live.Oysters`),
+    `Total...Dead.Oysters`  = if_else(is.na(`Total...Dead.Oysters`), DEAD, `Total...Dead.Oysters`),
+    `..Drills`  = if_else(is.na(`..Drills`), DRILLS, `..Drills`),
+    `..Crown.Conch`  = if_else(is.na(`..Crown.Conch`), CC, `..Crown.Conch`)
+  ) %>%
+  dplyr::select(-c(WGHT, VOL, LIVE, DEAD, DRILLS, CC)) %>%
+  #Remove datalogger rows: filter(str_to_lower(Comments) != "entered in datalogger") %>%   rename(Station_Name = Station) %>%
+  #Add FID
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>%
+  mutate(
+    Date = format(Date.Collected, "%Y%m%d"),
+    Estuary = SiteCode)
+#
+#
+#Build the PKs and wrap everything in single quotes so that SQL can read it
+TripTable<- data.frame(TripID= paste0("'",A2$Estuary,"SHBG_",A2$Date,"_1","'"),
+                       TripType= paste0("'","Shell Budget","'"),
+                       TripDate = paste0("'",ymd(A2$Date),"'"),
+                       DataStatus = paste0("'","Proofed","'"),
+                       DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                       EnteredBy =  paste0("'",Proofed_by,"'"),
+                       DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                       ProofedBy = paste0("'",Proofed_by,"'"))
+
+#Check to make sure everything is in single quotes 
+TripTable<- unique(TripTable)
+
+# Create a template for the TripInfo SQL script
+TripInfoSQLtemplate <- "
+INSERT INTO [dbo].[TripInfo]
+           ([TripID]
+           ,[TripType]
+           ,[TripDate]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy])
+     VALUES"
+temp <- character(length(nrow(TripTable)))
+for(i in 1:nrow(TripTable)){
+  temp[i] <- paste0(TripInfoSQLtemplate, "\n      (",paste(TripTable[i,], collapse = "\n      ,"), ")\n GO")
+}
+Trip_SQL <- paste(temp, collapse = "\n\n")
+#
+# Save SQL code
+write_lines(Trip_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"TripInfo.sql"))
+#
+#
+#
+#
+#### Sample Event ####
+### Get data and create SampleEvent table
+#A2 created above. Using WQ to get Lat, Long
+#Clean date, station, and Estuary in quadrat data
+A3 <- BSWQ %>% 
+  rename(Station_Name = Station) %>%
+  #Add FID
+  mutate(
+    station_key = Station_Name %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  # Add datalogger data
+  left_join(tempWQ, 
+            by = c("Date", "Site", "Section", "Subsection", "Lat", "Lon", "station_key")) %>% 
+  mutate(
+    `Depth (m)` = if_else(is.na(`Depth (m)`), DEPTH, `Depth (m)`),
+    `# of Quadrats`  = if_else(is.na(`# of Quadrats`), NUMBR_QDRT, `# of Quadrats`),
+    `Temperature (°C)`  = if_else(is.na(`Temperature (°C)`), TEMP, `Temperature (°C)`),
+    Salinity  = if_else(is.na(Salinity), SALINITY, Salinity),
+    `Dissolved Oxygen (mg/L)`  = if_else(is.na(`Dissolved Oxygen (mg/L)`), DO, `Dissolved Oxygen (mg/L)`),
+    pH  = if_else(is.na(pH), PH, pH),
+    `Turbidity (FNU)`  = if_else(is.na(`Turbidity (FNU)`), TURBIDITY, `Turbidity (FNU)`),
+    `Bottom Type`  = if_else(is.na(`Bottom Type`), BOTTOM_TYP, `Bottom Type`)
+  ) %>%
+  dplyr::select(-c(`...19`,source_file:NUMBR_QDRT)) %>% 
+  # Add FID
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>%
+  mutate(
+    Date = format(Date, "%Y%m%d"),
+    Estuary = SiteCode) %>%
+  #Filter to dates that match survey data
+  filter(Date %in% A2$Date) %>%
+  #Check if Pre/Post column exists and add to Comment to specify which survey.
+  {
+    df <- .
+    prepost_cols <- names(df)[stringr::str_detect(names(df), regex("pre|post", ignore_case = TRUE))]
+    
+    if (length(prepost_cols) > 0) {
+      df <- df %>%
+        mutate(
+          Comments = case_when(
+            stringr::str_detect(.data[[prepost_cols[1]]], regex("pre", ignore_case = TRUE)) ~ "Pre",
+            stringr::str_detect(.data[[prepost_cols[1]]], regex("post", ignore_case = TRUE)) ~ "Post",
+            TRUE ~ NA_character_
+          )
+        )
+    }
+    df
+  }
+#
+SampleEvent<- data.frame(SampleEventID = paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1_",A3$FixedLocationID,"_1","'"),
+                         TripID= paste0("'",A3$Estuary,"SHBG_",A3$Date,"_1","'"),
+                         FixedLocationID = paste0("'",A3$FixedLocationID,"'"),
+                         LatitudeDec = ifelse(is.na(A3$Lat),"NULL",paste0("'",A3$Lat,"'")),
+                         LongitudeDec = ifelse(is.na(A3$Lon),"NULL",paste0("'",A3$Lon,"'")),
+                         DataStatus = paste0("'","Proofed","'"),
+                         DateEntered = paste0("'",format(Proof_date, "%Y-%m-%d %H:%M:%OS3"),"'"),
+                         EnteredBy =  paste0("'",Proofed_by,"'"),
+                         DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                         ProofedBy = paste0("'",Proofed_by,"'"),
+                         Comments = ifelse(is.na(A3$Comments), "NULL", paste0("'", A3$Comments, "'"))) 
+#
+SampleEvent<- unique(SampleEvent)
+#
+SampleEventtemplate<- "
+INSERT INTO [dbo].[SampleEvent]
+           ([SampleEventID]
+           ,[TripID]
+           ,[FixedLocationID]
+           ,[LatitudeDec]
+           ,[LongitudeDec]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments])
+     VALUES"
+
+temp <- character(length(nrow(SampleEvent)))
+for(i in 1:nrow(SampleEvent)){
+  temp[i] <- paste0(SampleEventtemplate, "\n      (",paste(SampleEvent[i,], collapse = "\n      ,"), ")\n GO")
+}
+SampleEvent_SQL <- paste(temp, collapse = "\n\n")
+
+# Save SQL code
+write_lines(SampleEvent_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEevent.sql"))
+#
+#
+#
+#### SampleEventWQ ####
+#
+#Working with A3 created above:
+head(A3)
+#
+A4 <- A3 %>% 
+  rename_with(~ str_replace_all(.x, "[^A-Za-z0-9]", "")) %>%
+mutate(TemperatureC= ifelse(TemperatureC == "Z",NA, TemperatureC),
+       Salinity= ifelse(Salinity == "Z",NA,
+                        ifelse(Salinity == "N", 0, Salinity)),
+       DissolvedOxygenmgL = ifelse(DissolvedOxygenmgL == "Z",NA,
+                                   ifelse(DissolvedOxygenmgL == "N", 0, DissolvedOxygenmgL)),
+       pH = ifelse(pH == "Z",NA, pH),
+       SampleDepthm = ifelse(SampleDepthm=="Z",NA, SampleDepthm),
+       TurbidityFNU = ifelse(TurbidityFNU=="Z",NA, TurbidityFNU),
+       Comments = NA)
+
+
+SampleEventWQ <- data.frame(SampleEventWQID = paste0("'",A4$Estuary,"SHBG_",A4$Date,"_1_",A4$FixedLocationID,"_1_01","'"),
+                            SampleEventID = paste0("'",A4$Estuary,"SHBG_",A4$Date,"_1_",A4$FixedLocationID,"_1","'"),
+                            Temperature =  ifelse(is.na(A4$TemperatureC),"NULL",paste0("'",A4$TemperatureC,"'")),
+                            Salinity = ifelse(is.na(A4$Salinity),"NULL",paste0("'",A4$Salinity,"'")),
+                            DissolvedOxygen = ifelse(is.na(A4$DissolvedOxygenmgL),"NULL",paste0("'",A4$DissolvedOxygenmgL,"'")),
+                            pH = ifelse(is.na(A4$pH)| A4$pH >= 10,"NULL", paste0("'",A4$pH,"'")),
+                            Depth = ifelse(is.na(A4$SampleDepthm),"NULL",paste0("'",A4$SampleDepthm,"'")),
+                            TurbidityYSI = ifelse(is.na(A4$TurbidityFNU),"NULL",paste0("'",A4$TurbidityFNU,"'")),
+                            DataStatus = paste0("'","Proofed","'"),
+                            DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            EnteredBy =  paste0("'",Proofed_by,"'"),
+                            DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                            ProofedBy = paste0("'",Proofed_by,"'"),
+                            Comments = paste0("'",
+                                              ifelse(!is.na(A4$pH) & A4$pH >= 10, paste0(" pH = ", A4$pH, "; "), ""),
+                                              paste("Notes =", A4$Comments," NumQuads =", A4$ofQuadrats,"'")),
+                            CollectionTime = "NULL")
+
+SampleEventWQtemplate<- "
+INSERT INTO [dbo].[SampleEventWQ]
+           ([SampleEventWQID]
+           ,[SampleEventID]
+           ,[Temperature]
+           ,[Salinity]
+           ,[DissolvedOxygen]
+           ,[pH]
+           ,[Depth]
+           ,[TurbidityYSI]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments]
+           ,[CollectionTime])
+     VALUES"
+
+temp <- character(length(nrow(SampleEventWQ)))
+for(i in 1:nrow(SampleEventWQ)){
+  temp[i] <- paste0(SampleEventWQtemplate, "\n      (",paste(SampleEventWQ[i,], collapse = "\n      ,"), ")\n GO")
+}
+SampleEventWQ_SQL <- paste(temp, collapse = "\n\n")
+
+# Save SQL code
+write_lines(SampleEventWQ_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SampleEventWQ.sql"))
+#
+#
+#
+#### ShellBudgetQuadrat ####
+#
+#Working with A4 from above:
+head(A4)
+A5 <- A4 %>% 
+  mutate(SampleEventID = paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) %>%
+  dplyr::select(SampleEventID,
+                Survey,
+                Date,
+                Estuary,
+                Section,
+                StationName,
+                FixedLocationID)
+
+B2 <- A2 %>% 
+  mutate(Quadrat = sprintf("%02d", Quadrat..1.4.m2.),
+         StationName = Station,
+         SampleEventID = paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) 
+
+B3 <- left_join(B2, 
+                A5, 
+                by= c("SampleEventID","Survey","Date","Estuary","Section","StationName","FixedLocationID"))
+
+B3 <- B3 %>% mutate(Quadrat= ifelse(is.na(Quadrat),"01",Quadrat),
+                    TotalSampleVolume = ifelse(Total.Sample.Vol..L. == "Z", NA,
+                                               ifelse(Total.Sample.Vol..L. == "N", 0.04 , as.numeric(Total.Sample.Vol..L.))),
+                    TotalSampleWeight = ifelse(trimws(Total.Sample.Wt..kg.) == "Z", NA,
+                                               ifelse(trimws(Total.Sample.Wt..kg.) == "N", 0.01, as.numeric(Total.Sample.Wt..kg.))),
+                    LiveOysterVolume = ifelse(Live.Oyster.Volume..L. == "Z", NA,
+                                              ifelse(Live.Oyster.Volume..L. == "N", 0.04 , as.numeric(Live.Oyster.Volume..L.))),
+                    LiveOysterWeight = ifelse(trimws(Live.Oyster.Weight..kg.) == "Z", NA,
+                                              ifelse(trimws(Live.Oyster.Weight..kg.) == "N", 0.01 , as.numeric(Live.Oyster.Weight..kg.))),
+                    DrillWeight = ifelse(Drill.Weight..kg. == "Z", NA,
+                                         ifelse(Drill.Weight..kg. == "N", 0.01 , as.numeric(Drill.Weight..kg.))),
+                    Crown.Conch.Wt..kg.= ifelse(Crown.Conch.Wt..kg. == "Z", NA,
+                                          ifelse(Crown.Conch.Wt..kg. == "N", 0.01 , as.numeric(Crown.Conch.Wt..kg.))),
+                    OtherBiotaWeight = ifelse(Other.Biota.Weight..kg. == "Z", NA,
+                                              ifelse(Other.Biota.Weight..kg. == "N", 0.01 , as.numeric(Other.Biota.Weight..kg.))),
+                    OysterShellVolume = ifelse(Oyster.Shell.Volume..L. == "Z", NA,
+                                               ifelse(Oyster.Shell.Volume..L. == "N", 0.04 , as.numeric(Oyster.Shell.Volume..L.))),
+                    OysterShellWeight = ifelse(Oyster.Shell.Weight..kg. == "Z", NA,
+                                               ifelse(Oyster.Shell.Weight..kg. == "N", 0.01 , as.numeric(Oyster.Shell.Weight..kg.))),
+                    PlantedShellVolume = ifelse(Planted.Shell.Volume..L. == "Z", NA,
+                                                ifelse(Planted.Shell.Volume..L. == "N", 0.04 , as.numeric(Planted.Shell.Volume..L.))),
+                    PlantedShellWeight = ifelse(Planted.Shell.Weight..kg. == "Z", NA,
+                                                ifelse(Planted.Shell.Weight..kg. == "N", 0.01 , as.numeric(Planted.Shell.Weight..kg.))),
+                    ShellHashVolume = ifelse(Shell.Hash.Volume..L. == "Z", NA,
+                                             ifelse(Shell.Hash.Volume..L. == "N", 0.04 , as.numeric(Shell.Hash.Volume..L.))),
+                    ShellHashWeight = ifelse(Shell.Hash.Weight..kg. == "Z", NA,
+                                             ifelse(Shell.Hash.Weight..kg. == "N", 0.01 , as.numeric(Shell.Hash.Weight..kg.))),
+                    BlackAndOtherSubstrateVolume = ifelse(Black.and.Other.Substrate.Volume..L. == "Z", NA,
+                                                          ifelse(Black.and.Other.Substrate.Volume..L. == "N", 0.04 , as.numeric(Black.and.Other.Substrate.Volume..L.))),
+                    BlackAndOtherSubstrateWeight = ifelse(Black.and.Other.Substrate.Weight..kg. == "Z", NA,
+                                                          ifelse(Black.and.Other.Substrate.Weight..kg. == "N", 0.01 , as.numeric(Black.and.Other.Substrate.Weight..kg.)))
+                    )
+
+ShellBudgetQuadrat<- data.frame(QuadratID = paste0("'",B3$SampleEventID,"_",B3$Quadrat,"'"),
+                           SampleEventID = paste0("'",B3$SampleEventID,"'"),
+                           QuadratNumber = paste0("'",B3$Quadrat,"'"),
+                           TotalSampleVolume= ifelse(is.na(B3$TotalSampleVolume),"NULL",paste0("'",B3$TotalSampleVolume,"'")),
+                           TotalSampleWeight= ifelse(is.na(B3$TotalSampleWeight),"NULL",paste0("'",B3$TotalSampleWeight,"'")),
+                           LiveOysterVolume= ifelse(is.na(B3$LiveOysterVolume),"NULL",paste0("'",B3$LiveOysterVolume,"'")),
+                           LiveOysterWeight= ifelse(is.na(B3$LiveOysterWeight),"NULL",paste0("'",B3$LiveOysterWeight,"'")),
+                           NumDrills = ifelse(is.na(B3$..Drills),"NULL",paste0("'",B3$..Drills,"'")),
+                           DrillWeight = ifelse(is.na(B3$DrillWeight),"NULL",paste0("'",B3$DrillWeight,"'")),
+                           OtherBiotaWeight = ifelse(is.na(B3$OtherBiotaWeight),"NULL",paste0("'",B3$OtherBiotaWeight,"'")),
+                           NumLiveOysters= ifelse(is.na(B3$Total...Live.Oysters),"NULL",paste0("'",B3$Total...Live.Oysters,"'")),
+                           NumDeadOysters= ifelse(is.na(B3$Total...Dead.Oysters),"NULL",paste0("'",B3$Total...Dead.Oysters,"'")),
+                           OysterShellVolume= ifelse(is.na(B3$OysterShellVolume),"NULL",paste0("'",B3$OysterShellVolume,"'")),
+                           OysterShellWeight= ifelse(is.na(B3$OysterShellWeight),"NULL",paste0("'",B3$OysterShellWeight,"'")),
+                           PlantedShellVolume= ifelse(is.na(B3$PlantedShellVolume),"NULL",paste0("'",B3$PlantedShellVolume,"'")),
+                           PlantedShellWeight= ifelse(is.na(B3$PlantedShellWeight),"NULL",paste0("'",B3$PlantedShellWeight,"'")),
+                           ShellHashVolume= ifelse(is.na(B3$ShellHashVolume),"NULL",paste0("'",B3$ShellHashVolume,"'")),
+                           ShellHashWeight= ifelse(is.na(B3$ShellHashWeight),"NULL",paste0("'",B3$ShellHashWeight,"'")),
+                           BlackAndOtherSubstrateVolume= ifelse(is.na(B3$BlackAndOtherSubstrateVolume),"NULL",paste0("'",B3$BlackAndOtherSubstrateVolume,"'")),
+                           BlackAndOtherSubstrateWeight= ifelse(is.na(B3$BlackAndOtherSubstrateWeight),"NULL",paste0("'",B3$BlackAndOtherSubstrateWeight,"'")),
+                           DataStatus = paste0("'","Proofed","'"),
+                           DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                           EnteredBy =  paste0("'",Proofed_by,"'"),
+                           DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                           ProofedBy = paste0("'",Proofed_by,"'"),
+                           Comments = paste0("'",paste("Notes =", B3$Comments),
+                                             paste(" CrownConchNumber =",
+                                                   B3$..Crown.Conch),
+                                             paste(" CrownConchWt =",
+                                                   B3$Crown.Conch.Wt..kg.),"'"))
+
+
+
+
+ShellBudgetQuadrattemplate<- "
+INSERT INTO [dbo].[ShellBudgetQuadrat]
+           ([QuadratID]
+           ,[SampleEventID]
+           ,[QuadratNumber]
+           ,[TotalSampleVolume]
+           ,[TotalSampleWeight]
+           ,[LiveOysterVolume]
+           ,[LiveOysterWeight]
+           ,[NumDrills]
+           ,[DrillWeight]
+           ,[OtherBiotaWeight]
+           ,[NumLiveOysters]
+           ,[NumDeadOysters]
+           ,[OysterShellVolume]
+           ,[OysterShellWeight]
+           ,[PlantedShellVolume]
+           ,[PlantedShellWeight]
+           ,[ShellHashVolume]
+           ,[ShellHashWeight]
+           ,[BlackAndOtherSubstrateVolume]
+           ,[BlackAndOtherSubstrateWeight]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments])
+     VALUES"
+
+temp <- character(length(nrow(ShellBudgetQuadrat)))
+for(i in 1:nrow(ShellBudgetQuadrat)){
+  temp[i] <- paste0(ShellBudgetQuadrattemplate, "\n      (",paste(ShellBudgetQuadrat[i,], collapse = "\n      ,"), ")\n GO")
+}
+ShellBudgetQuadrat_SQL <- paste(temp, collapse = "\n\n")
+
+# Save SQL code
+write_lines(ShellBudgetQuadrat_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"ShellBudgetQuadrat.sql"))
+#
+#
+#
+#
+#### ShellBudgetSH####
+#Every station needs at least one SH record, even if no SH measured
+
+D2 <- BSSH %>% 
+  dplyr::select(Date.Collected, Station, Quadrat..1.4.m2., Live.or.Dead, SH..mm.) %>%
+  rename(StationName = Station) %>% 
+  mutate(OYSTER_NUM = NA) %>%
+  # Add datalogger data
+  rbind(tempSH) %>% 
+  #Add FID
+  mutate(
+    station_key = StationName %>%
+      str_to_lower() %>%
+      str_replace_all("[^a-z0-9]", "")) %>%
+  left_join(
+    FLIDS %>%
+      mutate(
+        station_key = StationName %>%
+          str_to_lower() %>%
+          str_replace_all("[^a-z0-9]", "")
+      ) %>%
+      select(station_key, FixedLocationID),
+    by = "station_key"
+  ) %>% 
+  mutate(Date = format(Date.Collected, "%Y%m%d"),
+                      Quadrat = sprintf("%02d", Quadrat..1.4.m2.),
+                      Estuary = SiteCode,
+                      SampleEventID= paste0(Estuary,"SHBG_",Date,"_1_",FixedLocationID,"_1")) 
+
+D3 <- left_join(D2,
+                A5, 
+                by = c("SampleEventID", "Date", "Estuary", "StationName", "FixedLocationID"))
+
+D4 <- D3 %>%
+  mutate(Quadrat = ifelse(is.na(Quadrat),"01",Quadrat),
+         QuadratID =paste0(D3$Estuary,"SHBG_",D3$Date,"_1_",D3$FixedLocationID,"_1_",D3$Quadrat),
+         SH..mm. = ifelse(SH..mm. == "Z", NA, SH..mm.),
+         Comments = NA)%>%
+  group_by(QuadratID) %>% 
+  mutate(Qnum = sprintf("%02d", row_number()), 
+         Qnum = ifelse(Quadrat== "01", "01", Qnum)) %>% 
+  ungroup()
+
+
+SBSH <- data.frame(ShellHeightID = paste0("'",D4$QuadratID,"_",D4$Qnum,"'"),
+                   QuadratID = paste0("'",D4$QuadratID,"'"),
+                   LiveOrDead = ifelse(is.na(D4$Live.or.Dead),"NULL",paste0("'",D4$Live.or.Dead,"'")),
+                   ShellHeight = ifelse(is.na(D4$SH..mm.),"NULL",paste0("'",D4$SH..mm.,"'")),
+                   DataStatus = paste0("'","Proofed","'"),
+                   DateEntered = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                   EnteredBy =  paste0("'",Proofed_by,"'"),
+                   DateProofed = paste0("'",format(Proof_date,"%Y-%m-%d %H:%M:%OS3"),"'"),
+                   ProofedBy = paste0("'",Proofed_by,"'"),
+                   Comments = ifelse(is.na(D4$Comments), "NULL", paste0(D4$Comments)))
+
+
+SBSHtemplate<- "
+INSERT INTO [dbo].[ShellBudgetSH]
+           ([ShellHeightID]
+           ,[QuadratID]
+           ,[LiveOrDead]
+           ,[ShellHeight]
+           ,[DataStatus]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateProofed]
+           ,[ProofedBy]
+           ,[Comments])
+     VALUES"
+
+temp <- character(length(nrow(SBSH)))
+for(i in 1:nrow(SBSH)){
+  temp[i] <- paste0(SBSHtemplate, "\n      (",paste(SBSH[i,], collapse = "\n      ,"), ")\n GO")
+}
+SBSH_SQL <- paste(temp, collapse = "\n\n")
+
+# Save SQL code
+write_lines(SBSH_SQL, paste0("../", SiteCode, "_", DataType, "_", DataDate,"SBSH.sql"))
+#

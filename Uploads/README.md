@@ -23,3 +23,5 @@ Located within the *Database\_uploads* folder.
 2. Run 'DataloggerFormatOysters\_ELW' to clean and organize datalogger files as needed.
 3. Run 'DataUpload\[...]\_ELW' to load and combine datasheet and datalogger files. This file outputs SQL code to upload data to the database.
 
+   1. For this code to work, datalogger files should be saved within the folder structure: "../Data/Datalogger/Raw/\[YYYY and/or SiteCode]/YYYYMMDD/" where Year of survey and SiteCode or just Site code are used for the folder name, and date of survey is used for the primary folder containing the logger files. i.e, WI Zone/20260226
+

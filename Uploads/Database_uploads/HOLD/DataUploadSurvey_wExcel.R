@@ -24,7 +24,7 @@ head(BSWQ)
 
 
 #### TripInfo ####
-### Get data and create TripInfo table - use WQ since not all stataions in Quad data
+### Get data and create TripInfo table - use WQ since not all stations in Quad data
 A2 <- BSWQ %>% rename(RunningStation = Station) %>%
   mutate(Date = format(Date, "%Y%m%d"),
          Station = sprintf("%04d", as.numeric(substr(BaywideID.StationName, 2, n()))),
