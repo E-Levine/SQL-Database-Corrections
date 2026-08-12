@@ -60,4 +60,5 @@ Uploads/Data/*.xlsx
 
 # Ignore all raw datalogger files
 Uploads/Data/Datalogger/Raw*
+!Uploads/Data/Datalogger/Raw/*gitkeep*
 
