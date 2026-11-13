@@ -62,3 +62,11 @@ Uploads/Data/*.xlsx
 # Ignore all raw datalogger files
 Uploads/Data/Datalogger/Raw/**
 
+# Ignore all .zip files anywhere in the repo
+*.zip
+
+# Ignore sql files
+*.sql
+
+# Ignore HOLD folder
+**/HOLD/**
